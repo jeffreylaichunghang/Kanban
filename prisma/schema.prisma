@@ -1,0 +1,89 @@
+// After you change your data model, you'll need to manually re-generate Prisma Client to ensure the code inside node_modules/.prisma/client gets updated:
+//   prisma db push
+// or prisma migrate dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// field: name!, type!, type modifiers, attributes
+// type: String, Int, BigInt, Float, Decimal, Boolean, DateTime("2020-03-19T14:21:00+02:00"), Json, Bytes
+// type modifiers: [],
+// attributes: field => @, block => @@, @unique, signature**,
+
+model User {
+  id         Int              @id @default(autoincrement())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  email      String           @unique
+  first_name String?          @default("")
+  last_name  String?          @default("")
+  credential User_Credential?
+  profile    Profile?
+  boards     Board[]
+}
+
+model User_Credential {
+  password String?
+  googleId String? @unique
+  userId   Int     @id
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  PREFER_NOT_TO_SAY
+}
+
+model Profile {
+  userId Int  @id @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sex    Sex
+}
+
+model Board {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  board_name String
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int?
+  columns    Column[]
+}
+
+model Column {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  column_name String
+  board       Board?   @relation(fields: [boardId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  boardId     Int?
+  tasks       Task[]
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  task_name   String
+  description String
+  colummn     Column?   @relation(fields: [columnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  columnId    Int?
+  sub_tasks   SubTask[]
+}
+
+model SubTask {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  sub_task_name String
+  task          Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  taskId        Int?
+  status        Boolean  @default(false)
+}
