@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/app.js",
+    "server": "nodemon backend/app.js",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -20,6 +24,7 @@
     "postgres": "^3.4.3"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "prisma": "^5.7.1"
   }
 }
