@@ -7,7 +7,9 @@
     font-family: 'Inter', sans-serif;
     font-family: 'Overpass', sans-serif;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-family: 'Rubik', sans-serif;
+    /* font-family: 'Rubik', sans-serif; */
+    letter-spacing: 1px;
+    font-style: normal;
 }
 
 *::-webkit-scrollbar {

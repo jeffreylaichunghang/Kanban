@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { ThemeContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 
@@ -8,10 +8,12 @@ import LogoLight from '../../assets/LogoLight'
 import Ellipsis from '../../assets/Ellipsis'
 import Button from "../Button"
 import Text from "../Text"
+import ActionModal from "../modals/ActionModal"
 
 export default function NavBar({
     board
 }) {
+    const [actionModal, setActionModal] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
     const { width } = useWindowDimension()
     const styles = {
@@ -37,6 +39,7 @@ export default function NavBar({
             alignItems: 'center',
             width: width - constants.sidebarWidth,
             padding: 32,
+            position: 'relative',
         },
         buttonGroup: {
             display: 'flex',
@@ -69,8 +72,27 @@ export default function NavBar({
                         text="+ Add New Task"
                         onClick={() => console.log('create task')}
                     />
-                    <span style={styles.ellipsis}><Ellipsis /></span>
+                    <span style={styles.ellipsis} onClick={() => setActionModal(true)}><Ellipsis /></span>
                 </span>
+                <ActionModal
+                    actionModal={actionModal}
+                    setActionModal={setActionModal}
+                >
+                    <Text
+                        variant="body"
+                        size="l"
+                        color={theme.color.secondaryText}
+                        text="Edit Board"
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <Text
+                        variant="body"
+                        size="l"
+                        color={theme.color.destructive}
+                        text="Delete Board"
+                        style={{ cursor: 'pointer' }}
+                    />
+                </ActionModal>
             </div>
         </div>
     )

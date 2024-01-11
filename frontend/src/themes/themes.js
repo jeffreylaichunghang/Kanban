@@ -32,6 +32,7 @@ export const theme = {
         borderLine: palette.mediumGrey[0.25],
         primaryText: palette.white,
         secondaryText: palette.mediumGrey[1],
+        primaryLabel: palette.white,
         line: palette.darkLine,
         destructive: palette.red,
         destructiveHover: palette.redHover,
@@ -92,6 +93,7 @@ export const lightTheme = {
         backgroundPrimary: palette.lightGrey,
         backgroundSecondary: palette.white,
         primaryText: palette.black,
-        line: palette.lightLine
+        line: palette.lightLine,
+        primaryLabel: palette.mediumGrey[1]
     }
 }

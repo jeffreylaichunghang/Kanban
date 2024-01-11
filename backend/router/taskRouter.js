@@ -41,6 +41,7 @@ class TaskRouter {
     }
 
     async createBoard(req, res) {
+        console.log(req.body)
         const data = await this.service.createBoard(req.body)
         res.json(data)
     }

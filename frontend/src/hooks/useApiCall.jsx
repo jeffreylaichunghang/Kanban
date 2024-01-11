@@ -9,15 +9,15 @@ const baseURL = import.meta.env.VITE_API_URL
 export default function useApiCall(
     endpoint,
     verb = 'GET',
-    options = {},
-    dependencies = []
+    // options = {},
+    // dependencies = []
 ) {
-    return useAsync(() => {
+    return useAsync((options) => {
         return axios({
             method: verb,
             baseURL: baseURL,
             url: endpoint,
-            params: options
+            data: options
         }).then((res) => {
             if (res.statusText === 'OK') return res.data
             return Promise.reject(res.data)
@@ -27,5 +27,5 @@ export default function useApiCall(
         //     if (res.ok) return res.json()
         //     return res.json().then(json => Promise.reject(json))
         // })
-    }, dependencies)
+    })
 }

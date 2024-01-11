@@ -79,6 +79,7 @@ class TaskService {
     }
 
     async createBoard(newBoard) {
+        console.log(`create new board ${newBoard}`)
         const { board_name, board_columns } = newBoard
         try {
             const createdBoard = await prisma.$transaction(async tx => {

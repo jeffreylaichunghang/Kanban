@@ -9,8 +9,9 @@ import BoardModal from "../../components/modals/BoardModal"
 export default function TaskBoard() {
     const [allTaskData, setAllTaskData] = useState([])
     const [board, setBoard] = useState(null)
+    const [modal, setModal] = useState('')
     const { theme } = useContext(ThemeContext)
-    const { value, error, loading, callbackMemoized } = useApiCall('getAllBoardsData', 'GET')
+    const { value, error, loading, callbackMemoized: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
     const styles = {
         container: {
             backgroundColor: theme.color.backgroundPrimary,
@@ -23,17 +24,29 @@ export default function TaskBoard() {
         }
     }
 
+    useEffect(() => { getAllBoardsData() }, [])
     useEffect(() => {
         if (value) {
             // console.log(value)
             setAllTaskData(value)
-            setBoard(value[0])
+            if (!board) {
+                setBoard(value[0])
+            } else {
+                setBoard(board)
+            }
         }
-    }, [value])
+    }, [value, board])
 
     return (
         <div style={styles.container}>
-            <BoardModal />
+            <BoardModal
+                board={board}
+                setBoard={setBoard}
+                modal={modal}
+                setModal={setModal}
+                allTaskData={allTaskData}
+                getAllBoardsData={getAllBoardsData}
+            />
             <NavBar
                 board={board}
             />
@@ -41,6 +54,7 @@ export default function TaskBoard() {
                 board={board}
                 setBoard={setBoard}
                 allTaskData={allTaskData}
+                setModal={setModal}
             />
         </div>
     )

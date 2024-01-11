@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from "react"
 
-export default function useAsync(callback, dependencies = []) {
+export default function useAsync(callback) {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState()
     const [value, setValue] = useState()
 
-    const callbackMemoized = useCallback(() => {
+    const callbackMemoized = useCallback((options = {}) => {
         setLoading(true)
         setError(undefined)
         setValue(undefined)
-        callback()
+        callback(options)
             .then(setValue)
             .catch(setError)
             .finally(() => setLoading(false))
-    }, dependencies)
+    }, [callback])
 
-    useEffect(() => {
-        callbackMemoized()
-    }, [callbackMemoized])
+    // useEffect(() => {
+    //     callbackMemoized()
+    // }, [callbackMemoized])
 
     return { loading, error, value, callbackMemoized }
 }

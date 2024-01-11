@@ -12,6 +12,7 @@ export default function Sidebar({
     board,
     setBoard,
     allTaskData,
+    setModal,
 }) {
     const [activeBoard, setActiveBoard] = useState(null)
     const [boardList, setBoardList] = useState([])
@@ -65,6 +66,10 @@ export default function Sidebar({
                     key={board?.id}
                     icon={'boardIcon'}
                     text={board?.board_name}
+                    onClick={() => {
+                        setActiveBoard(board)
+                        setBoard(board)
+                    }}
                     buttonColor={activeBoard?.board_name === board?.board_name ? theme.color.primary : 'transparent'}
                     buttonHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.primaryHover : theme.color.secondary}
                     iconColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.secondaryText}
@@ -101,6 +106,7 @@ export default function Sidebar({
                         buttonHoverColor={'transparent'}
                         iconColor={theme.color.primary}
                         iconHoverColor={theme.color.primaryHover}
+                        onClick={() => setModal('newboard')}
                     />
                 </div>
                 <ThemeToggleButton />

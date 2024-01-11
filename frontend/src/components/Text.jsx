@@ -7,6 +7,7 @@ export default function Text({
     text = '',
     color,
     style = {},
+    onClick = () => true
 }) {
     const { theme } = useContext(ThemeContext)
     let defaultStyle = {};
@@ -50,7 +51,7 @@ export default function Text({
     }
 
     return (
-        <p style={styles}>
+        <p style={styles} onClick={onClick}>
             {text}
         </p>
     )

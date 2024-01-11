@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../../themes";
 import OutsideAlerter from "../../hooks/useOutsideAlerter";
 import { motion } from "framer-motion";
@@ -11,16 +11,23 @@ const modalVariants = {
 export default function Modal({
     children,
     style = {},
+    modal,
+    action
 }) {
     const { theme } = useContext(ThemeContext)
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        modal === '' ? setOpen(false) : setOpen(true)
+    }, [modal])
 
     return (
         <motion.div
             animate={open ? 'open' : 'closed'}
             variants={modalVariants}
+            transition={{ type: 'just' }}
+            initial={false}
             style={{
-                display: open ? "block" : "none",
                 position: 'absolute',
                 width: '100%',
                 height: '100%',
@@ -30,13 +37,14 @@ export default function Modal({
             <OutsideAlerter
                 action={() => {
                     if (open) setOpen(false)
+                    action()
                 }}
                 style={{
                     backgroundColor: theme.color.backgroundSecondary,
                     borderRadius: 6,
                     color: theme.color.secondary,
                     width: "480px",
-                    height: "100px",
+                    height: 'min-content',
                     position: "absolute",
                     top: 0,
                     left: 0,
