@@ -17,7 +17,7 @@ Insert gif or link to demo
 
 ## Tech Stack
 
-**Client:** React, Recoil, CSS, Material UI
+**Client:** React, Recoil, CSS, Material UI, Framer Motion
 
 **Server:** Node, Express, Postgres, Prisma
 

@@ -20,24 +20,20 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark')
 
   const toggleTheme = () => {
     setTheme(prev => {
-      if (prev === 'light') {
-        setTheme('dark')
-        localStorage.setItem('theme', 'dark')
-      } else {
-        setTheme('dark')
-        localStorage.setItem('theme', 'dark')
-      }
+      const newTheme = prev === 'light' ? 'dark' : 'light'
+      localStorage.setItem('theme', newTheme)
+      return newTheme
     })
   }
 
   const themes = theme === 'dark' ? darkTheme : lightTheme
 
   return (
-    <ThemeContext.Provider value={{ theme: themes, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: themes, toggleTheme, themeState: theme }}>
       <RouterProvider router={router} />
     </ThemeContext.Provider>
   )
