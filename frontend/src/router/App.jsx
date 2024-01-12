@@ -6,7 +6,7 @@ import {
 import { ThemeContext } from "../themes";
 import { lightTheme, theme as darkTheme } from "../themes/themes";
 
-import TaskBoard from "../screens/taskBoard/TaskBoard";
+import KanbanBoard from "../screens/kanbanBoard/KanbanBoard";
 
 const router = createBrowserRouter([
   {
@@ -14,8 +14,8 @@ const router = createBrowserRouter([
     element: <div>Hello world!</div>,
   },
   {
-    path: '/taskBoard',
-    element: <TaskBoard />
+    path: '/kanbanBoard',
+    element: <KanbanBoard />
   }
 ]);
 

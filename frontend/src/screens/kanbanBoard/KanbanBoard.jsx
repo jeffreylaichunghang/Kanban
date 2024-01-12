@@ -7,13 +7,13 @@ import Sidebar from "../../components/sidebar/Sidebar"
 import BoardModal from "../../components/modals/BoardModal"
 import WarningModal from "../../components/modals/WarningModal"
 
-export default function TaskBoard() {
+export default function KanbanBoard() {
     const [allTaskData, setAllTaskData] = useState([])
     const [board, setBoard] = useState(null)
     const [modal, setModal] = useState('')
     const [warningModal, setWarningModal] = useState({ show: false })
     const { theme } = useContext(ThemeContext)
-    const { value, error, loading, callbackMemoized: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
+    const { value, error, loading, callApi: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
     const styles = {
         container: {
             backgroundColor: theme.color.backgroundPrimary,
@@ -59,6 +59,7 @@ export default function TaskBoard() {
             <NavBar
                 board={board}
                 setWarningModal={setWarningModal}
+                setModal={setModal}
             />
             <Sidebar
                 board={board}

@@ -55,29 +55,27 @@ export default function Sidebar({
     }
 
     useEffect(() => {
-        setBoardList(allTaskData.map(data => ({ id: data.id, board_name: data.board_name })))
+        setBoardList(allTaskData)
         setActiveBoard(board)
     }, [allTaskData, board])
 
-    const boardButtonElements = useMemo(() => {
-        return boardList.map(board => {
-            return (
-                <SidebarButton
-                    key={board?.id}
-                    icon={'boardIcon'}
-                    text={board?.board_name}
-                    onClick={() => {
-                        setActiveBoard(board)
-                        setBoard(board)
-                    }}
-                    buttonColor={activeBoard?.board_name === board?.board_name ? theme.color.primary : 'transparent'}
-                    buttonHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.primaryHover : theme.color.secondary}
-                    iconColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.secondaryText}
-                    iconHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.primary}
-                />
-            )
-        })
-    }, [boardList])
+    const boardButtonElements = boardList.map(board => {
+        return (
+            <SidebarButton
+                key={board?.id}
+                icon={'boardIcon'}
+                text={board?.board_name}
+                onClick={() => {
+                    setActiveBoard(board)
+                    setBoard(board)
+                }}
+                buttonColor={activeBoard?.board_name === board?.board_name ? theme.color.primary : 'transparent'}
+                buttonHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.primaryHover : theme.color.secondary}
+                iconColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.secondaryText}
+                iconHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.primary}
+            />
+        )
+    })
 
     return (
         <>

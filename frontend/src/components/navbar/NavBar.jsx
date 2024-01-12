@@ -12,7 +12,8 @@ import ActionModal from "../modals/ActionModal"
 
 export default function NavBar({
     board,
-    setWarningModal
+    setWarningModal,
+    setModal
 }) {
     const [actionModal, setActionModal] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
@@ -87,6 +88,7 @@ export default function NavBar({
                         style={{ cursor: 'pointer' }}
                         onClick={() => {
                             setActionModal(false)
+                            setModal('editboard')
                         }}
                     />
                     <Text

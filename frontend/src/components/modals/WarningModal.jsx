@@ -13,7 +13,7 @@ export default function WarningModal({
     setBoard,
     getAllBoardsData
 }) {
-    const { loading, error, value: deletedboard, callbackMemoized: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
+    const { loading, error, value: deletedboard, callApi: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
     const { theme } = useContext(ThemeContext)
 
     useEffect(() => {

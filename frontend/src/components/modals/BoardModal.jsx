@@ -18,7 +18,8 @@ export default function BoardModal({
     allTaskData,
     getAllBoardsData
 }) {
-    const { value: createdBoard, callbackMemoized: createboard } = useApiCall('createBoard', 'POST')
+    const { value: createdBoard, callApi: createboard } = useApiCall('createBoard', 'POST')
+    const { value: editedBoard, callApi: editboard } = useApiCall(`editBoard/${board?.id}`, 'PUT')
     const [boardInfo, setBoardInfo] = useState(null)
     const { theme } = useContext(ThemeContext)
     const styles = {
@@ -40,6 +41,8 @@ export default function BoardModal({
         } else if (modal === 'editboard') {
             setBoardInfo(board)
         }
+    }, [board, modal])
+    useEffect(() => {
         if (createdBoard) {
             console.log(createdBoard)
             setBoard({
@@ -48,8 +51,12 @@ export default function BoardModal({
             })
             setModal('')
             getAllBoardsData()
+        } else if (editedBoard) {
+            console.log(editedBoard)
+            setBoard(editedBoard)
+            setModal('')
         }
-    }, [board, modal, createdBoard])
+    }, [createdBoard, editedBoard])
 
     const boardColumnList = useMemo(() => {
         return boardInfo?.columns.map((info, index) => {
@@ -84,13 +91,25 @@ export default function BoardModal({
             let validation = { valid: true, message: '' }
 
             if (key === 'board_name') {
-                if (value === '' || allTaskData?.map(board => board.board_name).includes(value)) {
+                if (value === '') {
                     valid = false
                     validation.valid = false
-                    validation.message = value === '' ? 'Can \'t be empty' : 'Duplicated'
+                    validation.message = 'Can \'t be empty'
+                } else if (modal === 'newboard' && allTaskData?.map(board => board.board_name).includes(value)) {
+                    valid = false
+                    validation.valid = false
+                    validation.message = `${value} already exist`
+                } else if (
+                    modal === 'editboard' &&
+                    allTaskData.map(data => data.board_name).filter(name => name !== board.board_name).includes(value)
+                ) {
+                    valid = false
+                    validation.valid = false
+                    validation.message = `${value} already exist`
                 }
                 infoToValidate.validBoardName = validation
-            } else if (key === 'columns') {
+            }
+            if (key === 'columns') {
                 value.forEach((column, index) => {
                     if (column.column_name === '' || infoToValidate.columns.map(col => col.column_name).indexOf(column.column_name) !== index) {
                         valid = false
@@ -108,11 +127,19 @@ export default function BoardModal({
 
     const onsubmit = () => {
         if (!validateBoardInfo(boardInfo)) return
-        console.log(boardInfo)
-        createboard({
-            board_name: boardInfo.board_name,
-            board_columns: boardInfo.columns
-        })
+        if (modal === 'newboard') {
+            console.log('create board')
+            createboard({
+                board_name: boardInfo.board_name,
+                board_columns: boardInfo.columns
+            })
+        } else if (modal === 'editboard') {
+            console.log('edit board', boardInfo)
+            editboard({
+                board_name: boardInfo.board_name,
+                board_columns: boardInfo.columns
+            })
+        }
     }
 
     return (
@@ -138,6 +165,7 @@ export default function BoardModal({
                 <Label text="Board Name" name="boardName" />
                 <Input
                     name="boardName"
+                    value={boardInfo?.board_name}
                     placeholder={modal === 'newboard' ? "e.g. Web Design" : ''}
                     onChange={(e) => setBoardInfo(prev => ({
                         ...prev,
