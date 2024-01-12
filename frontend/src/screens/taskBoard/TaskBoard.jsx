@@ -5,11 +5,13 @@ import useApiCall from "../../hooks/useApiCall"
 import NavBar from "../../components/navbar/NavBar"
 import Sidebar from "../../components/sidebar/Sidebar"
 import BoardModal from "../../components/modals/BoardModal"
+import WarningModal from "../../components/modals/WarningModal"
 
 export default function TaskBoard() {
     const [allTaskData, setAllTaskData] = useState([])
     const [board, setBoard] = useState(null)
     const [modal, setModal] = useState('')
+    const [warningModal, setWarningModal] = useState({ show: false })
     const { theme } = useContext(ThemeContext)
     const { value, error, loading, callbackMemoized: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
     const styles = {
@@ -39,6 +41,13 @@ export default function TaskBoard() {
 
     return (
         <div style={styles.container}>
+            <WarningModal
+                warningModal={warningModal}
+                setWarningModal={setWarningModal}
+                board={board}
+                setBoard={setBoard}
+                getAllBoardsData={getAllBoardsData}
+            />
             <BoardModal
                 board={board}
                 setBoard={setBoard}
@@ -49,6 +58,7 @@ export default function TaskBoard() {
             />
             <NavBar
                 board={board}
+                setWarningModal={setWarningModal}
             />
             <Sidebar
                 board={board}

@@ -250,22 +250,13 @@ class TaskService {
         }
     }
 
-    async deleteBoard(board) {
-        console.log('delete board =', board)
-        const { board_name } = board
+    async deleteBoard(boardId) {
+        console.log('delete board =', boardId)
         try {
             return await prisma.$transaction(async tx => {
-                const boardId = await tx.board.findFirst({
-                    where: {
-                        board_name: board_name
-                    },
-                    select: { id: true }
-                })
                 const deletedBoard = await tx.board.delete({
                     where: {
-                        id: boardId.id,
-                        board_name: board_name,
-                        userId: 1,
+                        id: boardId,
                     },
                     select: {
                         board_name: true,

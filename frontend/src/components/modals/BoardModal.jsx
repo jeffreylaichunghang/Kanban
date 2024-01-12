@@ -47,6 +47,7 @@ export default function BoardModal({
                 columns: createdBoard.createdColumns
             })
             setModal('')
+            getAllBoardsData()
         }
     }, [board, modal, createdBoard])
 
@@ -123,7 +124,10 @@ export default function BoardModal({
                 rowGap: 24,
             }}
             modal={modal}
-            action={() => setModal('')}
+            action={() => {
+                setModal('')
+                setBoardInfo(null)
+            }}
         >
             <Text
                 variant="heading"

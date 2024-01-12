@@ -11,7 +11,8 @@ import Text from "../Text"
 import ActionModal from "../modals/ActionModal"
 
 export default function NavBar({
-    board
+    board,
+    setWarningModal
 }) {
     const [actionModal, setActionModal] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
@@ -84,6 +85,9 @@ export default function NavBar({
                         color={theme.color.secondaryText}
                         text="Edit Board"
                         style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            setActionModal(false)
+                        }}
                     />
                     <Text
                         variant="body"
@@ -91,6 +95,13 @@ export default function NavBar({
                         color={theme.color.destructive}
                         text="Delete Board"
                         style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            setWarningModal({
+                                show: true,
+                                target: 'board'
+                            })
+                            setActionModal(false)
+                        }}
                     />
                 </ActionModal>
             </div>

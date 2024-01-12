@@ -25,7 +25,7 @@ export default function Modal({
         <motion.div
             animate={open ? 'open' : 'closed'}
             variants={modalVariants}
-            transition={{ type: 'just' }}
+            transition={{ type: 'just', duration: 0.5, ease: [0, 0.71, 0.2, 1.01] }}
             initial={false}
             style={{
                 position: 'absolute',

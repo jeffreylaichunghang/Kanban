@@ -24,6 +24,8 @@ export default function Input({
         setInputValue(value)
         if (validation) {
             setWarningText(validation.message)
+        } else {
+            setWarningText(false)
         }
     }, [value, validation])
 
@@ -72,7 +74,7 @@ export default function Input({
                     paddingLeft: 16,
                     paddingRight: 16,
                     marginTop: 8,
-                    color: theme.color.secondary,
+                    color: theme.color.primaryText,
                     border: `1px solid ${borderColor}`,
                     outlineColor: theme.color.primary,
                     ...theme.font.body.l,

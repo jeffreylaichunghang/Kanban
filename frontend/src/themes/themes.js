@@ -37,7 +37,7 @@ export const theme = {
         destructive: palette.red,
         destructiveHover: palette.redHover,
         mainPurple: palette.mainPurple[1],
-        white: palette.white
+        white: palette.white,
     },
     font: {
         heading: {
