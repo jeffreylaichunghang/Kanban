@@ -38,7 +38,7 @@ export default function InputItem({
             <span
                 onClick={onClick}
                 style={{
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                 }}
             >
                 <CrossIcon

@@ -89,7 +89,7 @@ export default function Taskcolumn({
                                 taskInfo={task}
                                 onClick={() => {
                                     setTaskData(task)
-                                    setModal(true)
+                                    setModal('taskcard')
                                 }}
                             />
                         )

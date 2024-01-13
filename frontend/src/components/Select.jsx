@@ -22,10 +22,8 @@ export default function Select({
     useEffect(() => {
         if (initialValue) {
             setValue(initialValue)
-        } else if (options) {
-            setValue(options[0])
         }
-    }, [options, initialValue])
+    }, [initialValue])
 
     return (
         <OutsideAlerter action={() => setOpen(false)}>

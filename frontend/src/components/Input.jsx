@@ -76,6 +76,7 @@ export default function Input({
                     marginTop: 8,
                     color: theme.color.primaryText,
                     border: `1px solid ${borderColor}`,
+                    borderRadius: 4,
                     outlineColor: theme.color.primary,
                     ...theme.font.body.l,
                     ...style

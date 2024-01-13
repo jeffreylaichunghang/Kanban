@@ -35,8 +35,10 @@ export default function TaskCardModal({
 
     return (
         <Modal
-            modal={modal}
-            action={() => setModal(false)}
+            modal={modal === 'taskcard'}
+            action={() => {
+                if (modal === 'taskcard') setModal(false)
+            }}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -74,6 +76,7 @@ export default function TaskCardModal({
                         text="Edit Task"
                         color={theme.color.secondaryText}
                         style={{ cursor: 'pointer' }}
+                        onClick={() => setModal('edittask')}
                     />
                     <Text
                         variant="body"
