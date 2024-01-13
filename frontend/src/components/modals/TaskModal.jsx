@@ -198,6 +198,10 @@ export default function TaskModal({
                 <Select
                     options={boardTasks[0]?.columns.map(col => col.column_name)}
                     initialValue={boardTasks[0]?.columns.filter(col => col.id === task?.columnId)[0]?.column_name}
+                    action={(option) => setTask(prev => ({
+                        ...prev,
+                        columnId: boardTasks[0]?.columns?.filter(col => col?.column_name === option)[0]?.id
+                    }))}
                 />
             </div>
             <Button

@@ -16,7 +16,6 @@ export default function KanbanBoard() {
     const [taskData, setTaskData] = useState(null)
     const [board, setBoard] = useState(null)
     const [modal, setModal] = useState('')
-    // const [cardModal, setCardModal] = useState(false)
     const [warningModal, setWarningModal] = useState({ show: false })
     const [sidebar, setSidebar] = useState(true)
     const { theme } = useContext(ThemeContext)
@@ -58,6 +57,7 @@ export default function KanbanBoard() {
                 setWarningModal={setWarningModal}
                 board={board}
                 setBoard={setBoard}
+                taskData={taskData}
                 getAllBoardsData={getAllBoardsData}
             />
             <TaskModal
@@ -72,6 +72,7 @@ export default function KanbanBoard() {
                 setTaskData={setTaskData}
                 modal={modal}
                 setModal={setModal}
+                setWarningModal={setWarningModal}
                 boardTasks={boardTasks}
                 getAllBoardsData={getAllBoardsData}
             />

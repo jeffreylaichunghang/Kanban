@@ -11,9 +11,11 @@ export default function WarningModal({
     setWarningModal,
     board,
     setBoard,
+    taskData,
     getAllBoardsData
 }) {
     const { loading, error, value: deletedboard, callApi: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
+    const { value: deletedTask, callApi: deleteTask } = useApiCall(`deleteTask/${taskData?.id}`, 'DELETE')
     const { theme } = useContext(ThemeContext)
 
     useEffect(() => {
@@ -22,8 +24,12 @@ export default function WarningModal({
             setWarningModal({ show: false })
             setBoard(null)
             getAllBoardsData()
+        } else if (deletedTask) {
+            console.log(deletedTask)
+            setWarningModal({ show: false })
+            getAllBoardsData()
         }
-    }, [deletedboard])
+    }, [deletedboard, deletedTask])
 
     let target = {
         type: '',
@@ -37,7 +43,7 @@ export default function WarningModal({
                 break;
             case 'task':
                 target.type = 'task',
-                    target.message = `Are you sure you want to delete the ‘${'task name'}’ task? This action will remove all subtasks and cannot be reversed.`
+                    target.message = `Are you sure you want to delete the ‘${taskData.task_name}’ task? This action will remove all subtasks and cannot be reversed.`
                 break;
 
             default:
@@ -84,7 +90,13 @@ export default function WarningModal({
                     style={{
                         width: '100%'
                     }}
-                    onClick={() => deleteboard()}
+                    onClick={() => {
+                        if (target.type === 'board') {
+                            deleteboard()
+                        } else if (target.type === 'task') {
+                            deleteTask()
+                        }
+                    }}
                 />
                 <Button
                     text="Cancel"

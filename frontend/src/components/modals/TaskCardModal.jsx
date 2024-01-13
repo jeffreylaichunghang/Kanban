@@ -14,6 +14,7 @@ export default function TaskCardModal({
     setTaskData,
     modal,
     setModal,
+    setWarningModal,
     boardTasks,
     getAllBoardsData
 }) {
@@ -84,6 +85,13 @@ export default function TaskCardModal({
                         text="Delete Task"
                         color={theme.color.destructive}
                         style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            setWarningModal({
+                                show: true,
+                                target: 'task'
+                            })
+                            setModal('')
+                        }}
                     />
                 </ActionModal>
             </div>

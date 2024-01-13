@@ -8,7 +8,7 @@ export default function Taskboard({
     sidebar,
     boardTasks,
     setModal,
-    setTaskData
+    setTaskData,
 }) {
     const { width, height } = useWindowDimension()
 
