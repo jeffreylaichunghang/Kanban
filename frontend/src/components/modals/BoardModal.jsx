@@ -150,10 +150,12 @@ export default function BoardModal({
                 flex: 1,
                 rowGap: 24,
             }}
-            modal={modal}
+            modal={modal === 'newboard' || modal === 'editboard'}
             action={() => {
-                setModal('')
-                setBoardInfo(null)
+                if (modal === 'newboard' || modal === 'editboard') {
+                    setModal('')
+                    setBoardInfo(null)
+                }
             }}
         >
             <Text

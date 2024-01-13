@@ -17,7 +17,7 @@ class TaskRouter {
 
         router.put('/editBoard/:id', this.editBoard.bind(this))
         router.put('/editTask/:id', this.editTask.bind(this))
-        router.put('/updateSubTask/:id', this.updateSubTask.bind(this))
+        router.put('/updateSubTask/:taskId', this.updateSubTask.bind(this))
 
         router.delete('/deleteBoard/:id', this.deleteBoard.bind(this))
         router.delete('/deleteTask/:id', this.deleteTask.bind(this))
@@ -123,7 +123,7 @@ class TaskRouter {
     }
 
     async updateSubTask(req, res) {
-        const taskId = req.params.id
+        const taskId = req.params.taskId
         const data = await this.service.updateSubTask(req.body, taskId)
         res.json(data)
     }

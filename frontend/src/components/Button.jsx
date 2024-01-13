@@ -1,6 +1,7 @@
 import { useContext, useRef } from "react"
 import { ThemeContext } from "../themes"
 import useHover from "../hooks/useHover"
+import { motion } from "framer-motion"
 
 import Text from "./Text"
 
@@ -67,16 +68,17 @@ export default function Button({
     }
 
     return (
-        <button
+        <motion.button
             ref={buttonRef}
             style={styles}
             onClick={onClick}
+            whileTap={{ scale: 0.97 }}
         >
             <Text
                 text={text}
                 {...textProperty}
                 style={textStyle}
             />
-        </button>
+        </motion.button>
     )
 }

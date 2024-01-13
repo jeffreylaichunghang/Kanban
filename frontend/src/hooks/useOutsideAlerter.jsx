@@ -18,13 +18,11 @@ export default function OutsideAlerter({
     useOutsideAlerter(modalRef, action)
 
     return (
-        <>
-            <div
-                ref={modalRef}
-                style={style}
-            >
-                {children}
-            </div>
-        </>
+        <div
+            ref={modalRef}
+            style={style}
+        >
+            {children}
+        </div>
     )
 }

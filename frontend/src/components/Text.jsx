@@ -1,14 +1,18 @@
-import { useContext } from "react"
+import { useContext, useRef } from "react"
 import { ThemeContext } from "../themes"
+import useHover from "../hooks/useHover";
 
 export default function Text({
     variant = 'body',
     size = 'l',
     text = '',
     color,
+    hoverColor,
     style = {},
     onClick = () => true
 }) {
+    const textRef = useRef()
+    const hovered = useHover(textRef)
     const { theme } = useContext(ThemeContext)
     let defaultStyle = {};
 
@@ -45,13 +49,13 @@ export default function Text({
     }
 
     const styles = {
-        color: color || theme.color.primaryText,
+        color: hovered ? hoverColor || color : color || theme.color.primaryText,
         ...defaultStyle,
         ...style
     }
 
     return (
-        <p style={styles} onClick={onClick}>
+        <p style={styles} onClick={onClick} ref={textRef}>
             {text}
         </p>
     )

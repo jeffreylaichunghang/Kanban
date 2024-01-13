@@ -6,25 +6,25 @@ import OutsideAlerter from "../../hooks/useOutsideAlerter"
 export default function ActionModal({
     actionModal,
     setActionModal,
-    children
+    children,
+    style = {}
 }) {
     const { theme } = useContext(ThemeContext)
 
     return (
         <OutsideAlerter
-            action={() => { setActionModal(false) }}
+            action={() => setActionModal(false)}
             style={{
                 display: actionModal ? 'block' : 'none',
                 position: 'absolute',
                 backgroundColor: 'white',
-                right: 24,
-                bottom: -90,
                 width: 190,
                 padding: 16,
                 backgroundColor: theme.color.backgroundPrimary,
                 boxShadow: '1px 2px 9px black',
                 color: theme.color.secondaryText,
                 borderRadius: 8,
+                ...style
             }}
         >
             <div style={{

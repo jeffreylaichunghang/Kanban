@@ -72,13 +72,17 @@ export default function NavBar({
                     <Button
                         variant="primary"
                         text="+ Add New Task"
-                        onClick={() => console.log('create task')}
+                        onClick={() => setModal('taskmodal')}
                     />
                     <span style={styles.ellipsis} onClick={() => setActionModal(true)}><Ellipsis /></span>
                 </span>
                 <ActionModal
                     actionModal={actionModal}
                     setActionModal={setActionModal}
+                    style={{
+                        right: 24,
+                        bottom: -90,
+                    }}
                 >
                     <Text
                         variant="body"

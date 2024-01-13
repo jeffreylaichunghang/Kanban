@@ -1,25 +1,33 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { ThemeContext } from "../../themes"
 import useApiCall from "../../hooks/useApiCall"
+import useWindowDimension from "../../hooks/useWindowDimension"
 
+import Taskboard from "../../components/taskboard/Taskboard"
 import NavBar from "../../components/navbar/NavBar"
 import Sidebar from "../../components/sidebar/Sidebar"
 import BoardModal from "../../components/modals/BoardModal"
 import WarningModal from "../../components/modals/WarningModal"
+import TaskCardModal from "../../components/modals/TaskCardModal"
+import TaskModal from "../../components/modals/TaskModal"
 
 export default function KanbanBoard() {
     const [allTaskData, setAllTaskData] = useState([])
+    const [taskData, setTaskData] = useState(null)
     const [board, setBoard] = useState(null)
     const [modal, setModal] = useState('')
+    const [cardModal, setCardModal] = useState(false)
     const [warningModal, setWarningModal] = useState({ show: false })
+    const [sidebar, setSidebar] = useState(true)
     const { theme } = useContext(ThemeContext)
     const { value, error, loading, callApi: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
+    const { width, height } = useWindowDimension()
     const styles = {
         container: {
             backgroundColor: theme.color.backgroundPrimary,
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh',
+            width: width,
+            height: height,
+            maxHeight: height,
             overFlowY: 'none',
             overflowX: 'scroll',
             padding: 0,
@@ -39,6 +47,10 @@ export default function KanbanBoard() {
         }
     }, [value, board])
 
+    const boardTasks = useMemo(() => {
+        return allTaskData?.filter(data => data.id === board?.id)
+    }, [board, allTaskData])
+
     return (
         <div style={styles.container}>
             <WarningModal
@@ -46,6 +58,18 @@ export default function KanbanBoard() {
                 setWarningModal={setWarningModal}
                 board={board}
                 setBoard={setBoard}
+                getAllBoardsData={getAllBoardsData}
+            />
+            <TaskModal
+                modal={modal}
+                setModal={setModal}
+            />
+            <TaskCardModal
+                taskData={taskData}
+                setTaskData={setTaskData}
+                modal={cardModal}
+                setModal={setCardModal}
+                boardTasks={boardTasks}
                 getAllBoardsData={getAllBoardsData}
             />
             <BoardModal
@@ -66,6 +90,14 @@ export default function KanbanBoard() {
                 setBoard={setBoard}
                 allTaskData={allTaskData}
                 setModal={setModal}
+                sidebar={sidebar}
+                setSidebar={setSidebar}
+            />
+            <Taskboard
+                sidebar={sidebar}
+                boardTasks={boardTasks}
+                setModal={setCardModal}
+                setTaskData={setTaskData}
             />
         </div>
     )

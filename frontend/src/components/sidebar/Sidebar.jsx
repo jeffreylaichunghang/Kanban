@@ -13,10 +13,12 @@ export default function Sidebar({
     setBoard,
     allTaskData,
     setModal,
+    sidebar,
+    setSidebar,
 }) {
     const [activeBoard, setActiveBoard] = useState(null)
     const [boardList, setBoardList] = useState([])
-    const [sidebar, setSidebar] = useState(true)
+    // const [sidebar, setSidebar] = useState(true)
     const { theme } = useContext(ThemeContext)
     const { height } = useWindowDimension()
     const styles = {

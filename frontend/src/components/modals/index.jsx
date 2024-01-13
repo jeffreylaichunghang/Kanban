@@ -3,6 +3,8 @@ import { ThemeContext } from "../../themes";
 import OutsideAlerter from "../../hooks/useOutsideAlerter";
 import { motion } from "framer-motion";
 
+import { constants } from "../../constants/constants";
+
 const modalVariants = {
     open: { scale: 1 },
     closed: { scale: 0 }
@@ -18,7 +20,7 @@ export default function Modal({
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        modal === '' ? setOpen(false) : setOpen(true)
+        modal ? setOpen(true) : setOpen(false)
     }, [modal])
 
     return (
@@ -35,15 +37,12 @@ export default function Modal({
                 zIndex: 5
             }}>
             <OutsideAlerter
-                action={() => {
-                    if (open) setOpen(false)
-                    action()
-                }}
+                action={action}
                 style={{
                     backgroundColor: theme.color.backgroundSecondary,
                     borderRadius: 6,
                     color: theme.color.secondary,
-                    width: "480px",
+                    width: constants.modalWidth,
                     height: 'min-content',
                     position: "absolute",
                     top: 0,

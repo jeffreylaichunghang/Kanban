@@ -47,7 +47,7 @@ export default function WarningModal({
 
     return (
         <Modal
-            modal={warningModal.show ? 'warningModal' : ''}
+            modal={warningModal.show}
             action={() => setWarningModal({ show: false })}
             style={{
                 display: 'flex',
