@@ -73,6 +73,7 @@ export default function NavBar({
                         variant="primary"
                         text="+ Add New Task"
                         onClick={() => setModal('taskmodal')}
+                        disabled={!board?.columns.length > 0}
                     />
                     <span style={styles.ellipsis} onClick={() => setActionModal(true)}><Ellipsis /></span>
                 </span>
