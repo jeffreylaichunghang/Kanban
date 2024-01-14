@@ -7,9 +7,8 @@ The Kanban Task Management App is a web-based application designed to help indiv
 
 ## Screenshots
 
-![App Screenshot](
+<!-- ![App Screenshot]() -->
   <img width="1252" alt="Screenshot 2024-01-14 at 10 31 43 PM" src="https://github.com/jeffreylaichunghang/portfolio/assets/129647521/aeb98b3c-197e-47b1-9da5-ecde0ac77206">
-)
 
 
 <!-- ## Demo
