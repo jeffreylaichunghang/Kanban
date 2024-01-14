@@ -1,10 +1,9 @@
-import { useState } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import { ThemeContext } from "../themes";
-import { lightTheme, theme as darkTheme } from "../themes/themes";
+import useToggleTheme from "../hooks/useToggleTheme";
 
 import KanbanBoard from "../screens/kanbanBoard/KanbanBoard";
 
@@ -20,17 +19,7 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark')
-
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const newTheme = prev === 'light' ? 'dark' : 'light'
-      localStorage.setItem('theme', newTheme)
-      return newTheme
-    })
-  }
-
-  const themes = theme === 'dark' ? darkTheme : lightTheme
+  const { themes, toggleTheme, theme } = useToggleTheme('dark')
 
   return (
     <ThemeContext.Provider value={{ theme: themes, toggleTheme, themeState: theme }}>
