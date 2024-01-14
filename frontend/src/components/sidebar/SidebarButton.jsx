@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import useHover from "../../hooks/useHover"
 
 import Text from "../Text"
@@ -20,6 +20,7 @@ export default function SidebarButton({
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
     const { theme } = useContext(ThemeContext)
+    const { layout } = useContext(MediaQueryContext)
     const renderedIcon = {
         'hideIcon': <HideIcon fill={hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText} />,
         'showIcon': <ShowIcon fill={hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText} />,
@@ -31,7 +32,7 @@ export default function SidebarButton({
             ref={buttonRef}
             onClick={onClick}
             style={{
-                width: 276,
+                width: layout.sidebarButtonWidth,
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -39,8 +40,8 @@ export default function SidebarButton({
                 cursor: 'pointer',
                 paddingTop: 14,
                 paddingBottom: 13,
-                paddingLeft: 32,
-                marginRight: 32,
+                paddingLeft: layout.sidebarPadding,
+                marginRight: layout.sidebarPadding,
                 borderTopRightRadius: 100,
                 borderBottomRightRadius: 100,
                 backgroundColor: hovered ? buttonHoverColor || theme.color.secondary : buttonColor || 'transparent',

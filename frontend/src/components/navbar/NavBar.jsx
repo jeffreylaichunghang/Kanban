@@ -1,10 +1,13 @@
 import { useContext, useState } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 
 import { constants } from "../../constants/constants"
 import LogoDark from "../../assets/LogoDark"
 import LogoLight from '../../assets/LogoLight'
+import LogoMobile from '../../assets/LogoMobile'
+import ChevronDown from '../../assets/ChevronDown'
+import ChevronUp from '../../assets/ChevronUp'
 import Ellipsis from '../../assets/Ellipsis'
 import Button from "../Button"
 import Text from "../Text"
@@ -13,14 +16,17 @@ import ActionModal from "../modals/ActionModal"
 export default function NavBar({
     board,
     setWarningModal,
-    setModal
+    setModal,
+    sidebar,
+    setSidebar,
 }) {
     const [actionModal, setActionModal] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
+    const { layout, isMobile } = useContext(MediaQueryContext)
     const { width } = useWindowDimension()
     const styles = {
         container: {
-            height: constants.navbarHeight,
+            height: layout.navbarHeight,
             width: width,
             backgroundColor: theme.color.backgroundSecondary,
             borderBottom: `1px solid ${theme.color.line}`,
@@ -28,10 +34,10 @@ export default function NavBar({
             flexDirection: 'row',
         },
         logo: {
-            width: constants.sidebarWidth,
+            width: layout.sidebarWidth,
             height: '100%',
-            paddingTop: '34px',
-            paddingLeft: '34px',
+            paddingTop: layout.logoPaddingTop,
+            paddingLeft: '24px',
             borderRight: `1px solid ${theme.color.line}`,
         },
         content: {
@@ -39,8 +45,8 @@ export default function NavBar({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: width - constants.sidebarWidth,
-            padding: 32,
+            width: isMobile ? '100%' : width - layout.sidebarWidth,
+            padding: layout.navbarPadding,
             position: 'relative',
         },
         buttonGroup: {
@@ -59,21 +65,41 @@ export default function NavBar({
 
     return (
         <div style={styles.container}>
-            <div style={styles.logo}>
+            {!isMobile && <div style={styles.logo}>
                 {themeState === 'dark' ? <LogoLight /> : <LogoDark />}
-            </div>
+            </div>}
             <div style={styles.content}>
-                <Text
-                    text={board?.board_name}
-                    variant="heading"
-                    size="xl"
-                />
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    columnGap: 24
+                }}>
+                    {isMobile && <LogoMobile />}
+                    <Text
+                        text={board?.board_name}
+                        variant="heading"
+                        size={layout.boardnameSize}
+                        hoverColor={theme.color.primaryText}
+                    />
+                    {
+                        isMobile &&
+                        <ChevronUp onClick={() => setSidebar(!sidebar)} />
+                    }
+                </div>
                 <span style={styles.buttonGroup}>
                     <Button
                         variant="primary"
-                        text="+ Add New Task"
+                        text={isMobile ? "+" : "+ Add New Task"}
                         onClick={() => setModal('taskmodal')}
                         disabled={!board?.columns.length > 0}
+                        style={{
+                            paddingTop: isMobile ? 5 : 15,
+                            paddingBottom: isMobile ? 8 : 15,
+                            paddingLeft: isMobile ? 18 : 24,
+                            paddingRight: isMobile ? 18 : 24,
+                        }}
                     />
                     <span style={styles.ellipsis} onClick={() => setActionModal(true)}><Ellipsis /></span>
                 </span>

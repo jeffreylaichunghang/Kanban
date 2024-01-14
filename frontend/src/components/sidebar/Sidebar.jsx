@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
 
@@ -18,15 +18,18 @@ export default function Sidebar({
 }) {
     const [activeBoard, setActiveBoard] = useState(null)
     const [boardList, setBoardList] = useState([])
-    // const [sidebar, setSidebar] = useState(true)
     const { theme } = useContext(ThemeContext)
+    const { layout, isMobile } = useContext(MediaQueryContext)
     const { height } = useWindowDimension()
     const styles = {
         container: {
             position: 'absolute',
-            top: constants.navbarHeight - 1,
-            width: constants.sidebarWidth,
-            height: height - constants.navbarHeight + 1,
+            top: isMobile ? layout.navbarHeight + 16 : layout.navbarHeight - 1,
+            left: 0,
+            right: isMobile ? 0 : '',
+            margin: 'auto',
+            width: layout.sidebarWidth,
+            height: isMobile ? '' : height - layout.navbarHeight + 1,
             backgroundColor: theme.color.backgroundSecondary,
             borderRight: `1px solid ${theme.color.line}`,
             borderTop: `1px solid transparent`,
@@ -34,7 +37,7 @@ export default function Sidebar({
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            paddingBottom: 90,
+            paddingBottom: isMobile ? 16 : 90,
             zIndex: 2
         },
         boardBtns: {
@@ -42,16 +45,16 @@ export default function Sidebar({
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            maxHeight: height - constants.navbarHeight + 100,
+            maxHeight: height - layout.navbarHeight + 100,
             overflowY: 'scroll',
             overflowX: 'none'
         },
         sidebarBtn: {
             position: 'absolute',
-            width: sidebar ? 276 : 56,
+            width: sidebar ? layout.sidebarWidth : 56,
             height: 48,
             bottom: 32,
-            paddingLeft: sidebar ? 32 : 16,
+            paddingLeft: sidebar ? layout.sidebarPadding : 16,
             zIndex: 3
         }
     }
@@ -79,10 +82,21 @@ export default function Sidebar({
         )
     })
 
+    const sidebarVariant = {
+        mobile: {
+            display: sidebar ? 'block' : 'none',
+            opacity: sidebar ? 1 : 0,
+        },
+        notMobile: {
+            x: sidebar ? 0 : '-100%'
+        }
+    }
+
     return (
         <>
             <motion.div
-                animate={{ x: sidebar ? 0 : '-100%' }}
+                animate={isMobile ? 'mobile' : 'notMobile'}
+                variants={sidebarVariant}
                 transition={{ type: 'just' }}
                 style={styles.container}
             >
@@ -92,7 +106,7 @@ export default function Sidebar({
                     text={`ALL BOARDS (${boardList.length})`}
                     color={theme.color.secondaryText}
                     style={{
-                        paddingLeft: 32,
+                        paddingLeft: layout.sidebarPadding,
                         marginBottom: 19,
                         marginTop: 15,
                     }}
@@ -111,7 +125,7 @@ export default function Sidebar({
                 </div>
                 <ThemeToggleButton />
             </motion.div>
-            <SidebarButton
+            {!isMobile && <SidebarButton
                 onClick={(e) => { setSidebar(!sidebar) }}
                 icon={sidebar ? 'hideIcon' : 'showIcon'}
                 text={sidebar ? 'Hide Sidebar' : ''}
@@ -120,7 +134,7 @@ export default function Sidebar({
                 iconColor={sidebar ? theme.color.secondaryText : theme.color.white}
                 iconHoverColor={sidebar ? theme.color.mainPurple : theme.color.white}
                 style={styles.sidebarBtn}
-            />
+            />}
         </>
     )
 }

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { ThemeContext } from "../../themes";
+import { ThemeContext, MediaQueryContext } from "../../themes";
 import OutsideAlerter from "../../hooks/useOutsideAlerter";
 import { motion } from "framer-motion";
 
@@ -17,6 +17,7 @@ export default function Modal({
     action
 }) {
     const { theme } = useContext(ThemeContext)
+    const { layout } = useContext(MediaQueryContext)
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -42,7 +43,7 @@ export default function Modal({
                     backgroundColor: theme.color.backgroundSecondary,
                     borderRadius: 6,
                     color: theme.color.secondary,
-                    width: constants.modalWidth,
+                    width: layout.modalWidth,
                     height: 'min-content',
                     position: "absolute",
                     top: 0,

@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
 
@@ -15,17 +15,28 @@ export default function Taskboard({
     setTaskData,
 }) {
     const { theme } = useContext(ThemeContext)
+    const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
+
+    const taskboardVariant = {
+        mobile: {
+            paddingLeft: 24,
+        },
+        notMobile: {
+            paddingLeft: sidebar ? layout.taskboardPadding + 24 : 24,
+        }
+    }
 
     return (
         <motion.div
             initial={false}
             transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-            animate={{ paddingLeft: sidebar ? constants.sidebarWidth + 24 : 24, }}
+            variants={taskboardVariant}
+            animate={isMobile ? 'mobile' : 'notMobile'}
             style={{
                 paddingTop: 24,
-                height: height - constants.navbarHeight - 24,
-                maxHeight: height - constants.navbarHeight - 24,
+                height: height - layout.navbarHeight - 24,
+                maxHeight: height - layout.navbarHeight - 24,
                 minWidth: width,
                 overflowY: 'none',
                 overflowX: 'scroll',
@@ -61,6 +72,7 @@ export default function Taskboard({
                                 size="l"
                                 text="This board is empty. Create a new column to get started."
                                 color={theme.color.secondaryText}
+                                style={{ width: layout.emptyBoardtext }}
                             />
                             <Button
                                 variant="primary"

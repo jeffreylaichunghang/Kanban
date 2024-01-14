@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import useHover from "../../hooks/useHover"
 import { motion } from 'framer-motion'
 
@@ -11,6 +11,7 @@ export default function ThemeToggleButton({
 
 }) {
     const { theme, toggleTheme, themeState } = useContext(ThemeContext)
+    const { layout } = useContext(MediaQueryContext)
     const [buttonPosition, setButtonPosition] = useState(themeState === 'light' ? 'flex-start' : 'flex-end')
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
@@ -25,7 +26,7 @@ export default function ThemeToggleButton({
             ref={buttonRef}
             onClick={toggleTheme}
             style={{
-                width: constants.sidebarWidth * 0.85,
+                width: layout.sidebarWidth * 0.85,
                 backgroundColor: theme.color.backgroundPrimary,
                 marginRight: 'auto',
                 marginLeft: 'auto',
@@ -60,6 +61,7 @@ export default function ThemeToggleButton({
                         backgroundColor: theme.color.white,
                     }}
                     layout
+                    initial={false}
                 ></motion.span>
             </span>
             <ThemeDark />

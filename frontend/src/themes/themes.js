@@ -81,7 +81,7 @@ export const theme = {
                 fontFamily: 'Plus Jakarta Sans',
             },
         }
-    }
+    },
 }
 
 export const lightTheme = {

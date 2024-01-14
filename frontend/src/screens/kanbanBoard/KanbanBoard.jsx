@@ -88,6 +88,8 @@ export default function KanbanBoard() {
                 board={board}
                 setWarningModal={setWarningModal}
                 setModal={setModal}
+                sidebar={sidebar}
+                setSidebar={setSidebar}
             />
             <Sidebar
                 board={board}
