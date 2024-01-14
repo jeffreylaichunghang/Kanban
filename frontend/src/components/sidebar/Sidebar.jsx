@@ -28,16 +28,17 @@ export default function Sidebar({
             left: 0,
             right: isMobile ? 0 : '',
             margin: 'auto',
+            paddingBottom: isMobile ? 16 : 90,
             width: layout.sidebarWidth,
             height: isMobile ? '' : height - layout.navbarHeight + 1,
             backgroundColor: theme.color.backgroundSecondary,
             borderRight: `1px solid ${theme.color.line}`,
             borderTop: `1px solid transparent`,
+            borderRadius: isMobile ? 8 : 0,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            paddingBottom: isMobile ? 16 : 90,
             zIndex: 2
         },
         boardBtns: {

@@ -7,17 +7,19 @@ The Kanban Task Management App is a web-based application designed to help indiv
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](
+  <img width="1252" alt="Screenshot 2024-01-14 at 10 31 43 PM" src="https://github.com/jeffreylaichunghang/portfolio/assets/129647521/aeb98b3c-197e-47b1-9da5-ecde0ac77206">
+)
 
 
-## Demo
+<!-- ## Demo
 
-Insert gif or link to demo
+Insert gif or link to demo -->
 
 
 ## Tech Stack
 
-**Client:** React, Recoil, CSS, Material UI, Framer Motion
+**Client:** React, Framer Motion
 
 **Server:** Node, Express, Postgres, Prisma
 
@@ -34,26 +36,27 @@ Insert gif or link to demo
 #### Get all items
 
 ```http
-  GET /api/items
+  GET /api/getAllBoardsData
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+|           |          | All data of boards, columns, tasks and subtasks|
 
-#### Get item
+#### Create a board
 
 ```http
-  GET /api/items/${id}
+  POST /api/createBoard
 ```
 
-| Parameter | Type     | Description                       |
+| Data | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| `board_name` | `string` | **Required**. Name of board |
+| `columns` | `string[]` | Name of the columns |
 
-#### add(num1, num2)
+<!-- #### add(num1, num2)
 
-Takes two numbers and returns the sum.
+Takes two numbers and returns the sum. -->
 
 
 
@@ -77,10 +80,10 @@ Install backend dependencies
   npm install
 ```
 
-Start the server
+Go to the frontend directory
 
 ```bash
-  node index.js
+  cd frondend
 ```
 
 Install frontend dependencies
@@ -89,15 +92,14 @@ Install frontend dependencies
   npm install
 ```
 
-Start the server
+Start the server at the root directory
 
 ```bash
-  npm start
+  npm run dev
 ```
 
 
-
-## Usage/Examples
+<!-- ## Usage/Examples
 
 ```javascript
 import Component from 'my-project'
@@ -105,14 +107,16 @@ import Component from 'my-project'
 function App() {
   return <Component />
 }
-```
+``` -->
 
 
 ## Roadmap
 
-- Additional browser support
+- Authentication
 
-- Add more integrations
+- Real-Time Collaboration
+
+- Group messaging
 
 
 ## Authors

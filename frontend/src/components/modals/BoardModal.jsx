@@ -55,6 +55,7 @@ export default function BoardModal({
             console.log(editedBoard)
             setBoard(editedBoard)
             setModal('')
+            getAllBoardsData()
         }
     }, [createdBoard, editedBoard])
 
