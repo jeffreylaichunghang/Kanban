@@ -8,7 +8,7 @@ The Kanban Task Management App is a web-based application designed to help indiv
 ## Screenshots
 
 <!-- ![App Screenshot]() -->
-  <img width="1252" alt="Screenshot 2024-01-14 at 10 31 43 PM" src="https://github.com/jeffreylaichunghang/portfolio/assets/129647521/aeb98b3c-197e-47b1-9da5-ecde0ac77206">
+  <img width="1256" alt="Screenshot 2024-01-15 at 11 04 25 AM" src="https://github.com/jeffreylaichunghang/Kanban/assets/129647521/e99618e9-b1df-4412-b176-835d845cd372">
 
 
 <!-- ## Demo
@@ -52,6 +52,66 @@ Insert gif or link to demo -->
 | :-------- | :------- | :-------------------------------- |
 | `board_name` | `string` | **Required**. Name of board |
 | `columns` | `string[]` | Name of the columns |
+
+```http
+  POST /api/createColumn
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `column_name` | `string` | **Required**. Name of column |
+
+```http
+  POST /api/createTask
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `task_name` | `string` | **Required**. Name of task |
+| `sub_tasks` | `string[]` | **Required**. Array of sub task names |
+
+```http
+  PUT /api/editBoard/:id
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `board_name` | `string` | **Required**. Name of board |
+| `columns` | `object[]` | **Required**. Array of columns. Those with an id will be updated. Those without an id will be created. The array is compared with the old array from which those items don't exist anymore will be deleted |
+
+```http
+  PUT /api/editTask/:id
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `task_name` | `string` | **Required**. Name of task |
+| `sub_tasks` | `object[]` | **Required**. Array of sub tasks. Those with an id will be updated. Those without an id will be created. The array is compared with the old array from which those items don't exist anymore will be deleted |
+
+```http
+  PUT /api/updateSubTask/:taskId
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `task_Id` | `number` | **Required**. Id of task |
+| `sub_tasks` | `object` | **Required**. An object of a sub task. To update the info of the sub task, mainly to update its status ( done / undone) from the app |
+
+```http
+  PUT /api/deleteBoard/:id
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `board_Id` | `number` | **Required**. Id of board |
+
+```http
+  PUT /api/deleteTask/:id
+```
+
+| Data | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `task_Id` | `number` | **Required**. Id of task |
 
 <!-- #### add(num1, num2)
 
