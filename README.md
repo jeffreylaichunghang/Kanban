@@ -1,34 +1,28 @@
 
-
 # Kanban
 
 The Kanban Task Management App is a web-based application designed to help individuals or teams efficiently manage their tasks using the popular Kanban method. With an intuitive user interface and powerful features, the app allows users to visualize their workflow, track progress, and collaborate effectively.
-
 
 ## Screenshots
 
 <!-- ![App Screenshot]() -->
   <img width="1256" alt="Screenshot 2024-01-15 at 11 04 25 AM" src="https://github.com/jeffreylaichunghang/Kanban/assets/129647521/e99618e9-b1df-4412-b176-835d845cd372">
 
-
 <!-- ## Demo
 
 Insert gif or link to demo -->
 
-
 ## Tech Stack
 
-**Client:** React, Framer Motion
+**Client:** React, Framer Motion, React-beautiful-dnd
 
 **Server:** Node, Express, Postgres, Prisma
-
 
 ## Features
 
 - Light/dark mode toggle
 - Drag-and-Drop Interface
 - Workflow Visualization
-
 
 ## API Reference
 
@@ -117,8 +111,6 @@ Insert gif or link to demo -->
 
 Takes two numbers and returns the sum. -->
 
-
-
 ## Run Locally
 
 Clone the project
@@ -157,7 +149,6 @@ Start the server at the root directory
   npm run dev
 ```
 
-
 <!-- ## Usage/Examples
 
 ```javascript
@@ -168,7 +159,6 @@ function App() {
 }
 ``` -->
 
-
 ## Roadmap
 
 - Authentication
@@ -177,11 +167,10 @@ function App() {
 
 - Group messaging
 
-
 ## Authors
 
 - [@jeffreylaichunghang](https://www.github.com/jeffreylaichunghang)
 
 ## Acknowledgements
 
- - [Frontend Mentor](https://www.frontendmentor.io/)
+- [Frontend Mentor](https://www.frontendmentor.io/)

@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import { ThemeContext } from "../../themes"
+import { Droppable } from "react-beautiful-dnd"
 
 import Text from "../Text"
 import Ellipsis from "../../assets/Ellipsis"
@@ -12,6 +13,7 @@ const setBg = () => {
 
 export default function Taskcolumn({
     columnInfo,
+    colIndex,
     setModal,
     setTaskData,
 }) {
@@ -73,29 +75,39 @@ export default function Taskcolumn({
                     <Ellipsis />
                 </span>
             </div>
-            <div style={{
-                overflowY: 'scroll',
-                overflowX: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                rowGap: 20,
-            }}>
-                {
-                    columnInfo?.tasks.map(task => {
-                        return (
-                            <TaskCard
-                                key={task.id}
-                                taskInfo={task}
-                                onClick={() => {
-                                    setTaskData(task)
-                                    setModal('taskcard')
-                                }}
-                            />
-                        )
-                    })
-                }
-            </div>
+            <Droppable
+                droppableId={String(colIndex)}
+                type="task_group"
+            >
+                {(provided) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef} style={{
+                        overflowY: 'scroll',
+                        overflowX: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        // rowGap: 20, (not supported in dnd)
+                        height: '100%'
+                    }}>
+                        {
+                            columnInfo?.tasks.map((task, index) => {
+                                return (
+                                    <TaskCard
+                                        key={task.id}
+                                        taskInfo={task}
+                                        index={index}
+                                        onClick={() => {
+                                            setTaskData(task)
+                                            setModal('taskcard')
+                                        }}
+                                    />
+                                )
+                            })
+                        }
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         </div>
     )
 }
