@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { constants } from "../../constants/constants"
 import Taskcolumn from "./Taskcolumn"
@@ -40,21 +40,27 @@ export default function Taskboard({
             source.index === destination.index
         ) return;
         if (type === 'task_group') {
-            // do something on the state
-            console.log(source)
-            console.log(destination)
             setTasklist(prev => {
                 const newTasklist = [...prev]
                 const draggedItem = newTasklist[source.droppableId].tasks.splice(source.index, 1)
-                console.log(draggedItem)
+                // console.log(draggedItem)
                 newTasklist[destination.droppableId].tasks.splice(destination.index, 0, draggedItem[0])
+                return newTasklist
+            })
+        } else if (type === 'column_group') {
+            console.log(source)
+            console.log(destination)
+            setTasklist(prev => {
+                const newTasklist = [...prev];
+                [newTasklist[source.index], newTasklist[destination.index]] =
+                    [newTasklist[destination.index], newTasklist[source.index]];
                 return newTasklist
             })
         }
     }
 
     return (
-        <DragDropContext onDragEnd={handleDragDrop}>
+        tasklist?.length !== 0 ?
             <motion.div
                 initial={false}
                 transition={{ type: 'spring', stiffness: 100, damping: 15 }}
@@ -67,51 +73,61 @@ export default function Taskboard({
                     minWidth: width,
                     overflowY: 'none',
                     overflowX: 'scroll',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    columnGap: 24,
                 }}
             >
-                {
-                    tasklist?.length !== 0 ?
-                        tasklist?.map((column, index) => {
-                            return (
-                                <Taskcolumn
-                                    key={column.id}
-                                    colIndex={index}
-                                    columnInfo={column}
-                                    setModal={setModal}
-                                    setTaskData={setTaskData}
-                                />
-                            )
-                        }) :
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                display: 'grid',
-                                placeItems: 'center'
-                            }}
-                        >
-                            <div style={{ textAlign: 'center' }}>
-                                <Text
-                                    variant="heading"
-                                    size="l"
-                                    text="This board is empty. Create a new column to get started."
-                                    color={theme.color.secondaryText}
-                                    style={{ width: layout.emptyBoardtext }}
-                                />
-                                <Button
-                                    variant="primary"
-                                    text="+ Add New Column"
-                                    style={{ marginTop: 32 }}
-                                    onClick={() => setModal('editboard')}
-                                />
+                <DragDropContext onDragEnd={handleDragDrop}>
+                    <Droppable droppableId="taskboard" type="column_group" direction="horizontal">
+                        {(provided) => (
+                            <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    flexWrap: 'nowrap',
+                                    // columnGap: 24, (not supported in dnd)
+                                }}
+                            >
+                                {
+                                    tasklist?.map((column, index) => (
+                                        <Taskcolumn
+                                            key={column.id}
+                                            colIndex={index}
+                                            columnInfo={column}
+                                            setModal={setModal}
+                                            setTaskData={setTaskData}
+                                        />
+                                    ))
+                                }
+                                {provided.placeholder}
                             </div>
-                        </div>
-                }
-            </motion.div>
-        </DragDropContext>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            </motion.div> :
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'grid',
+                    placeItems: 'center'
+                }}
+            >
+                <div style={{ textAlign: 'center' }}>
+                    <Text
+                        variant="heading"
+                        size="l"
+                        text="This board is empty. Create a new column to get started."
+                        color={theme.color.secondaryText}
+                        style={{ width: layout.emptyBoardtext }}
+                    />
+                    <Button
+                        variant="primary"
+                        text="+ Add New Column"
+                        style={{ marginTop: 32 }}
+                        onClick={() => setModal('editboard')}
+                    />
+                </div>
+            </div>
     )
 }

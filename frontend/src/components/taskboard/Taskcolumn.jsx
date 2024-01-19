@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { ThemeContext } from "../../themes"
-import { Droppable } from "react-beautiful-dnd"
+import { Draggable, Droppable } from "react-beautiful-dnd"
 
 import Text from "../Text"
 import Ellipsis from "../../assets/Ellipsis"
@@ -28,6 +28,7 @@ export default function Taskcolumn({
             flexDirection: 'column',
             flex: 1,
             rowGap: 24,
+            marginLeft: 24,
         },
         columnHeader: {
             display: 'flex',
@@ -56,58 +57,73 @@ export default function Taskcolumn({
         }
     }
     return (
-        <div
-            style={styles.container}
+        <Draggable
+            draggableId={String(`col_${columnInfo.id}`)}
+            index={colIndex}
+            key={columnInfo.id}
         >
-            <div style={styles.columnHeader}>
-                <div style={styles.columnName}>
-                    <span style={styles.colorDot}></span>
-                    <Text
-                        variant="heading"
-                        size="s"
-                        color={theme.color.secondaryText}
-                        text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks.length})`}
-                        style={{ letterSpacing: '2.4px' }}
-                    />
-                </div>
-                <span style={styles.ellipsis}>
-                    <Ellipsis />
-                    <Ellipsis />
-                </span>
-            </div>
-            <Droppable
-                droppableId={String(colIndex)}
-                type="task_group"
-            >
-                {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} style={{
-                        overflowY: 'scroll',
-                        overflowX: 'none',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'flex-start',
-                        // rowGap: 20, (not supported in dnd)
-                        height: '100%'
-                    }}>
-                        {
-                            columnInfo?.tasks.map((task, index) => {
-                                return (
-                                    <TaskCard
-                                        key={task.id}
-                                        taskInfo={task}
-                                        index={index}
-                                        onClick={() => {
-                                            setTaskData(task)
-                                            setModal('taskcard')
-                                        }}
-                                    />
-                                )
-                            })
-                        }
-                        {provided.placeholder}
+            {(provided) => (
+                <div
+                    // {...provided.dragHandleProps}
+                    {...provided.draggableProps}
+                    ref={provided.innerRef}
+                >
+                    <div style={styles.container}>
+                        <div style={styles.columnHeader} {...provided.dragHandleProps}>
+                            <div style={styles.columnName}>
+                                <span style={styles.colorDot}></span>
+                                <Text
+                                    variant="heading"
+                                    size="s"
+                                    color={theme.color.secondaryText}
+                                    text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks.length})`}
+                                    style={{ letterSpacing: '2.4px' }}
+                                />
+                            </div>
+                            <span style={styles.ellipsis}>
+                                <Ellipsis />
+                                <Ellipsis />
+                            </span>
+                        </div>
+                        <Droppable
+                            droppableId={String(colIndex)}
+                            type="task_group"
+                        >
+                            {(provided) => (
+                                <div
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                    style={{
+                                        // overflowY: 'scroll',
+                                        // overflowX: 'none',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'flex-start',
+                                        // rowGap: 20, (not supported in dnd)
+                                        height: '100%'
+                                    }}>
+                                    {
+                                        columnInfo?.tasks.map((task, index) => {
+                                            return (
+                                                <TaskCard
+                                                    key={task.id}
+                                                    taskInfo={task}
+                                                    index={index}
+                                                    onClick={() => {
+                                                        setTaskData(task)
+                                                        setModal('taskcard')
+                                                    }}
+                                                />
+                                            )
+                                        })
+                                    }
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
                     </div>
-                )}
-            </Droppable>
-        </div>
+                </div>
+            )}
+        </Draggable>
     )
 }
