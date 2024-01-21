@@ -17,7 +17,7 @@ export default function ActionModal({
             style={{
                 display: actionModal ? 'block' : 'none',
                 position: 'absolute',
-                backgroundColor: 'white',
+                // backgroundColor: 'white',
                 width: 190,
                 padding: 16,
                 backgroundColor: theme.color.backgroundPrimary,

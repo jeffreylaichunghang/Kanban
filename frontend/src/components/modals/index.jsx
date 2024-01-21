@@ -3,8 +3,6 @@ import { ThemeContext, MediaQueryContext } from "../../themes";
 import OutsideAlerter from "../../hooks/useOutsideAlerter";
 import { motion } from "framer-motion";
 
-import { constants } from "../../constants/constants";
-
 const modalVariants = {
     open: { scale: 1 },
     closed: { scale: 0 }

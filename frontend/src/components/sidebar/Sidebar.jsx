@@ -24,7 +24,7 @@ export default function Sidebar({
     const styles = {
         container: {
             position: 'absolute',
-            top: isMobile ? layout.navbarHeight + 16 : layout.navbarHeight - 1,
+            top: isMobile ? layout.navbarHeight + 16 : layout.navbarHeight - 2,
             left: 0,
             right: isMobile ? 0 : '',
             margin: 'auto',
@@ -39,10 +39,10 @@ export default function Sidebar({
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            zIndex: 2
+            zIndex: 2,
         },
         boardBtns: {
-            width: '100%',
+            width: '110%',
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
@@ -52,7 +52,7 @@ export default function Sidebar({
         },
         sidebarBtn: {
             position: 'absolute',
-            width: sidebar ? layout.sidebarWidth : 56,
+            width: sidebar ? layout.sidebarButtonWidth : 56,
             height: 48,
             bottom: 32,
             paddingLeft: sidebar ? layout.sidebarPadding : 16,

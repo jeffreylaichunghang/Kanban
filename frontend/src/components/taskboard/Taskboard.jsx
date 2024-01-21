@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import useApiCall from "../../hooks/useApiCall"
 
-import { constants } from "../../constants/constants"
 import Taskcolumn from "./Taskcolumn"
 import Text from "../Text"
 import Button from "../Button"
@@ -19,10 +19,18 @@ export default function Taskboard({
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
+    const draggedCard = useRef(null)
+    const { value: updatedTask, callApi: updatetask } = useApiCall(`updateTask`, 'PUT')
 
     useEffect(() => {
         setTasklist(boardTasks[0]?.columns)
     }, [boardTasks])
+
+    useEffect(() => {
+        if (updatedTask) {
+            console.log(updatedTask)
+        }
+    }, [updatedTask])
 
     const taskboardVariant = {
         mobile: {
@@ -40,13 +48,17 @@ export default function Taskboard({
             source.index === destination.index
         ) return;
         if (type === 'task_group') {
+            console.log(source, destination)
             setTasklist(prev => {
                 const newTasklist = [...prev]
                 const draggedItem = newTasklist[source.droppableId].tasks.splice(source.index, 1)
-                // console.log(draggedItem)
+                draggedItem[0].columnId = boardTasks[0]?.columns[Number(destination.droppableId)].id
+                draggedCard.current = draggedItem[0]
                 newTasklist[destination.droppableId].tasks.splice(destination.index, 0, draggedItem[0])
                 return newTasklist
             })
+            // console.log(draggedCard.current)
+            updatetask(draggedCard.current)
         } else if (type === 'column_group') {
             console.log(source)
             console.log(destination)
@@ -68,8 +80,8 @@ export default function Taskboard({
                 animate={isMobile ? 'mobile' : 'notMobile'}
                 style={{
                     paddingTop: 24,
-                    height: height - layout.navbarHeight - 24,
-                    maxHeight: height - layout.navbarHeight - 24,
+                    height: height - layout.navbarHeight - 10,
+                    maxHeight: height - layout.navbarHeight - 10,
                     minWidth: width,
                     overflowY: 'none',
                     overflowX: 'scroll',

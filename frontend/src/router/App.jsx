@@ -2,31 +2,19 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { router } from ".";
 import { ThemeContext } from "../themes";
 import useToggleTheme from "../hooks/useToggleTheme";
 import { MediaQueryContext } from "../themes";
 import useLayout from "../hooks/useMediaQuery";
 
-import KanbanBoard from "../screens/kanbanBoard/KanbanBoard";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <div>Hello world!</div>,
-  },
-  {
-    path: '/kanbanBoard',
-    element: <KanbanBoard />
-  }
-]);
-
 export default function App() {
-  const { themes, toggleTheme, theme } = useToggleTheme('dark')
+  const { themes, toggleTheme, themeState } = useToggleTheme('dark')
   const { layout, isMobile, isTablet } = useLayout()
 
   return (
     <MediaQueryContext.Provider value={{ layout, isMobile, isTablet }}>
-      <ThemeContext.Provider value={{ theme: themes, toggleTheme, themeState: theme }}>
+      <ThemeContext.Provider value={{ theme: themes, toggleTheme, themeState: themeState }}>
         <RouterProvider router={router} />
       </ThemeContext.Provider>
     </MediaQueryContext.Provider>

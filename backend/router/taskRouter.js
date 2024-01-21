@@ -17,6 +17,7 @@ class TaskRouter {
 
         router.put('/editBoard/:id', this.editBoard.bind(this))
         router.put('/editTask/:id', this.editTask.bind(this))
+        router.put('/updateTask', this.updateTask.bind(this))
         router.put('/updateSubTask/:taskId', this.updateSubTask.bind(this))
 
         router.delete('/deleteBoard/:id', this.deleteBoard.bind(this))
@@ -120,6 +121,11 @@ class TaskRouter {
         const newTask = await this.service.getTask(taskId)
 
         res.json(newTask)
+    }
+
+    async updateTask(req, res) {
+        const data = await this.service.updateTask(req.body, req.body.id)
+        res.json(data)
     }
 
     async updateSubTask(req, res) {

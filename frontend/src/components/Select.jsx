@@ -1,12 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { ThemeContext } from '../themes'
+import { ThemeContext, MediaQueryContext } from '../themes'
 import useHover from '../hooks/useHover'
 import { motion } from 'framer-motion'
-import OutsideAlerter, { useOutsideAlerter } from '../hooks/useOutsideAlerter'
+import OutsideAlerter from '../hooks/useOutsideAlerter'
 
 import Chevron from '../assets/ChevronDown'
 import Text from './Text'
-import { constants } from '../constants/constants'
 
 export default function Select({
     options,
@@ -18,6 +17,7 @@ export default function Select({
     const selectRef = useRef()
     const hovered = useHover(selectRef)
     const { theme } = useContext(ThemeContext)
+    const { layout } = useContext(MediaQueryContext)
 
     useEffect(() => {
         if (initialValue) {
@@ -74,7 +74,7 @@ export default function Select({
                     style={{
                         position: 'absolute',
                         backgroundColor: theme.color.backgroundPrimary,
-                        width: constants.modalWidth - 32 * 2,
+                        width: layout.modalWidth - 32 * 2,
                         left: 0,
                         right: 0,
                         margin: 'auto',
@@ -84,7 +84,7 @@ export default function Select({
                         flexDirection: 'column',
                         rowGap: 8,
                         borderRadius: 8,
-                        textAlign: 'left'
+                        textAlign: 'left',
                     }}
                     variants={{
                         open: {

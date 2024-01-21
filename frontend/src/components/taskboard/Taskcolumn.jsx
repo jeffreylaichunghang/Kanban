@@ -5,11 +5,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd"
 import Text from "../Text"
 import Ellipsis from "../../assets/Ellipsis"
 import TaskCard from "./TaskCard"
-
-const setBg = () => {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    return "#" + randomColor;
-}
+import { constants } from "../../constants/constants"
 
 export default function Taskcolumn({
     columnInfo,
@@ -49,7 +45,7 @@ export default function Taskcolumn({
             width: 15,
             aspectRatio: 1 / 1,
             borderRadius: 15 / 2,
-            backgroundColor: setBg(),
+            backgroundColor: constants.colorTags[colIndex],
         },
         ellipsis: {
             marginRight: 10,
@@ -58,7 +54,7 @@ export default function Taskcolumn({
     }
     return (
         <Draggable
-            draggableId={String(`col_${columnInfo.id}`)}
+            draggableId={`col_${columnInfo.id}`}
             index={colIndex}
             key={columnInfo.id}
         >
@@ -94,8 +90,8 @@ export default function Taskcolumn({
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                     style={{
-                                        // overflowY: 'scroll',
-                                        // overflowX: 'none',
+                                        overflowY: 'scroll',
+                                        overflowX: 'none',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         justifyContent: 'flex-start',

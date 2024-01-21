@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const cors = require('cors')
+const path = require('path')
 
 // files
 const TaskRouter = require('./router/taskRouter')
@@ -18,7 +19,14 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 async function main() {
-    app.use('/api', new TaskRouter(express, taskService).route())
+    if (process.env.NODE_ENV === 'production') {
+        const __dirname = path.resolve();
+        app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+        app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html')))
+    } else {
+        app.use('/api', new TaskRouter(express, taskService).route())
+    }
 }
 
 app.listen(process.env.PORT, () => {

@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+// const { PrismaClient } = require('@prisma/client')
+// const prisma = new PrismaClient()
 
 class TaskService {
     constructor(prisma) {
@@ -7,7 +7,7 @@ class TaskService {
     }
 
     async getAllBoardsData() {
-        const allBoardsData = await prisma.user.findFirst({
+        const allBoardsData = await this.prisma.user.findFirst({
             where: {
                 id: 1,
             },
@@ -31,14 +31,14 @@ class TaskService {
     }
 
     async geAllBoards() {
-        const boards = await prisma.board.findMany({
+        const boards = await this.prisma.board.findMany({
             where: { userId: 1 }
         })
         return boards
     }
 
     async getBoardTasks(board) {
-        const allTasks = await prisma.board.findFirst({
+        const allTasks = await this.prisma.board.findFirst({
             where: {
                 board_name: board,
             },
@@ -58,21 +58,21 @@ class TaskService {
     }
 
     async getBoard(boardId) {
-        return await prisma.board.findFirst({
+        return await this.prisma.board.findFirst({
             where: { id: boardId },
             include: { columns: true }
         })
     }
 
     async getTask(taskId) {
-        return await prisma.task.findFirst({
+        return await this.prisma.task.findFirst({
             where: { id: taskId },
             include: { sub_tasks: true }
         })
     }
 
     async getBoardColumns(boardId) {
-        const columns = await prisma.column.findMany({
+        const columns = await this.prisma.column.findMany({
             where: { boardId }
         })
         return columns
@@ -82,7 +82,7 @@ class TaskService {
         console.log(`create new board ${newBoard}`)
         const { board_name, board_columns } = newBoard
         try {
-            const createdBoard = await prisma.$transaction(async tx => {
+            const createdBoard = await this.prisma.$transaction(async tx => {
                 const newBoard = await tx.board.create({
                     data: {
                         userId: 1,
@@ -104,14 +104,14 @@ class TaskService {
         console.log(`create new columns ${columns} in board ${boardId}`)
         try {
             const createColumnsOperation = columns.map(col => {
-                return prisma.column.create({
+                return this.prisma.column.create({
                     data: {
                         column_name: col.column_name,
                         boardId: boardId
                     }
                 })
             })
-            return await prisma.$transaction(createColumnsOperation)
+            return await this.prisma.$transaction(createColumnsOperation)
         } catch (error) {
             console.log(error)
             throw new Error(error)
@@ -121,7 +121,7 @@ class TaskService {
     async createTask(task) {
         console.log(`create new task ${task}`)
         try {
-            return await prisma.$transaction(async tx => {
+            return await this.prisma.$transaction(async tx => {
                 return await tx.task.create({
                     data: {
                         task_name: task.task_name,
@@ -140,7 +140,7 @@ class TaskService {
         console.log(`create sub tasks at task ${taskId}`)
         try {
             const createSubtaskOperation = subtasks.map(subtask => {
-                return prisma.subTask.create({
+                return this.prisma.subTask.create({
                     data: {
                         sub_task_name: subtask.sub_task_name,
                         status: subtask.status,
@@ -148,7 +148,7 @@ class TaskService {
                     }
                 })
             })
-            return await prisma.$transaction(createSubtaskOperation)
+            return await this.prisma.$transaction(createSubtaskOperation)
         } catch (error) {
             console.error('error creating new sub task ', error);
             return error
@@ -158,7 +158,7 @@ class TaskService {
     async updateBoard(board, boardId) {
         console.log(`update ${board} ${boardId}`)
         try {
-            return await prisma.$transaction(async tx => {
+            return await this.prisma.$transaction(async tx => {
                 const updatedBoard = await tx.board.update({
                     where: {
                         id: boardId
@@ -183,7 +183,7 @@ class TaskService {
         console.log('update column ', column)
         try {
             const updateColumnsOperation = column.map(col => {
-                return prisma.column.update({
+                return this.prisma.column.update({
                     where: {
                         boardId,
                         id: col.id
@@ -193,7 +193,7 @@ class TaskService {
                     }
                 })
             })
-            return await prisma.$transaction(updateColumnsOperation)
+            return await this.prisma.$transaction(updateColumnsOperation)
         } catch (error) {
             console.error('error updating column', error)
             return error
@@ -203,7 +203,7 @@ class TaskService {
     async updateTask(task, taskId) {
         console.log(`update task ${taskId}`)
         try {
-            return prisma.$transaction(async tx => {
+            return this.prisma.$transaction(async tx => {
                 const updatedTask = await tx.task.update({
                     where: {
                         id: taskId,
@@ -232,7 +232,7 @@ class TaskService {
         console.log(`update subtask from task ${taskId}`)
         try {
             const updateSubTaskOperation = subTasks.map(subtask => {
-                return prisma.subTask.update({
+                return this.prisma.subTask.update({
                     where: {
                         id: subtask.id,
                         taskId: subtask.taskId
@@ -243,7 +243,7 @@ class TaskService {
                     }
                 })
             })
-            return await prisma.$transaction(updateSubTaskOperation)
+            return await this.prisma.$transaction(updateSubTaskOperation)
         } catch (error) {
             console.error('error updating subtasks', error)
             return error
@@ -253,7 +253,7 @@ class TaskService {
     async deleteBoard(boardId) {
         console.log('delete board =', boardId)
         try {
-            return await prisma.$transaction(async tx => {
+            return await this.prisma.$transaction(async tx => {
                 const deletedBoard = await tx.board.delete({
                     where: {
                         id: boardId,
@@ -274,7 +274,7 @@ class TaskService {
     async deleteColumn(columns, boardId) {
         try {
             const deleteColumnOperation = columns.map(col => {
-                return prisma.column.delete({
+                return this.prisma.column.delete({
                     where: {
                         boardId,
                         id: col.id,
@@ -286,7 +286,7 @@ class TaskService {
                     }
                 })
             })
-            return await prisma.$transaction(deleteColumnOperation)
+            return await this.prisma.$transaction(deleteColumnOperation)
         } catch (error) {
             console.error('error deleting column ', error)
             return error
@@ -295,7 +295,7 @@ class TaskService {
 
     async deleteTask(taskId) {
         try {
-            return await prisma.$transaction(async tx => {
+            return await this.prisma.$transaction(async tx => {
                 return await tx.task.delete({
                     where: {
                         id: taskId
@@ -315,7 +315,7 @@ class TaskService {
     async deleteSubTasks(subtasks) {
         try {
             const deleteSubtaskOperation = subtasks.map(subtask => {
-                return prisma.subTask.delete({
+                return this.prisma.subTask.delete({
                     where: {
                         id: subtask.id
                     },
@@ -325,7 +325,7 @@ class TaskService {
                     }
                 })
             })
-            return await prisma.$transaction(deleteSubtaskOperation)
+            return await this.prisma.$transaction(deleteSubtaskOperation)
         } catch (error) {
             console.error('error deleting sub tasks ', error);
             return error
