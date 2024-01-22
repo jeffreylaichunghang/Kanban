@@ -12,7 +12,7 @@ export default function useApiCall(
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const callApi = (options = {}) => {
+    const callApi = useCallback((options = {}) => {
         setLoading(true)
         axios({
             method: verb,
@@ -28,7 +28,7 @@ export default function useApiCall(
         }).finally(() => {
             setLoading(false)
         })
-    }
+    }, [endpoint, verb])
 
     return { value, loading, error, callApi }
 }

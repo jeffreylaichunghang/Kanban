@@ -129,6 +129,8 @@ Install backend dependencies
 
 ```bash
   npm install
+  (if you wish to have seed data, run:)
+  npx prisma db seed -- --environment development
 ```
 
 Go to the frontend directory
@@ -147,6 +149,8 @@ Start the server at the root directory
 
 ```bash
   npm run dev
+  or
+  npm run server
 ```
 
 <!-- ## Usage/Examples

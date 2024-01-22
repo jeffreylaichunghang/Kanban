@@ -36,7 +36,7 @@ export default function KanbanBoard() {
     useEffect(() => { getAllBoardsData() }, [])
     useEffect(() => {
         if (value) {
-            // console.log(value)
+            console.log(value)
             setAllTaskData(value)
             if (!board) {
                 setBoard(value[0])
@@ -46,9 +46,8 @@ export default function KanbanBoard() {
         }
     }, [value, board])
 
-    const boardTasks = useMemo(() => {
-        return allTaskData?.filter(data => data.id === board?.id)
-    }, [board, allTaskData])
+    // e.filter is not a function ?
+    const boardTasks = allTaskData?.filter(data => data.id === board?.id)
 
     return (
         <div style={styles.container}>

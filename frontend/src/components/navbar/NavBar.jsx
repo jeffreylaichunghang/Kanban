@@ -62,6 +62,7 @@ export default function NavBar({
             cursor: 'pointer'
         }
     }
+    // console.log(board)
 
     return (
         <div style={styles.container}>
