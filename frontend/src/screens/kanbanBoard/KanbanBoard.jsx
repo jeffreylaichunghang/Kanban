@@ -46,7 +46,6 @@ export default function KanbanBoard() {
         }
     }, [value, board])
 
-    // e.filter is not a function ?
     const boardTasks = allTaskData?.filter(data => data.id === board?.id)
 
     return (

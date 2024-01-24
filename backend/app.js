@@ -4,22 +4,30 @@ const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const cors = require('cors')
 const path = require('path')
+const passport = require('passport')
+const jwt = require('jsonwebtoken')
 
 // files
 const TaskRouter = require('./router/taskRouter')
 const TaskService = require('./service/taskService')
+const AuthRouter = require('./router/authRouter')
+const secureRoute = require('./router/secureRoute')
 
 const app = express()
 const prisma = new PrismaClient()
 const taskService = new TaskService(prisma)
+require('./auth/auth')(passport, prisma)
 
 // middlewares
 app.use(cors())
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(passport.initialize())
 
 async function main() {
     app.use('/api', new TaskRouter(express, taskService).route())
+    app.use('/api', new AuthRouter(express, passport, jwt).route())
+    app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute)
     if (process.env.NODE_ENV === 'production') {
         const __dirname = path.resolve();
         app.use(express.static(path.join(__dirname, 'frontend/dist')));

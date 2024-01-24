@@ -1,6 +1,7 @@
 const { parseArgs } = require('node:util')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const bcrypt = require('bcrypt')
 
 // to seed the db, run: npx prisma db seed -- --environment development
 // reset: npx prisma migrate reset
@@ -40,7 +41,8 @@ async function main() {
             })
             const userCredential = await prisma.user_Credential.create({
                 data: {
-                    userId: user.id
+                    userId: user.id,
+                    password: bcrypt.hashSync('1234', 10)
                 }
             })
             const userProfile = await prisma.profile.create({

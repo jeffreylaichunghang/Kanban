@@ -16,7 +16,9 @@ Insert gif or link to demo -->
 
 **Client:** React, Framer Motion, React-beautiful-dnd
 
-**Server:** Node, Express, Postgres, Prisma
+**API:** Node, Express, Postgres, Prisma
+
+**Authentication:** Passport, JWT, bcrypt
 
 ## Features
 
@@ -170,6 +172,8 @@ function App() {
 - Real-Time Collaboration
 
 - Group messaging
+
+- sample boards
 
 ## Authors
 
