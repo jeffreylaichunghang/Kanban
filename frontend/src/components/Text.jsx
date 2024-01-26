@@ -32,6 +32,7 @@ export default function Text({
                 break;
 
             default:
+                defaultStyle = {}
                 break;
         }
     } else if (variant === 'body') {
@@ -44,6 +45,7 @@ export default function Text({
                 break;
 
             default:
+                defaultStyle = {}
                 break;
         }
     }

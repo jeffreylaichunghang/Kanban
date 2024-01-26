@@ -12,6 +12,7 @@ export default function Button({
     textStyle = {},
     onClick = () => true,
     disabled = false,
+    type,
 }) {
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
@@ -82,6 +83,7 @@ export default function Button({
             onClick={onClick}
             whileTap={{ scale: disabled ? 1 : 0.97 }}
             disabled={disabled}
+            type={type}
         >
             <Text
                 text={text}

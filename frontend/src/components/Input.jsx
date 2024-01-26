@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, forwardRef } from "react";
 import { ThemeContext } from "../themes";
 import useHover from "../hooks/useHover";
 
 import Text from "./Text";
+import { mergeRefs } from "../utils/mergeRefs";
 
-export default function Input({
+const Input = forwardRef(function Input({
     name = '',
     placeholder = '',
     value = '',
@@ -13,7 +14,8 @@ export default function Input({
     onFocus = () => true,
     style = {},
     validation,
-}) {
+    type = 'text',
+}, ref) {
     const inputRef = useRef()
     const hovered = useHover(inputRef)
     const [inputValue, setInputValue] = useState('')
@@ -50,21 +52,22 @@ export default function Input({
             width: '100%'
         }}>
             <input
-                ref={inputRef}
+                ref={mergeRefs(inputRef, ref)}
                 name={name}
                 placeholder={placeholder}
                 value={inputValue}
+                type={type}
                 onChange={(e) => {
                     setInputValue(e.target.value)
                     onChange(e)
                 }}
                 onFocus={(e) => {
                     e.target.style.outline = `1px solid ${theme.color.primary}`
-                    onFocus()
+                    onFocus(e)
                 }}
                 onBlur={(e) => {
                     e.target.style.outline = `1px solid ${theme.color.line}`
-                    onBlur()
+                    onBlur(e)
                 }}
                 style={{
                     width: '100%',
@@ -96,4 +99,6 @@ export default function Input({
             />
         </div>
     )
-}
+})
+
+export default Input

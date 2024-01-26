@@ -9,7 +9,9 @@ export const desktopLayout = {
     sidebarButtonWidth: 276,
     taskboardPadding: 300,
     boardnameSize: 'xl',
-    emptyBoardtext: 550
+    emptyBoardtext: 550,
+    signinFormWidth: 700,
+    signinFormHeight: 400
 }
 
 export const tabletLayout = {
@@ -24,6 +26,8 @@ export const tabletLayout = {
     taskboardPadding: 300,
     boardnameSize: 'l',
     emptyBoardtext: 459,
+    signinFormWidth: 700,
+    signinFormHeight: 400
 }
 
 export const mobileLayout = {
@@ -38,4 +42,6 @@ export const mobileLayout = {
     taskboardPadding: 0,
     boardnameSize: 'm',
     emptyBoardtext: 343,
+    signinFormWidth: 350,
+    signinFormHeight: 700
 }

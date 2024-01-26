@@ -46,6 +46,7 @@ export default function useLayout() {
 
         case 'mobile':
             layout = mobileLayout
+            break;
 
         default:
             layout = desktopLayout

@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import KanbanBoard from "../screens/kanbanBoard/KanbanBoard";
-import Signin from "../screens/Signin";
+import SigninPage from "../screens/signin/SigninPage";
 
 export const router = createBrowserRouter([
     {
         path: "/signIn",
-        element: <Signin />,
+        element: <SigninPage />,
     },
     {
         path: "/signUp",
