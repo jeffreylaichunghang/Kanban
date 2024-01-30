@@ -12,7 +12,7 @@ export default function Button({
     textStyle = {},
     onClick = () => true,
     disabled = false,
-    type,
+    type = 'button',
 }) {
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)

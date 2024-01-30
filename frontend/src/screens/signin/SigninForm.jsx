@@ -1,18 +1,22 @@
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import useApiCall from '../../hooks/useApiCall'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Input from "../../components/Input"
 import Button from "../../components/Button"
-import { useEffect } from "react"
 
 export default function SigninForm() {
-    const { register, handleSubmit, formState: { errors }, resetField, reset } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
         defaultValues: {
             email: '',
             password: ''
         },
-        mode: 'onBlur' || 'onSubmit'
+        mode: 'onBlur' || 'onSubmit',
+        resetOptions: {
+            keepDirtyValues: true,
+            keepErrors: true
+        }
     })
     const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST')
     const navigate = useNavigate()
@@ -38,29 +42,31 @@ export default function SigninForm() {
 
     useEffect(() => {
         if (authenticated) {
-            console.log(authenticated)
+            // console.log(authenticated)
             const { token, message } = authenticated
             localStorage.setItem('secret_token', token)
             navigate('/kanbanBoard')
         }
         if (notauthenticated) {
             console.log(notauthenticated)
+            const data = notauthenticated.response.data
+            if (data.message === 'wrong password') {
+                setError('password', data)
+            } else if (data.message === 'user not found') {
+                setError('email', data)
+            }
         }
     }, [authenticated, notauthenticated])
 
     const onSubmit = (data) => {
         console.log(data)
-        reset(undefined, {
-            keepDirtyValues: true,
-            keepErrors: false,
-            keepValues: true,
-        })
+        // reset(undefined, {
+        //     keepDirtyValues: true,
+        //     keepErrors: false,
+        //     keepValues: true,
+        // })
         if (data) authenticate(data)
     }
-
-    // const navigate = (url) => {
-    //     return redirect(url)
-    // }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,11 +97,14 @@ export default function SigninForm() {
                     variant="primary"
                     style={styles.button}
                     type={'submit'}
+                    disabled={authenticating}
                 />
                 <Button
                     text="Sign Up"
                     variant="secondary"
                     style={styles.button}
+                    disabled={authenticating}
+                    onClick={() => navigate('/signup')}
                 />
             </div>
         </form>

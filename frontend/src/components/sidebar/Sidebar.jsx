@@ -3,10 +3,11 @@ import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
 
-import { constants } from "../../constants/constants"
 import SidebarButton from "./SidebarButton"
-import ThemeToggleButton from "./ThemeToggleButton"
+import ToggleSwitch from "../ToggleSwitch"
 import Text from "../Text"
+import ThemeLight from "../../assets/ThemeLight"
+import ThemeDark from "../../assets/ThemeDark"
 
 export default function Sidebar({
     board,
@@ -18,7 +19,7 @@ export default function Sidebar({
 }) {
     const [activeBoard, setActiveBoard] = useState(null)
     const [boardList, setBoardList] = useState([])
-    const { theme } = useContext(ThemeContext)
+    const { theme, toggleTheme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { height } = useWindowDimension()
     const styles = {
@@ -124,10 +125,19 @@ export default function Sidebar({
                         onClick={() => setModal('newboard')}
                     />
                 </div>
-                <ThemeToggleButton />
+                <div style={{ width: layout.sidebarWidth * 0.85, margin: 'auto' }}>
+                    <ToggleSwitch
+                        leftLabel={<ThemeLight />}
+                        rightLabel={<ThemeDark />}
+                        onClick={() => {
+                            toggleTheme()
+                        }}
+                        defaultValue={themeState === 'light'}
+                    />
+                </div>
             </motion.div>
             {!isMobile && <SidebarButton
-                onClick={(e) => { setSidebar(!sidebar) }}
+                onClick={() => { setSidebar(!sidebar) }}
                 icon={sidebar ? 'hideIcon' : 'showIcon'}
                 text={sidebar ? 'Hide Sidebar' : ''}
                 buttonColor={sidebar ? 'transparent' : theme.color.mainPurple}

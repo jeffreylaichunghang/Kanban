@@ -14,7 +14,7 @@ Insert gif or link to demo -->
 
 ## Tech Stack
 
-**Client:** React, Framer Motion, React-beautiful-dnd
+**Client:** React, React Router, Framer Motion, React Hook Form React-beautiful-dnd
 
 **API:** Node, Express, Postgres, Prisma
 
@@ -25,6 +25,7 @@ Insert gif or link to demo -->
 - Light/dark mode toggle
 - Drag-and-Drop Interface
 - Workflow Visualization
+- Sign up form carousel
 
 ## API Reference
 

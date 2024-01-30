@@ -11,7 +11,12 @@ export const desktopLayout = {
     boardnameSize: 'xl',
     emptyBoardtext: 550,
     signinFormWidth: 700,
-    signinFormHeight: 400
+    signinFormHeight: 400,
+    signupContainerWidth: 900,
+    signupContainerHeight: 568,
+    signupSidebarWidth: 274,
+    signupSidebarHeight: 568,
+    signupContainerPadding: 15,
 }
 
 export const tabletLayout = {
@@ -27,7 +32,12 @@ export const tabletLayout = {
     boardnameSize: 'l',
     emptyBoardtext: 459,
     signinFormWidth: 700,
-    signinFormHeight: 400
+    signinFormHeight: 400,
+    signupContainerWidth: 900,
+    signupContainerHeight: 568,
+    signupSidebarWidth: 274,
+    signupSidebarHeight: 568,
+    signupContainerPadding: 15,
 }
 
 export const mobileLayout = {
@@ -43,5 +53,10 @@ export const mobileLayout = {
     boardnameSize: 'm',
     emptyBoardtext: 343,
     signinFormWidth: 350,
-    signinFormHeight: 700
+    signinFormHeight: 700,
+    signupContainerWidth: 375,
+    signupContainerHeight: 650,
+    signupSidebarWidth: 375,
+    signupSidebarHeight: 172,
+    signupContainerPadding: 0,
 }

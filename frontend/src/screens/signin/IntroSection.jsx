@@ -5,7 +5,7 @@ import Text from "../../components/Text";
 
 export default function IntroSection() {
     const { theme } = useContext(ThemeContext)
-    const { layout, isMobile } = useContext(MediaQueryContext)
+    const { isMobile } = useContext(MediaQueryContext)
     return (
         <div
             style={{
@@ -21,7 +21,7 @@ export default function IntroSection() {
         >
             <Text
                 variant={'heading'}
-                text={'Start organizing your day with Kanban'}
+                text={'Start organizing your work with Kanban'}
                 color={theme.color.mainPurple}
                 hoverColor={theme.color.mainPurple}
                 style={{

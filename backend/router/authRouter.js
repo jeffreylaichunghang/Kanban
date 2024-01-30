@@ -22,7 +22,8 @@ class AuthRouter {
             async (err, user, info) => {
                 try {
                     if (err || !user) {
-                        return next(new Error('An error occurred', info))
+                        // return next(new Error('An error occurred', info))
+                        return res.status(500).json(info)
                     }
                     res.json({
                         message: 'Signup successful',
@@ -41,7 +42,8 @@ class AuthRouter {
             async (err, user, info) => {
                 try {
                     if (err || !user) {
-                        return next(new Error('An error occurred', info))
+                        // return next(new Error('An error occurred', info))
+                        return res.status(500).json(info)
                     }
 
                     req.login(

@@ -1,35 +1,32 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { ThemeContext, MediaQueryContext } from "../../themes"
-import useHover from "../../hooks/useHover"
+import { ThemeContext, MediaQueryContext } from "../themes"
+import useHover from "../hooks/useHover"
 import { motion } from 'framer-motion'
 
-import { constants } from "../../constants/constants"
-import ThemeLight from '../../assets/ThemeLight'
-import ThemeDark from '../../assets/ThemeDark'
-
-export default function ThemeToggleButton({
-
+export default function ToggleSwitch({
+    leftLabel,
+    rightLabel,
+    onClick,
+    defaultValue,
 }) {
-    const { theme, toggleTheme, themeState } = useContext(ThemeContext)
-    const { layout } = useContext(MediaQueryContext)
-    const [buttonPosition, setButtonPosition] = useState(themeState === 'light' ? 'flex-start' : 'flex-end')
+    const { theme } = useContext(ThemeContext)
+    // const { layout } = useContext(MediaQueryContext)
+    const [buttonPosition, setButtonPosition] = useState(defaultValue)
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
 
-    useEffect(() => {
-        setButtonPosition(themeState === 'light' ? 'flex-start' : 'flex-end')
-    }, [themeState])
+    // useEffect(() => {
+    //     setButtonPosition(defaultValue)
+    // }, [defaultValue])
 
-    // console.log(themeState)
     return (
         <div
             ref={buttonRef}
-            onClick={toggleTheme}
+            onClick={onClick}
             style={{
-                width: layout.sidebarWidth * 0.85,
+                width: '100%',
                 backgroundColor: theme.color.backgroundPrimary,
-                marginRight: 'auto',
-                marginLeft: 'auto',
+                margin: 'auto',
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'center',
@@ -39,7 +36,7 @@ export default function ThemeToggleButton({
                 cursor: 'pointer'
             }}
         >
-            <ThemeLight />
+            {leftLabel}
             <span
                 style={{
                     width: 40,
@@ -47,7 +44,7 @@ export default function ThemeToggleButton({
                     marginRight: 20,
                     marginLeft: 20,
                     display: 'flex',
-                    justifyContent: buttonPosition,
+                    justifyContent: buttonPosition ? 'flex-start' : 'flex-end',
                     justifyItems: 'center',
                     backgroundColor: hovered ? theme.color.primaryHover : theme.color.primary,
                     borderRadius: 10
@@ -64,7 +61,7 @@ export default function ThemeToggleButton({
                     initial={false}
                 ></motion.span>
             </span>
-            <ThemeDark />
+            {rightLabel}
         </div>
     )
 }

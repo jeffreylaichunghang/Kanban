@@ -16,6 +16,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'react/prop-types': [0]
+    'react/prop-types': 'off',
+    // "no-console": "warn",
+    // "react/self-closing-comp": "warn",
   },
 }
