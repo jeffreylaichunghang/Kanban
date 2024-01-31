@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 
 import Input from './Input'
 import Label from './Label'
@@ -9,7 +8,8 @@ const LabeledInput = ({
     placeholder,
     value,
     type,
-    ref = null
+    ref = null,
+    onChange,
 }) => {
     return (
         <div>
@@ -23,6 +23,7 @@ const LabeledInput = ({
                 value={value}
                 type={type}
                 ref={ref}
+                onChange={onChange}
             />
         </div>
     )

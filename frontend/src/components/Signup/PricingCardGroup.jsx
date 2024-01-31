@@ -6,7 +6,9 @@ export default function PricingCardGroup({
     image,
     name,
     price,
-    defaultPlan
+    defaultPlan = '',
+    setSignupData,
+    priceunit,
 }) {
     const [selected, setSelected] = useState(defaultPlan)
 
@@ -32,8 +34,17 @@ export default function PricingCardGroup({
                         name={plan}
                         price={price[index]}
                         image={image[index]}
+                        defaultPlan={defaultPlan}
                         selected={selected}
                         setSelected={setSelected}
+                        priceunit={priceunit}
+                        onClick={() => setSignupData(prev => ({
+                            ...prev,
+                            plan: {
+                                name: plan,
+                                price: price[index]
+                            }
+                        }))}
                     />
                 ))
             }

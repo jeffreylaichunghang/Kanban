@@ -2,6 +2,7 @@ import { useContext, useRef } from "react"
 import { ThemeContext } from "../../themes"
 import useHover from "../../hooks/useHover"
 import { mergeRefs } from "../../utils/mergeRefs"
+import { motion } from "framer-motion"
 
 import ArcadeIcon from '../../assets/ArcadeIcon'
 import AdvancedIcon from '../../assets/AdvancedIcon'
@@ -20,6 +21,8 @@ function PricingCard({
     price,
     selected,
     setSelected,
+    priceunit,
+    onClick = () => true,
 }) {
     const { theme } = useContext(ThemeContext)
     const cardRef = useRef()
@@ -31,14 +34,11 @@ function PricingCard({
         bordercolor = hovered ? theme.color.primary : theme.color.borderLine
     }
 
-    const onClick = () => {
-        setSelected(name)
-    }
-
     return (
-        <div
+        <motion.button
             ref={mergeRefs(cardRef)}
             style={{
+                maxWidth: '100%',
                 width: '100%',
                 padding: 20,
                 borderRadius: 10,
@@ -46,25 +46,45 @@ function PricingCard({
                 display: 'flex',
                 flexDirection: 'column',
                 rowGap: 50,
+                backgroundColor: 'transparent',
+                textAlign: 'left'
             }}
-            onClick={onClick}
+            onClick={() => {
+                setSelected(name)
+                onClick()
+            }}
+            whileTap={{ scale: 0.98 }}
         >
             {Icons[image]()}
-            <div>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'start',
+                    rowGap: 5,
+                }}
+            >
                 <Text
                     variant="heading"
-                    size="l"
+                    size="m"
                     text={name}
                     color={theme.color.primaryText}
                 />
                 <Text
                     variant="body"
                     size="m"
-                    text={`$${price} /mo`}
+                    text={`$${price} /${priceunit === 'Monthly' ? 'mo' : 'yr'}`}
                     color={theme.color.secondaryText}
                 />
+                {priceunit === 'Yearly' &&
+                    <Text
+                        variant="body"
+                        size="m"
+                        text="2 months free"
+                        color={theme.color.primaryHover}
+                    />}
             </div>
-        </div>
+        </motion.button>
     )
 }
 

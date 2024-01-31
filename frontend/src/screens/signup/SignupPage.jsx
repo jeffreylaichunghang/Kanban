@@ -7,23 +7,68 @@ import SignupForm from "./SignupForm"
 import Text from "../../components/Text"
 
 export default function SignupPage() {
+    const [signupData, setSignupData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        plan: {
+            name: 'Arcade',
+            price: 9
+        },
+        paymentPeriod: 'Monthly',
+        addons: [],
+    })
     const [step, setStep] = useState(1)
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
+    let priceofplans, priceofAddons;
+    if (signupData.paymentPeriod === 'Monthly') {
+        priceofplans = [9, 12, 15]
+        priceofAddons = [1, 2, 2]
+    } else if (signupData.paymentPeriod === 'Yearly') {
+        priceofplans = [90, 120, 150]
+        priceofAddons = [10, 20, 20]
+    }
+
+    const inputOnchange = (e) => {
+        setSignupData(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const addonsOnchange = (addon, price) => {
+        setSignupData(prev => {
+            const item = { addon, price }
+            const newAddons = [...prev.addons]
+            if (!prev.addons.includes(item)) {
+                return {
+                    ...prev,
+                    addons: newAddons.concat([item])
+                }
+            } else {
+                return {
+                    ...prev,
+                    addons: newAddons.filter(addon => addon !== item)
+                }
+            }
+        })
+    }
 
     const renderItems = [
         {
             title: 'Personal info',
-            subTitle: 'Please provide your name, email address, and phone number.',
+            subTitle: 'Please provide your name, email address, and password.',
             componentData: [
                 {
                     props: {
                         label: 'Name',
                         name: 'name',
                         placeholder: 'e.g. Stephen King',
-                        value: '',
+                        value: signupData.name,
                         type: 'text',
+                        onChange: inputOnchange,
                     },
                     component: 'labeledInput',
                 },
@@ -32,18 +77,20 @@ export default function SignupPage() {
                         label: 'Email Address',
                         name: 'email',
                         placeholder: 'e.g. stephenking@lorem.com',
-                        value: '',
+                        value: signupData.email,
                         type: 'email',
+                        onChange: inputOnchange,
                     },
                     component: 'labeledInput',
                 },
                 {
                     props: {
-                        label: 'Phone Number',
-                        name: 'phone_number',
-                        placeholder: 'e.g. Stephen King',
-                        value: '',
-                        type: 'tel',
+                        label: 'Password',
+                        name: 'password',
+                        placeholder: '',
+                        value: signupData.password,
+                        type: 'password',
+                        onChange: inputOnchange,
                     },
                     component: 'labeledInput',
                 },
@@ -57,18 +104,22 @@ export default function SignupPage() {
                     props: {
                         image: ['ArcadeIcon', 'AdvancedIcon', 'ProIcon'],
                         name: ['Arcade', 'Advanced', 'Pro'],
-                        price: [9, 12, 15],
-                        defaultPlan: 'Arcade',
+                        price: priceofplans,
+                        defaultPlan: signupData.plan.name,
+                        priceunit: signupData.paymentPeriod,
+                        setSignupData: setSignupData,
                     },
                     component: 'pricingCardGroup'
                 },
                 {
                     props: {
-                        toggleValue: ['Monthly, Yearly'],
                         leftLabel: <Text variant="body" size="m" text="Monthly" color={theme.color.secondaryText} />,
                         rightLabel: <Text variant="body" size="m" text="Yearly" color={theme.color.secondaryText} />,
-                        defaultValue: 'Monthly' === 'Monthly',
-                        onclick: () => true
+                        defaultValue: signupData.paymentPeriod === 'Monthly',
+                        onClick: () => setSignupData(prev => ({
+                            ...prev,
+                            paymentPeriod: prev.paymentPeriod === 'Yearly' ? 'Monthly' : 'Yearly'
+                        }))
                     },
                     component: 'toggleSwitch'
                 },
@@ -82,25 +133,34 @@ export default function SignupPage() {
                     props: {
                         text: 'Group Project',
                         subText: 'Work together on the same board',
-                        price: 1,
+                        price: priceofAddons[0],
+                        onChange: () => addonsOnchange('Group Project', priceofAddons[0]),
+                        priceunit: signupData.paymentPeriod,
+
                     },
-                    component: 'addons'
+                    component: 'addons',
                 },
                 {
                     props: {
                         text: 'Larger storage',
                         subText: 'Extra 1TB of cloud save',
-                        price: 2,
+                        price: priceofAddons[1],
+                        onChange: () => addonsOnchange('Larger storage', priceofAddons[1]),
+                        priceunit: signupData.paymentPeriod,
+
                     },
-                    component: 'addons'
+                    component: 'addons',
                 },
                 {
                     props: {
                         text: 'Customizable Profile',
                         subText: 'Custom theme on your profile',
-                        price: 2,
+                        price: priceofAddons[2],
+                        onChange: () => addonsOnchange('Customizable Profile', priceofAddons[2]),
+                        priceunit: signupData.paymentPeriod,
+
                     },
-                    component: 'addons'
+                    component: 'addons',
                 },
             ],
         },
@@ -109,26 +169,13 @@ export default function SignupPage() {
             subTitle: 'Double-check everything looks OK before confirming.',
             componentData: [
                 {
-                    props: {
-                        plan: 'Arcade',
-                        toggleValue: 'Monthly',
-                        addons: [
-                            {
-                                addon: 'Group Project',
-                                price: 1
-                            },
-                            {
-                                addon: 'Larger Storage',
-                                price: 2
-                            },
-                        ],
-                        total: 12,
-                    },
+                    props: signupData,
                     component: 'cartSummary'
                 }
             ],
         },
     ]
+    console.log(signupData)
 
     return (
         <div

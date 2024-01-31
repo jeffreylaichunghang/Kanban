@@ -9,6 +9,7 @@ function Addons({
     text,
     subText,
     price,
+    priceunit,
     onChange = () => true,
 }) {
     const [check, setCheck] = useState(false)
@@ -37,6 +38,7 @@ function Addons({
             }}
             onClick={() => {
                 setCheck(!check)
+                onChange()
             }}
             whileTap={{ scale: 0.98 }}
         >
@@ -91,7 +93,7 @@ function Addons({
             <Text
                 variant='body'
                 size='m'
-                text={`+$${price}/mo`}
+                text={`+$${price}/${priceunit === 'Monthly' ? 'mo' : 'yr'}`}
                 color={theme.color.primary}
                 style={{
                     marginLeft: 'auto'

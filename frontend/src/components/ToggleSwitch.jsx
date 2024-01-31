@@ -15,9 +15,9 @@ export default function ToggleSwitch({
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
 
-    // useEffect(() => {
-    //     setButtonPosition(defaultValue)
-    // }, [defaultValue])
+    useEffect(() => {
+        setButtonPosition(defaultValue)
+    }, [defaultValue])
 
     return (
         <div
