@@ -32,7 +32,7 @@ class TaskRouter {
     }
 
     async getAllBoards(req, res) {
-        const userId = 1
+        const userId = Number(req.user.id)
         const data = await this.service.getAllBoards(userId)
         res.json(data)
     }

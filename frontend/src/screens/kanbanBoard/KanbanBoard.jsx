@@ -36,7 +36,7 @@ export default function KanbanBoard() {
     useEffect(() => { getAllBoardsData() }, [])
     useEffect(() => {
         if (value) {
-            console.log(value)
+            // console.log(value)
             setAllTaskData(value)
             if (!board) {
                 setBoard(value[0])

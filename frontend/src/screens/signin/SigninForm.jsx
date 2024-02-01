@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import useApiCall from '../../hooks/useApiCall'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from "../../hooks/useAuth"
 
 import Input from "../../components/Input"
 import Button from "../../components/Button"
@@ -21,6 +22,7 @@ export default function SigninForm() {
         }
     })
     const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST', authUrl)
+    const { setUser } = useAuth()
     const navigate = useNavigate()
     const styles = {
         button: {
@@ -46,7 +48,9 @@ export default function SigninForm() {
         if (authenticated) {
             // console.log(authenticated)
             const { token, message } = authenticated
+            console.log(token)
             localStorage.setItem('secret_token', token)
+            setUser(token)
             navigate('/kanbanBoard')
         }
         if (notauthenticated) {
@@ -61,7 +65,6 @@ export default function SigninForm() {
     }, [authenticated, notauthenticated])
 
     const onSubmit = (data) => {
-        console.log(data)
         // reset(undefined, {
         //     keepDirtyValues: true,
         //     keepErrors: false,

@@ -16,7 +16,9 @@ export const router = createBrowserRouter([
     },
     {
         path: '/kanbanBoard',
-        element: <KanbanBoard />
+        element: (<ProtectedRoute>
+            <KanbanBoard />
+        </ProtectedRoute>)
     },
     {
         path: '/test',

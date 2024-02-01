@@ -13,7 +13,7 @@ export default function useApiCall(
     const [value, setValue] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-    const user = useAuth()
+    const { user } = useAuth()
 
     const callApi = useCallback((options = {}) => {
         setLoading(true)

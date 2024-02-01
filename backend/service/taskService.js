@@ -30,7 +30,7 @@ class TaskService {
         return allBoardsData.boards
     }
 
-    async geAllBoards(userId) {
+    async getAllBoards(userId) {
         const boards = await this.prisma.board.findMany({
             where: { userId: userId }
         })

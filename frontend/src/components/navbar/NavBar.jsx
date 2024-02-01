@@ -1,8 +1,8 @@
 import { useContext, useState } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
+import { useNavigate } from 'react-router-dom'
 
-import { constants } from "../../constants/constants"
 import LogoDark from "../../assets/LogoDark"
 import LogoLight from '../../assets/LogoLight'
 import LogoMobile from '../../assets/LogoMobile'
@@ -24,6 +24,7 @@ export default function NavBar({
     const { theme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width } = useWindowDimension()
+    const navigate = useNavigate()
     const styles = {
         container: {
             height: layout.navbarHeight,
@@ -109,9 +110,20 @@ export default function NavBar({
                     setActionModal={setActionModal}
                     style={{
                         right: 24,
-                        bottom: -90,
+                        bottom: -140,
                     }}
                 >
+                    <Text
+                        variant="body"
+                        size="l"
+                        color={theme.color.secondaryText}
+                        text="Logout"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            localStorage.removeItem('secret_token')
+                            navigate('/signin', { replace: true })
+                        }}
+                    />
                     <Text
                         variant="body"
                         size="l"

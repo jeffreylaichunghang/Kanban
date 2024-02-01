@@ -2,6 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
+import useApiCall from "../../hooks/useApiCall"
 
 import SidebarButton from "./SidebarButton"
 import ToggleSwitch from "../ToggleSwitch"
@@ -22,6 +23,7 @@ export default function Sidebar({
     const { theme, toggleTheme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { height } = useWindowDimension()
+    const { value: allboards, callApi: getAllboards } = useApiCall('boards')
     const styles = {
         container: {
             position: 'absolute',
@@ -65,6 +67,15 @@ export default function Sidebar({
         setBoardList(allTaskData)
         setActiveBoard(board)
     }, [allTaskData, board])
+    // useEffect(() => getAllboards(), [])
+    // useEffect(() => {
+    //     if (allboards) {
+    //         console.log(allboards)
+    //         setBoardList(allboards)
+    //         setActiveBoard(allboards[0])
+    //         setBoard(allboards[0])
+    //     }
+    // }, [allboards])
 
     const boardButtonElements = boardList.map(board => {
         return (
