@@ -8,8 +8,8 @@ class TaskRouter {
         const router = this.express.Router()
 
         router.get('/getAllBoardsData', this.getAllBoardsData.bind(this))
-        router.get('/getAllBoards', this.getAllBoards.bind(this))
-        router.get('/allTasks', this.getBoardTasks.bind(this))
+        router.get('/boards', this.getAllBoards.bind(this))
+        router.get('/tasks/boardId', this.getBoardTasks.bind(this))
 
         router.post('/createBoard', this.createBoard.bind(this))
         router.post('/createColumn', this.createColumn.bind(this))
@@ -32,11 +32,13 @@ class TaskRouter {
     }
 
     async getAllBoards(req, res) {
-        const data = await this.service.getAllBoards()
+        const userId = 1
+        const data = await this.service.getAllBoards(userId)
         res.json(data)
     }
 
     async getBoardTasks(req, res) {
+        const boardId = Number(req.params.boardId)
         const data = await this.service.getBoardTasks()
         res.json(data)
     }

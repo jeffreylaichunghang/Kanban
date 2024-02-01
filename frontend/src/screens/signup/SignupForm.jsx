@@ -12,6 +12,8 @@ import ToggleSwitch from "../../components/ToggleSwitch"
 import Addons from "../../components/Signup/Addons"
 import CartSummary from "../../components/Signup/CartSummary"
 
+const authUrl = import.meta.env.VITE_AUTH_URL
+
 const RenderComponent = {
     labeledInput: LabeledInput,
     pricingCardGroup: PricingCardGroup,
@@ -29,7 +31,7 @@ export default function SignupForm({
     const [warningMessage, setWarningMessage] = useState(null)
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
-    const { value: signupSuccess, loading: signingup, error: signupFail, callApi: signup } = useApiCall('signup', 'POST')
+    const { value: signupSuccess, loading: signingup, error: signupFail, callApi: signup } = useApiCall('signup', 'POST', authUrl)
     const navigate = useNavigate()
     const FORM_MARGIN = isMobile ? 15 : 90;
     const FORM_WIDTH = isMobile ? layout.signupContainerWidth : layout.signupContainerWidth - layout.signupSidebarWidth

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import Input from "../../components/Input"
 import Button from "../../components/Button"
 
+const authUrl = import.meta.env.VITE_AUTH_URL
+
 export default function SigninForm() {
     const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
         defaultValues: {
@@ -18,7 +20,7 @@ export default function SigninForm() {
             keepErrors: true
         }
     })
-    const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST')
+    const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST', authUrl)
     const navigate = useNavigate()
     const styles = {
         button: {

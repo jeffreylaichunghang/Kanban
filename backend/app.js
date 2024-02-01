@@ -25,9 +25,9 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use(passport.initialize())
 
 async function main() {
-    app.use('/api', new TaskRouter(express, taskService).route())
-    app.use('/api', new AuthRouter(express, passport, jwt).route())
-    app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute)
+    app.use('/api', passport.authenticate('jwt', { session: false }), new TaskRouter(express, taskService).route())
+    app.use('/auth', new AuthRouter(express, passport, jwt).route())
+    app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute) // for testing purpose
     if (process.env.NODE_ENV === 'production') {
         const __dirname = path.resolve();
         app.use(express.static(path.join(__dirname, 'frontend/dist')));

@@ -14,7 +14,7 @@ Insert gif or link to demo -->
 
 ## Tech Stack
 
-**Client:** React, React Router, Framer Motion, React Hook Form React-beautiful-dnd
+**Client:** React, React Router, Framer Motion, React Hook Form, React-beautiful-dnd
 
 **API:** Node, Express, Postgres, Prisma
 
@@ -167,8 +167,6 @@ function App() {
 ``` -->
 
 ## Roadmap
-
-- Authentication
 
 - Real-Time Collaboration
 
