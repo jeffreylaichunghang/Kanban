@@ -15,6 +15,7 @@ const Input = forwardRef(function Input({
     style = {},
     validation,
     type = 'text',
+    ...props
 }, ref) {
     const inputRef = useRef()
     const hovered = useHover(inputRef)
@@ -84,6 +85,7 @@ const Input = forwardRef(function Input({
                     ...theme.font.body.l,
                     ...style
                 }}
+                {...props}
             />
             <Text
                 variant="body"

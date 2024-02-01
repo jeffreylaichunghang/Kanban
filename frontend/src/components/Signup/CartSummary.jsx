@@ -19,8 +19,8 @@ function CartSummary({
     }
     let addonsPrice, totalPrice;
     addonsPrice = addons.map(addon => addon.price).reduce((acc, cur) => acc + cur, 0)
-    totalPrice = plan.price + addonsPrice - 2
-    if (paymentPeriod === 'Yearly') totalPrice - 2
+    totalPrice = plan.price + addonsPrice
+    if (paymentPeriod === 'Yearly') totalPrice -= 2
     return (
         <div>
             <div

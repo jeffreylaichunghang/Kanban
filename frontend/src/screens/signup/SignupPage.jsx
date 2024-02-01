@@ -42,15 +42,15 @@ export default function SignupPage() {
         setSignupData(prev => {
             const item = { addon, price }
             const newAddons = [...prev.addons]
-            if (!prev.addons.includes(item)) {
+            if (!prev.addons.map(addon => addon.addon).includes(addon)) {
                 return {
                     ...prev,
-                    addons: newAddons.concat([item])
+                    addons: newAddons.concat(item)
                 }
             } else {
                 return {
                     ...prev,
-                    addons: newAddons.filter(addon => addon !== item)
+                    addons: newAddons.filter(addon => addon.addon !== item.addon)
                 }
             }
         })
@@ -69,6 +69,7 @@ export default function SignupPage() {
                         value: signupData.name,
                         type: 'text',
                         onChange: inputOnchange,
+                        required: true,
                     },
                     component: 'labeledInput',
                 },
@@ -80,6 +81,8 @@ export default function SignupPage() {
                         value: signupData.email,
                         type: 'email',
                         onChange: inputOnchange,
+                        required: true,
+                        pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                     },
                     component: 'labeledInput',
                 },
@@ -91,6 +94,10 @@ export default function SignupPage() {
                         value: signupData.password,
                         type: 'password',
                         onChange: inputOnchange,
+                        required: true,
+                        minLength: 7,
+                        maxLength: 16,
+                        // pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,14}$/,
                     },
                     component: 'labeledInput',
                 },
@@ -175,7 +182,6 @@ export default function SignupPage() {
             ],
         },
     ]
-    console.log(signupData)
 
     return (
         <div
@@ -208,6 +214,7 @@ export default function SignupPage() {
                     renderItems={renderItems}
                     step={step}
                     setStep={setStep}
+                    signupData={signupData}
                 />
             </div>
         </div>

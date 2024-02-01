@@ -27,6 +27,7 @@ function Addons({
     return (
         <motion.button
             ref={addonRef}
+            type='button'
             style={{
                 padding: isMobile ? 12 : 20,
                 marginBottom: isMobile ? 5 : 0,

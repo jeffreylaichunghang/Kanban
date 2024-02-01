@@ -17,6 +17,8 @@ export const desktopLayout = {
     signupSidebarWidth: 280,
     signupSidebarHeight: 568,
     signupContainerPadding: 15,
+    pricecardHeight: 180,
+
 }
 
 export const tabletLayout = {
@@ -38,6 +40,8 @@ export const tabletLayout = {
     signupSidebarWidth: 274,
     signupSidebarHeight: 568,
     signupContainerPadding: 15,
+    pricecardHeight: 180,
+
 }
 
 export const mobileLayout = {
@@ -59,4 +63,5 @@ export const mobileLayout = {
     signupSidebarWidth: 375,
     signupSidebarHeight: 172,
     signupContainerPadding: 0,
+    pricecardHeight: 150,
 }

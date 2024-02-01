@@ -25,7 +25,7 @@ function PricingCard({
     onClick = () => true,
 }) {
     const { theme } = useContext(ThemeContext)
-    const { isMobile } = useContext(MediaQueryContext)
+    const { layout, isMobile } = useContext(MediaQueryContext)
     const cardRef = useRef()
     const hovered = useHover(cardRef)
     let bordercolor;
@@ -38,15 +38,18 @@ function PricingCard({
     return (
         <motion.button
             ref={mergeRefs(cardRef)}
+            type="button"
             style={{
                 maxWidth: '100%',
+                height: layout.pricecardHeight,
                 width: '100%',
                 padding: isMobile ? 12 : 20,
                 borderRadius: 10,
                 border: `1px solid ${bordercolor}`,
                 display: 'flex',
                 flexDirection: 'column',
-                rowGap: priceunit === 'Yearly' ? isMobile ? 15 : 30 : 50,
+                // rowGap: priceunit === 'Yearly' ? isMobile ? 15 : 30 : 50,
+                justifyContent: 'space-between',
                 backgroundColor: 'transparent',
                 textAlign: 'left'
             }}

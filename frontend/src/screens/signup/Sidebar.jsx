@@ -15,7 +15,7 @@ export default function Sidebar({
     const commonButtonStyle = {
         backgroundColor: 'transparent',
         border: 'none',
-        cursor: 'pointer',
+        // cursor: 'pointer',
         textAlign: 'left',
     }
     const styles = {
@@ -57,12 +57,13 @@ export default function Sidebar({
                         const isCurrentstep = step === index + 1
                         const buttonStyle = isMobile ? styles.mobile : styles.desktop
                         return (
-                            <motion.button
+                            <motion.div
                                 key={`step_${index}`}
+                                type="button"
                                 style={{
                                     ...buttonStyle
                                 }}
-                                onClick={() => setStep(index + 1)}
+                                // onClick={() => setStep(index + 1)}
                                 whileTap={{ scale: 0.98 }}
                             >
                                 <motion.div
@@ -73,7 +74,7 @@ export default function Sidebar({
                                         width: isCurrentstep ? 45 : 40,
                                         aspectRatio: 1 / 1,
                                         borderRadius: '50%',
-                                        backgroundColor: isCurrentstep ? theme.color.primaryText : 'transparent',
+                                        backgroundColor: isCurrentstep ? theme.color.white : 'transparent',
                                     }}
                                     layout
                                 >
@@ -81,7 +82,7 @@ export default function Sidebar({
                                         variant="heading"
                                         size="m"
                                         text={index + 1}
-                                        color={isCurrentstep ? theme.color.backgroundSecondary : theme.color.primaryText}
+                                        color={isCurrentstep ? theme.color.secondaryText : theme.color.white}
                                         style={{
                                             display: 'inline-block',
                                         }}
@@ -96,20 +97,20 @@ export default function Sidebar({
                                         variant="heading"
                                         size="m"
                                         text={`STEP ${index + 1}`}
-                                        color={theme.color.backgroundSecondary}
+                                        color={theme.color.backgroundPrimary}
                                     />
                                     <Text
                                         variant="heading"
                                         size="l"
                                         text={item}
-                                        color={theme.color.primaryText}
+                                        color={theme.color.white}
                                         style={{
                                             whiteSpace: 'nowrap',
                                             overflow: 'hidden',
                                         }}
                                     />
                                 </div>}
-                            </motion.button>
+                            </motion.div>
                         )
                     })
                 }
