@@ -14,7 +14,7 @@ export const desktopLayout = {
     signinFormHeight: 400,
     signupContainerWidth: 900,
     signupContainerHeight: 568,
-    signupSidebarWidth: 274,
+    signupSidebarWidth: 280,
     signupSidebarHeight: 568,
     signupContainerPadding: 15,
 }

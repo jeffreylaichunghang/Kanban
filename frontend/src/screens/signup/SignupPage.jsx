@@ -200,7 +200,10 @@ export default function SignupPage() {
                     padding: layout.signupContainerPadding,
                 }}
             >
-                <Sidebar />
+                <Sidebar
+                    step={step}
+                    setStep={setStep}
+                />
                 <SignupForm
                     renderItems={renderItems}
                     step={step}
