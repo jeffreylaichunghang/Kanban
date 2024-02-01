@@ -1,6 +1,6 @@
 import { Fragment, useContext } from "react"
 import { ThemeContext, MediaQueryContext } from '../../themes/index'
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 
 import Button from "../../components/Button"
 import Text from "../../components/Text"
@@ -55,7 +55,7 @@ export default function SignupForm({
                     flexWrap: 'nowrap',
                     overflowX: 'none',
                     overflowY: 'none',
-                    height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 150 : layout.signupContainerHeight - 80,
+                    height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 80,
                     minWidth: '100%',
                     margin: 'auto',
                     translate: `0 ${isMobile ? '-15%' : 0}`,
@@ -64,14 +64,15 @@ export default function SignupForm({
                 }}
             >{renderItems.map((renderItem, index) => (
                 <Fragment key={`signup_step_${index}`}>
-                    {/* {index === step - 1 && */}
                     <motion.li
                         style={{
                             // border: '1px solid white',
                             height: '100%',
                             width: FORM_WIDTH - FORM_MARGIN * 2,
                             listStyle: 'none',
-                            paddingTop: 40,
+                            paddingTop: isMobile ? 20 : 40,
+                            paddingLeft: 15,
+                            paddingRight: 15,
                             display: index === step - 1 ? 'block' : 'none'
                         }}
                         initial={{ y: 10, opacity: 0 }}
@@ -88,7 +89,7 @@ export default function SignupForm({
                             variant="heading"
                             size="xl"
                             text={renderItem.title}
-                            color={theme.color.primaryText}
+                            color={isMobile ? theme.color.mainPurple : theme.color.primaryText}
                             style={{ marginBottom: 10 }}
                         />
                         <Text
@@ -97,28 +98,25 @@ export default function SignupForm({
                             text={renderItem.subTitle}
                             color={theme.color.secondaryText}
                         />
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                style={{
-                                    marginTop: 25,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    rowGap: 15,
-                                }}
-                            >
-                                {renderItem.componentData.map(({ component, props }, itemIndex) => (
-                                    <Fragment key={`${renderItem.title}_${itemIndex}`}>
-                                        {
-                                            RenderComponent[component]({
-                                                ...props
-                                            })
-                                        }
-                                    </Fragment>
-                                ))}
-                            </motion.div>
-                        </AnimatePresence>
+                        <motion.div
+                            style={{
+                                marginTop: isMobile ? 12 : 25,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                rowGap: isMobile ? 5 : 15,
+                            }}
+                        >
+                            {renderItem.componentData.map(({ component, props }, itemIndex) => (
+                                <Fragment key={`${renderItem.title}_${itemIndex}`}>
+                                    {
+                                        RenderComponent[component]({
+                                            ...props
+                                        })
+                                    }
+                                </Fragment>
+                            ))}
+                        </motion.div>
                     </motion.li>
-                    {/* } */}
                 </Fragment>
             ))}</ul>
             <div

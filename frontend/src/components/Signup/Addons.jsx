@@ -1,5 +1,5 @@
 import { useContext, useState, useRef } from 'react'
-import { ThemeContext } from '../../themes'
+import { ThemeContext, MediaQueryContext } from '../../themes'
 import { motion } from 'framer-motion'
 import useHover from '../../hooks/useHover'
 
@@ -14,6 +14,7 @@ function Addons({
 }) {
     const [check, setCheck] = useState(false)
     const { theme } = useContext(ThemeContext)
+    const { isMobile } = useContext(MediaQueryContext)
     const addonRef = useRef()
     const hovered = useHover(addonRef)
     let borderColor;
@@ -27,14 +28,15 @@ function Addons({
         <motion.button
             ref={addonRef}
             style={{
-                padding: 20,
+                padding: isMobile ? 12 : 20,
+                marginBottom: isMobile ? 5 : 0,
                 border: `1px solid ${borderColor}`,
                 borderRadius: 10,
                 display: 'flex',
                 justifyContent: 'left',
                 alignItems: 'center',
                 cursor: 'pointer',
-                backgroundColor: check ? theme.color.backgroundPrimary : 'transparent',
+                backgroundColor: check ? isMobile ? theme.color.backgroundPrimaryHover : theme.color.backgroundPrimary : 'transparent',
             }}
             onClick={() => {
                 setCheck(!check)
@@ -64,7 +66,7 @@ function Addons({
                         outline: 'none',
                         border: '1px solid rgba(130, 143, 163, 0.25)',
                         cursor: 'pointer',
-                        backgroundColor: check ? theme.color.mainPurple : theme.color.backgroundSecondary,
+                        backgroundColor: check ? theme.color.mainPurple : 'transparent',
                     }}
                 />
             </label>
@@ -72,16 +74,16 @@ function Addons({
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    rowGap: 10,
+                    rowGap: 7,
                     textAlign: 'left',
                     marginLeft: 20,
                 }}
             >
                 <Text
-                    variant='body'
-                    size='m'
+                    variant='heading'
+                    size={isMobile ? 'm' : 'l'}
                     text={text}
-                    color={theme.color.primaryText}
+                    color={isMobile ? theme.color.mainPurple : theme.color.primaryText}
                 />
                 <Text
                     variant='body'

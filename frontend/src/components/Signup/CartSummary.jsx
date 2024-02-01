@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { ThemeContext } from '../../themes'
+import { ThemeContext, MediaQueryContext } from '../../themes'
 
 import Text from '../Text'
 
@@ -9,8 +9,18 @@ function CartSummary({
     addons
 }) {
     const { theme } = useContext(ThemeContext)
-    let addonsPrice;
+    const { isMobile } = useContext(MediaQueryContext)
+    const styles = {
+        summaryText: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }
+    }
+    let addonsPrice, totalPrice;
     addonsPrice = addons.map(addon => addon.price).reduce((acc, cur) => acc + cur, 0)
+    totalPrice = plan.price + addonsPrice - 2
+    if (paymentPeriod === 'Yearly') totalPrice - 2
     return (
         <div>
             <div
@@ -18,14 +28,11 @@ function CartSummary({
                     backgroundColor: theme.color.backgroundPrimary,
                     borderRadius: 10,
                     padding: 20,
-
                 }}
             >
                 <div
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
+                        ...styles.summaryText
                     }}
                 >
                     <Text
@@ -37,20 +44,37 @@ function CartSummary({
                     <Text
                         variant='body'
                         size='l'
-                        text={`${plan.price}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
+                        text={`$${plan.price}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
                         color={theme.color.primaryText}
                     />
                 </div>
+                {
+                    paymentPeriod === 'Yearly' &&
+                    <div style={{ ...styles.summaryText }}>
+                        <Text
+                            variant='body'
+                            size='l'
+                            text={'Two Years Free'}
+                            color={theme.color.destructiveHover}
+                        />
+                        <Text
+                            variant='body'
+                            size='l'
+                            text={'-$2/yr'}
+                            color={theme.color.destructiveHover}
+                        />
+                    </div>
+                }
                 <hr style={{
                     border: `0.5px solid ${theme.color.borderLine}`,
-                    marginTop: 20,
-                    marginBottom: 20,
+                    marginTop: isMobile ? 5 : 20,
+                    marginBottom: isMobile ? 5 : 20,
                 }} />
                 <div
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        rowGap: 20,
+                        rowGap: isMobile ? 15 : 20,
                     }}
                 >
                     {
@@ -60,9 +84,7 @@ function CartSummary({
                                     <div
                                         key={`addon_${index}`}
                                         style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center'
+                                            ...styles.summaryText
                                         }}
                                     >
                                         <Text
@@ -74,7 +96,7 @@ function CartSummary({
                                         <Text
                                             variant='body'
                                             size='l'
-                                            text={`${addon.price}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
+                                            text={`$${addon.price}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
                                             color={theme.color.secondaryText}
                                         />
                                     </div>
@@ -91,10 +113,8 @@ function CartSummary({
             </div>
             <div
                 style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: 20,
+                    ...styles.summaryText,
+                    padding: isMobile ? 10 : 20,
                 }}
             >
                 <Text
@@ -106,7 +126,7 @@ function CartSummary({
                 <Text
                     variant='heading'
                     size='xl'
-                    text={`+${plan.price + addonsPrice}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
+                    text={`+$${totalPrice}/${paymentPeriod === 'Monthly' ? 'mo' : 'yr'}`}
                     color={theme.color.primary}
                     style={{
                         fontWeight: 'bolder'

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { MediaQueryContext } from "../../themes"
 
 import PricingCard from "./PricingCard"
 
@@ -11,6 +12,7 @@ export default function PricingCardGroup({
     priceunit,
 }) {
     const [selected, setSelected] = useState(defaultPlan)
+    const { isMobile } = useContext(MediaQueryContext)
 
     useEffect(() => {
         setSelected(defaultPlan)
@@ -24,7 +26,8 @@ export default function PricingCardGroup({
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 columnGap: 10,
-                width: '100%'
+                width: '100%',
+                marginBottom: isMobile ? 15 : 0
             }}
         >
             {

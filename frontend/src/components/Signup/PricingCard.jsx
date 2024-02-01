@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react"
-import { ThemeContext } from "../../themes"
+import { ThemeContext, MediaQueryContext } from "../../themes"
 import useHover from "../../hooks/useHover"
 import { mergeRefs } from "../../utils/mergeRefs"
 import { motion } from "framer-motion"
@@ -25,6 +25,7 @@ function PricingCard({
     onClick = () => true,
 }) {
     const { theme } = useContext(ThemeContext)
+    const { isMobile } = useContext(MediaQueryContext)
     const cardRef = useRef()
     const hovered = useHover(cardRef)
     let bordercolor;
@@ -40,12 +41,12 @@ function PricingCard({
             style={{
                 maxWidth: '100%',
                 width: '100%',
-                padding: 20,
+                padding: isMobile ? 12 : 20,
                 borderRadius: 10,
                 border: `1px solid ${bordercolor}`,
                 display: 'flex',
                 flexDirection: 'column',
-                rowGap: 50,
+                rowGap: priceunit === 'Yearly' ? isMobile ? 15 : 30 : 50,
                 backgroundColor: 'transparent',
                 textAlign: 'left'
             }}
