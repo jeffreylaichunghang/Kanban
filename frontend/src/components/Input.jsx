@@ -24,13 +24,15 @@ const Input = forwardRef(function Input({
     const { theme } = useContext(ThemeContext)
 
     useEffect(() => {
-        setInputValue(value)
         if (validation) {
             setWarningText(validation.message)
         } else {
             setWarningText(false)
         }
-    }, [value, validation])
+    }, [validation])
+    useEffect(() => {
+        setInputValue(value)
+    }, [value])
 
     let borderColor;
     if (hovered) {

@@ -10,20 +10,11 @@ import Button from "../../components/Button"
 const authUrl = import.meta.env.VITE_AUTH_URL
 
 export default function SigninForm() {
-    const { register, handleSubmit, formState: { errors }, setError } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm({
         defaultValues: {
             email: '',
             password: ''
-        },
-        mode: 'onBlur' || 'onSubmit',
-        reValidateMode: 'onBlur' || 'onSubmit',
-        resetOptions: {
-            keepDirtyValues: true,
-            keepErrors: false,
-            keepDefaultValues: false
-        },
-        shouldFocusError: true,
-        delayError: true,
+        }
     })
     const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST', authUrl)
     const { setUser } = useAuth()
@@ -42,10 +33,12 @@ export default function SigninForm() {
                 value: /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/,
                 message: 'wrong email format'
             },
-            shouldUnregister: false
+            onChange: () => clearErrors('email'),
+
         },
         'password': {
-            required: 'password is required'
+            required: 'password is required',
+            onChange: () => clearErrors('password')
         }
     }
 
@@ -69,23 +62,17 @@ export default function SigninForm() {
     }, [authenticated, notauthenticated])
 
     const onSubmit = (data) => {
-        // reset(undefined, {
-        //     keepDirtyValues: true,
-        //     keepErrors: false,
-        //     keepValues: true,
-        // })
         if (data) authenticate(data)
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             {
-                ['email', 'password'].map((field, index) => {
+                [{ field: 'email', type: 'text' }, { field: 'password', type: 'password' }].map(({ field, type }, index) => {
                     return (
                         <Input
-                            key={index}
-                            label={field}
-                            type={field}
+                            key={`field_${index}`}
+                            type={type}
                             placeholder={field}
                             validation={errors[field]}
                             {...register(field, registerOptions[field])}
