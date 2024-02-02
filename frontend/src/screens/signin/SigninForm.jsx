@@ -10,16 +10,20 @@ import Button from "../../components/Button"
 const authUrl = import.meta.env.VITE_AUTH_URL
 
 export default function SigninForm() {
-    const { register, handleSubmit, formState: { errors }, setError, reset } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
         defaultValues: {
             email: '',
             password: ''
         },
         mode: 'onBlur' || 'onSubmit',
+        reValidateMode: 'onBlur' || 'onSubmit',
         resetOptions: {
             keepDirtyValues: true,
-            keepErrors: true
-        }
+            keepErrors: false,
+            keepDefaultValues: false
+        },
+        shouldFocusError: true,
+        delayError: true,
     })
     const { value: authenticated, loading: authenticating, error: notauthenticated, callApi: authenticate } = useApiCall('login', 'POST', authUrl)
     const { setUser } = useAuth()
@@ -38,6 +42,7 @@ export default function SigninForm() {
                 value: /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/,
                 message: 'wrong email format'
             },
+            shouldUnregister: false
         },
         'password': {
             required: 'password is required'

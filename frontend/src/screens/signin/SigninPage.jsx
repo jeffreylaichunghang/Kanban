@@ -19,17 +19,15 @@ export default function SigninPage() {
                 width: width,
                 height: height,
                 position: 'relative',
+                overflow: 'none',
+                backgroundImage: `url(${desktopBgImage})`,
+                display: 'grid',
+                placeContent: 'center'
             }}
         >
             <div style={{
                 width: layout.signinFormWidth,
                 height: layout.signinFormHeight,
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                margin: 'auto',
                 display: 'flex',
                 flexDirection: isMobile ? 'column' : "row",
                 gap: isMobile ? 0 : 32,
@@ -60,14 +58,6 @@ export default function SigninPage() {
                     <SigninForm />
                 </div>
             </div>
-            <img
-                src={desktopBgImage}
-                style={{
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%'
-                }}
-            />
         </div>
     )
 }
