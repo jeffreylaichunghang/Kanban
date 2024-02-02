@@ -48,7 +48,6 @@ export default function SigninForm() {
         if (authenticated) {
             // console.log(authenticated)
             const { token, message } = authenticated
-            console.log(token)
             localStorage.setItem('secret_token', token)
             setUser(token)
             navigate('/kanbanBoard')

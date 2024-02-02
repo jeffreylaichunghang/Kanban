@@ -20,10 +20,10 @@ export const router = createBrowserRouter([
             <KanbanBoard />
         </ProtectedRoute>)
     },
-    {
-        path: '/test',
-        element: (<ProtectedRoute>
-            <h1>Secret</h1>
-        </ProtectedRoute>)
-    }
+    // {
+    //     path: '/test',
+    //     element: (<ProtectedRoute>
+    //         <h1>Secret</h1>
+    //     </ProtectedRoute>)
+    // }
 ]);

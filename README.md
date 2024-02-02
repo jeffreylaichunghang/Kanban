@@ -128,10 +128,16 @@ Go to the project directory
   cd Kanban
 ```
 
+Create .env file at root directory
+  you can use .example.env template and change the DATABASE_URL
+
 Install backend dependencies
 
 ```bash
+  cd backend
   npm install
+  npx prisma generate
+  npx prisma migrate dev
   (if you wish to have seed data, run:)
   npx prisma db seed -- --environment development
 ```
@@ -151,8 +157,10 @@ Install frontend dependencies
 Start the server at the root directory
 
 ```bash
+  ( NODE_ENV=development )
   npm run dev
   or
+  ( NODE_ENV=production )
   npm run server
 ```
 

@@ -97,7 +97,12 @@ module.exports = (passport, prisma) => {
             async (token, done) => {
                 console.log('authorizing ...:', token)
                 try {
-                    return done(null, token.user)
+                    const user = prisma.user.findFirst({
+                        where: {
+                            id: token.user.id
+                        }
+                    })
+                    if (user) return done(null, token.user)
                 } catch (error) {
                     return done(error)
                 }
