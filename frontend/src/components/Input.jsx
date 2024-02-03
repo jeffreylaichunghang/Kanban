@@ -21,7 +21,7 @@ const Input = forwardRef(function Input({
     const hovered = useHover(inputRef)
     const [inputValue, setInputValue] = useState('')
     const [warningText, setWarningText] = useState(false)
-    const { theme } = useContext(ThemeContext)
+    const { theme, themeState } = useContext(ThemeContext)
 
     useEffect(() => {
         if (validation) {
@@ -48,7 +48,7 @@ const Input = forwardRef(function Input({
             borderColor = theme.color.line
         }
     }
-    // element.style.setProperty('--variable', value)
+
     return (
         <div style={{
             position: 'relative',
@@ -56,6 +56,7 @@ const Input = forwardRef(function Input({
         }}>
             <input
                 ref={mergeRefs(inputRef, ref)}
+                className={themeState === 'light' ? 'inputLight' : 'inputDark'}
                 name={name}
                 placeholder={placeholder}
                 value={inputValue}

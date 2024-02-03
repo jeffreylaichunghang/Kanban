@@ -28,12 +28,22 @@
     border-radius: 5px;
 }
 
-/* input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+.inputDark:-webkit-autofill,
+.inputDark:-webkit-autofill:hover,
+.inputDark:-webkit-autofill:focus,
+.inputDark:-webkit-autofill:active {
     --text-color: white;
     transition: background-color 5000000s ease-in-out 0s;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset;
     -webkit-text-fill-color: var(--text-color);
-} */
+}
+
+.inputLight:-webkit-autofill,
+.inputLight:-webkit-autofill:hover,
+.inputLight:-webkit-autofill:focus,
+.inputLight:-webkit-autofill:active {
+    --text-color: black;
+    transition: background-color 5000000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    -webkit-text-fill-color: var(--text-color);
+}

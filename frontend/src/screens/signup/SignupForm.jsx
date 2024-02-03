@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from "react"
+import { Fragment, useContext, useEffect, useState, useRef } from "react"
 import { ThemeContext, MediaQueryContext } from '../../themes/index'
 import { motion } from "framer-motion"
 import { useNavigate } from 'react-router-dom'
@@ -33,6 +33,8 @@ export default function SignupForm({
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { value: signupSuccess, loading: signingup, error: signupFail, callApi: signup } = useApiCall('signup', 'POST', authUrl)
     const navigate = useNavigate()
+    const itemsRef = useRef()
+
     const FORM_MARGIN = isMobile ? 15 : 90;
     const FORM_WIDTH = isMobile ? layout.signupContainerWidth : layout.signupContainerWidth - layout.signupSidebarWidth
 
@@ -51,12 +53,29 @@ export default function SignupForm({
             const nextStep = prev < renderItems.length ? prev + 1 : prev
             return nextStep
         })
-        // const formData = new FormData(e.target);
-        // const formJson = Object.fromEntries(formData.entries());
+
         console.log(signupData);
         signup({
             email: signupData.email,
             password: signupData.password
+        })
+    }
+
+    function getMap() {
+        if (!itemsRef.current) {
+            // Initialize the Map on first usage.
+            itemsRef.current = new Map();
+        }
+        return itemsRef.current;
+    }
+
+    function scrollToItem(step) {
+        const map = getMap()
+        const node = map.get(step - 1)
+        node.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
         })
     }
 
@@ -68,18 +87,19 @@ export default function SignupForm({
                 justifyContent: 'space-between',
                 height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight : null,
                 width: FORM_WIDTH,
-                paddingLeft: FORM_MARGIN,
-                paddingRight: FORM_MARGIN,
+                marginLeft: FORM_MARGIN,
+                marginRight: FORM_MARGIN,
+                overflow: 'hidden',
+                border: '1px solid red',
             }}
             onSubmit={submitForm}
         >
-            <ul
+            <div
                 style={{
                     // border: '1px solid yellow',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    overflowX: 'none',
+                    // display: 'flex',
+                    // flexDirection: 'row',
+                    // flexWrap: 'nowrap',
                     overflowY: 'none',
                     height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 80,
                     minWidth: '100%',
@@ -88,70 +108,82 @@ export default function SignupForm({
                     borderRadius: 15,
                     backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
                 }}
-            >{renderItems.map((renderItem, index) => (
-                <motion.li
+            >
+                <ul
                     style={{
-                        // border: '1px solid white',
-                        height: '100%',
-                        width: FORM_WIDTH - FORM_MARGIN * 2,
-                        listStyle: 'none',
-                        paddingTop: isMobile ? 20 : 40,
-                        paddingLeft: 15,
-                        paddingRight: 15,
-                        display: index === step - 1 ? 'block' : 'none'
+                        border: '1px solid yellow',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'nowrap',
+                        // overflowY: 'none',
+                        // height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 80,
+                        // minWidth: '100%',
+                        // margin: 'auto',
+                        // translate: `0 ${isMobile ? '-15%' : 0}`,
+                        // borderRadius: 15,
+                        // backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
                     }}
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -10, opacity: 0 }}
-                    transition={{
-                        layout: { duration: 0.4 },
-                        opacity: { ease: 'linear' }
-                    }}
-                    key={`signup_step_${index}`}
-                    layout
-                >
-                    <Text
-                        variant="heading"
-                        size="xl"
-                        text={renderItem.title}
-                        color={isMobile ? theme.color.mainPurple : theme.color.primaryText}
-                        style={{ marginBottom: 10 }}
-                    />
-                    <Text
-                        variant="body"
-                        size="l"
-                        text={renderItem.subTitle}
-                        color={theme.color.secondaryText}
-                    />
-                    <motion.div
+                >{renderItems.map((renderItem, index) => (
+                    <motion.li
+                        key={`signup_step_${index}`}
                         style={{
-                            marginTop: isMobile ? 12 : 25,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            rowGap: isMobile ? 5 : 15,
+                            // border: '1px solid white',
+                            height: '100%',
+                            width: FORM_WIDTH - FORM_MARGIN * 2,
+                            listStyle: 'none',
+                            paddingTop: isMobile ? 20 : 40,
+                            paddingLeft: 15,
+                            paddingRight: 15,
                         }}
+                        ref={(node) => {
+                            const map = getMap()
+                            node ? map.set(index, node) : map.delete(index)
+                        }}
+                    // layout
                     >
-                        {renderItem.componentData.map(({ component, props }, itemIndex) => (
-                            <Fragment key={`${renderItem.title}_${itemIndex}`}>
-                                {
-                                    RenderComponent[component]({
-                                        ...props
-                                    })
-                                }
-                                {
-                                    step === 1 && itemIndex === 1 && warningMessage &&
-                                    <Text
-                                        variant="body"
-                                        size="m"
-                                        text={warningMessage}
-                                        color={theme.color.destructive}
-                                    />
-                                }
-                            </Fragment>
-                        ))}
-                    </motion.div>
-                </motion.li>
-            ))}</ul>
+                        <Text
+                            variant="heading"
+                            size="xl"
+                            text={renderItem.title}
+                            color={isMobile ? theme.color.mainPurple : theme.color.primaryText}
+                            style={{ marginBottom: 10 }}
+                        />
+                        <Text
+                            variant="body"
+                            size="l"
+                            text={renderItem.subTitle}
+                            color={theme.color.secondaryText}
+                        />
+                        <motion.div
+                            style={{
+                                marginTop: isMobile ? 12 : 25,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                rowGap: isMobile ? 5 : 15,
+                            }}
+                        >
+                            {renderItem.componentData.map(({ component, props }, itemIndex) => (
+                                <Fragment key={`${renderItem.title}_${itemIndex}`}>
+                                    {
+                                        RenderComponent[component]({
+                                            ...props
+                                        })
+                                    }
+                                    {
+                                        step === 1 && itemIndex === 1 && warningMessage &&
+                                        <Text
+                                            variant="body"
+                                            size="m"
+                                            text={warningMessage}
+                                            color={theme.color.destructive}
+                                        />
+                                    }
+                                </Fragment>
+                            ))}
+                        </motion.div>
+                    </motion.li>
+                ))}</ul>
+            </div>
             <div
                 style={{
                     height: 80,
@@ -167,6 +199,7 @@ export default function SignupForm({
                     onClick={() => {
                         setStep(prev => {
                             const nextStep = prev > 1 ? prev - 1 : prev
+                            scrollToItem(nextStep)
                             return nextStep
                         })
                         if (step === 1) navigate('/signin')
@@ -175,8 +208,15 @@ export default function SignupForm({
                 <Button
                     text={step === renderItems.length ? "Confirm" : "Next"}
                     variant="primary"
-                    type="submit"
+                    type="button"
                     disabled={signingup}
+                    onClick={() => {
+                        setStep(prev => {
+                            const nextStep = prev < renderItems.length ? prev + 1 : prev
+                            scrollToItem(nextStep)
+                            return nextStep
+                        })
+                    }}
                 />
             </div>
         </form>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState, useRef, useMemo } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
@@ -68,7 +68,17 @@ export default function Taskboard({
             })
         }
     }
-    // console.log(tasklist)
+
+    const memorizedTaskColumns = useMemo(() => tasklist?.map((column, index) => (
+        <Taskcolumn
+            key={column.id}
+            colIndex={index}
+            columnInfo={column}
+            setModal={setModal}
+            setTaskData={setTaskData}
+        />
+    )), [tasklist])
+
     return (
         tasklist?.length !== 0 ?
             <motion.div
@@ -98,17 +108,7 @@ export default function Taskboard({
                                     // columnGap: 24, (not supported in dnd)
                                 }}
                             >
-                                {
-                                    tasklist?.map((column, index) => (
-                                        <Taskcolumn
-                                            key={column.id}
-                                            colIndex={index}
-                                            columnInfo={column}
-                                            setModal={setModal}
-                                            setTaskData={setTaskData}
-                                        />
-                                    ))
-                                }
+                                {memorizedTaskColumns}
                                 {provided.placeholder}
                             </div>
                         )}
