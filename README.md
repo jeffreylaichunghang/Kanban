@@ -116,22 +116,22 @@ Takes two numbers and returns the sum. -->
 
 ## Run Locally
 
-Clone the project
+1. Clone the project
 
 ```bash
   git clone https://github.com/jeffreylaichunghang/Kanban.git
 ```
 
-Go to the project directory
+2. Go to the project directory
 
 ```bash
   cd Kanban
 ```
 
-Create .env file at root directory
+3. Create .env file at root directory
   you can use .example.env template and change the DATABASE_URL
 
-Install backend dependencies
+4. Install backend dependencies
 
 ```bash
   cd backend
@@ -142,7 +142,7 @@ Install backend dependencies
   npx prisma db seed -- --environment development
 ```
 
-Go to the frontend directory
+5. Go to the frontend directory
 
 ```bash
   cd frondend
@@ -154,7 +154,7 @@ Install frontend dependencies
   npm install
 ```
 
-Start the server at the root directory
+6. Start the server at the root directory
 
 ```bash
   ( NODE_ENV=development )

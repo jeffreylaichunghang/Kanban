@@ -46,7 +46,8 @@ export default function KanbanBoard() {
         }
     }, [value, board])
 
-    const boardTasks = allTaskData?.filter(data => data.id === board?.id)
+    // const boardTasks = allTaskData?.filter(data => data.id === board?.id)
+    const boardTasks = useMemo(() => allTaskData?.filter(data => data.id === board?.id), [board, allTaskData])
 
     return (
         <div style={styles.container}>

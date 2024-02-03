@@ -57,11 +57,9 @@ export default function Taskboard({
                 newTasklist[destination.droppableId].tasks.splice(destination.index, 0, draggedItem[0])
                 return newTasklist
             })
-            // console.log(draggedCard.current)
             updatetask(draggedCard.current)
         } else if (type === 'column_group') {
-            console.log(source)
-            console.log(destination)
+            console.log(source, destination)
             setTasklist(prev => {
                 const newTasklist = [...prev];
                 [newTasklist[source.index], newTasklist[destination.index]] =
@@ -70,7 +68,7 @@ export default function Taskboard({
             })
         }
     }
-
+    // console.log(tasklist)
     return (
         tasklist?.length !== 0 ?
             <motion.div

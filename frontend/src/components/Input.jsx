@@ -48,7 +48,7 @@ const Input = forwardRef(function Input({
             borderColor = theme.color.line
         }
     }
-
+    // element.style.setProperty('--variable', value)
     return (
         <div style={{
             position: 'relative',
@@ -85,8 +85,9 @@ const Input = forwardRef(function Input({
                     borderRadius: 4,
                     outlineColor: theme.color.primary,
                     ...theme.font.body.l,
-                    ...style
+                    ...style,
                 }}
+                autoComplete="color transparent"
                 {...props}
             />
             <Text

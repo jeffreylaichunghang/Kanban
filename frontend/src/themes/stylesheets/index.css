@@ -13,17 +13,27 @@
 }
 
 *::-webkit-scrollbar {
-    color: 'transparent';
+    color: transparent;
     height: 10px;
     width: 10px;
 }
 
 *::-webkit-scrollbar-track,
 *::-webkit-scrollbar-corner {
-    background-color: 'transparent';
+    background-color: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
     background-color: darkgrey;
     border-radius: 5px;
 }
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    --text-color: white;
+    transition: background-color 5000000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    -webkit-text-fill-color: var(--text-color);
+} */

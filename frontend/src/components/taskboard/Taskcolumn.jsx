@@ -105,7 +105,8 @@ export default function Taskcolumn({
                                                     key={task.id}
                                                     taskInfo={task}
                                                     index={index}
-                                                    onClick={() => {
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
                                                         setTaskData(task)
                                                         setModal('taskcard')
                                                     }}
