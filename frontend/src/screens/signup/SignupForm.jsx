@@ -1,4 +1,5 @@
 import { Fragment, useContext, useEffect, useState, useRef } from "react"
+import { flushSync } from 'react-dom'
 import { ThemeContext, MediaQueryContext } from '../../themes/index'
 import { motion } from "framer-motion"
 import { useNavigate } from 'react-router-dom'
@@ -33,7 +34,7 @@ export default function SignupForm({
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { value: signupSuccess, loading: signingup, error: signupFail, callApi: signup } = useApiCall('signup', 'POST', authUrl)
     const navigate = useNavigate()
-    const itemsRef = useRef()
+    const itemsRef = useRef(0)
 
     const FORM_MARGIN = isMobile ? 15 : 90;
     const FORM_WIDTH = isMobile ? layout.signupContainerWidth : layout.signupContainerWidth - layout.signupSidebarWidth
@@ -61,67 +62,31 @@ export default function SignupForm({
         })
     }
 
-    function getMap() {
-        if (!itemsRef.current) {
-            // Initialize the Map on first usage.
-            itemsRef.current = new Map();
-        }
-        return itemsRef.current;
-    }
-
-    function scrollToItem(step) {
-        const map = getMap()
-        const node = map.get(step - 1)
-        node.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        })
-    }
-
     return (
         <form
             style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight : null,
+                height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight : '100%',
                 width: FORM_WIDTH,
                 marginLeft: FORM_MARGIN,
                 marginRight: FORM_MARGIN,
                 overflow: 'hidden',
-                border: '1px solid red',
+                // border: '1px solid red',
             }}
             onSubmit={submitForm}
         >
-            <div
-                style={{
-                    // border: '1px solid yellow',
-                    // display: 'flex',
-                    // flexDirection: 'row',
-                    // flexWrap: 'nowrap',
-                    overflowY: 'none',
-                    height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 80,
-                    minWidth: '100%',
-                    margin: 'auto',
-                    translate: `0 ${isMobile ? '-15%' : 0}`,
-                    borderRadius: 15,
-                    backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
-                }}
-            >
+            <div>
                 <ul
                     style={{
-                        border: '1px solid yellow',
                         display: 'flex',
                         flexDirection: 'row',
                         flexWrap: 'nowrap',
-                        // overflowY: 'none',
-                        // height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 80,
-                        // minWidth: '100%',
-                        // margin: 'auto',
-                        // translate: `0 ${isMobile ? '-15%' : 0}`,
-                        // borderRadius: 15,
-                        // backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
+                        overflowY: 'none',
+                        height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 100,
+                        minWidth: '100%',
+                        margin: 'auto',
+                        translate: `0 ${isMobile ? '-15%' : 0}`,
+                        borderRadius: 15,
+                        backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
                     }}
                 >{renderItems.map((renderItem, index) => (
                     <motion.li
@@ -129,17 +94,20 @@ export default function SignupForm({
                         style={{
                             // border: '1px solid white',
                             height: '100%',
-                            width: FORM_WIDTH - FORM_MARGIN * 2,
+                            minWidth: FORM_WIDTH - FORM_MARGIN * 2,
                             listStyle: 'none',
                             paddingTop: isMobile ? 20 : 40,
                             paddingLeft: 15,
                             paddingRight: 15,
                         }}
-                        ref={(node) => {
-                            const map = getMap()
-                            node ? map.set(index, node) : map.delete(index)
+                        initial={{ opacity: 0 }}
+                        animate={{ x: -itemsRef.current, opacity: 1 }}
+                        transition={{
+                            type: 'spring',
+                            duration: 0.3,
+                            stiffness: 90,
+                            damping: 15,
                         }}
-                    // layout
                     >
                         <Text
                             variant="heading"
@@ -197,11 +165,12 @@ export default function SignupForm({
                     text={step > 1 ? "Back" : "Cancel"}
                     variant="secondary"
                     onClick={() => {
-                        setStep(prev => {
-                            const nextStep = prev > 1 ? prev - 1 : prev
-                            scrollToItem(nextStep)
-                            return nextStep
-                        })
+                        let nextStep = step;
+                        if (step > 1) {
+                            nextStep--
+                            itemsRef.current -= FORM_WIDTH - FORM_MARGIN * 2
+                        }
+                        setStep(nextStep)
                         if (step === 1) navigate('/signin')
                     }}
                 />
@@ -211,11 +180,12 @@ export default function SignupForm({
                     type="button"
                     disabled={signingup}
                     onClick={() => {
-                        setStep(prev => {
-                            const nextStep = prev < renderItems.length ? prev + 1 : prev
-                            scrollToItem(nextStep)
-                            return nextStep
-                        })
+                        let nextStep = step;
+                        if (step < renderItems.length) {
+                            nextStep++
+                            itemsRef.current += FORM_WIDTH - FORM_MARGIN * 2
+                        }
+                        setStep(nextStep)
                     }}
                 />
             </div>
