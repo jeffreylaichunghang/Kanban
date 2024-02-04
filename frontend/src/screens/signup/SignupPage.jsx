@@ -5,8 +5,10 @@ import useWindowDimension from '../../hooks/useWindowDimension'
 import Sidebar from "./Sidebar"
 import SignupForm from "./SignupForm"
 import Text from "../../components/Text"
+import { useForm, FormProvider } from "react-hook-form"
 
 export default function SignupPage() {
+    const methods = useForm()
     const [signupData, setSignupData] = useState({
         name: '',
         email: '',
@@ -36,6 +38,7 @@ export default function SignupPage() {
             ...prev,
             [e.target.name]: e.target.value
         }))
+        methods.clearErrors(e.target.name)
     }
 
     const addonsOnchange = (addon, price) => {
@@ -69,7 +72,6 @@ export default function SignupPage() {
                         value: signupData.name,
                         type: 'text',
                         onChange: inputOnchange,
-                        required: true,
                     },
                     component: 'labeledInput',
                 },
@@ -81,8 +83,6 @@ export default function SignupPage() {
                         value: signupData.email,
                         type: 'email',
                         onChange: inputOnchange,
-                        required: true,
-                        pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                     },
                     component: 'labeledInput',
                 },
@@ -94,10 +94,6 @@ export default function SignupPage() {
                         value: signupData.password,
                         type: 'password',
                         onChange: inputOnchange,
-                        required: true,
-                        minLength: 7,
-                        maxLength: 16,
-                        // pattern: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,14}$/,
                     },
                     component: 'labeledInput',
                 },
@@ -210,12 +206,14 @@ export default function SignupPage() {
                     step={step}
                     setStep={setStep}
                 />
-                <SignupForm
-                    renderItems={renderItems}
-                    step={step}
-                    setStep={setStep}
-                    signupData={signupData}
-                />
+                <FormProvider {...methods}>
+                    <SignupForm
+                        renderItems={renderItems}
+                        step={step}
+                        setStep={setStep}
+                        signupData={signupData}
+                    />
+                </FormProvider>
             </div>
         </div>
     )

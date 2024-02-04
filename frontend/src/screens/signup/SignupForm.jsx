@@ -1,9 +1,9 @@
 import { Fragment, useContext, useEffect, useState, useRef } from "react"
-import { flushSync } from 'react-dom'
 import { ThemeContext, MediaQueryContext } from '../../themes/index'
 import { motion } from "framer-motion"
 import { useNavigate } from 'react-router-dom'
 import useApiCall from "../../hooks/useApiCall"
+import { useFormContext } from "react-hook-form"
 
 import Button from "../../components/Button"
 import Text from "../../components/Text"
@@ -29,7 +29,7 @@ export default function SignupForm({
     setStep,
     signupData,
 }) {
-    const [warningMessage, setWarningMessage] = useState(null)
+    const { handleSubmit, setError, formState: { errors } } = useFormContext()
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { value: signupSuccess, loading: signingup, error: signupFail, callApi: signup } = useApiCall('signup', 'POST', authUrl)
@@ -44,24 +44,32 @@ export default function SignupForm({
         if (signupFail) {
             console.log(signupFail.response)
             setStep(1)
-            setWarningMessage(signupFail.response.data.message)
+            itemsRef.current = 0
+            const data = signupFail.response.data
+            if (data.message === 'email already exists') {
+                setError('email', data)
+            }
         }
     }, [signupSuccess, signupFail])
 
-    const submitForm = (e) => {
-        e.preventDefault()
-        if (step < renderItems.length) return setStep(prev => {
-            const nextStep = prev < renderItems.length ? prev + 1 : prev
-            return nextStep
-        })
-
-        console.log(signupData);
-        signup({
-            email: signupData.email,
-            password: signupData.password
-        })
+    const submitForm = (data) => {
+        if (step < renderItems.length) {
+            return setStep(prev => {
+                let nextStep = prev;
+                if (prev < renderItems.length) {
+                    nextStep++
+                    itemsRef.current += FORM_WIDTH - FORM_MARGIN * 2
+                }
+                return nextStep
+            })
+        } else if (step === renderItems.length) {
+            console.log(data);
+            signup({
+                email: data.email,
+                password: data.password
+            })
+        }
     }
-
     return (
         <form
             style={{
@@ -72,7 +80,7 @@ export default function SignupForm({
                 overflow: 'hidden',
                 // border: '1px solid red',
             }}
-            onSubmit={submitForm}
+            onSubmit={handleSubmit(submitForm)}
         >
             <div>
                 <ul
@@ -134,17 +142,9 @@ export default function SignupForm({
                                 <Fragment key={`${renderItem.title}_${itemIndex}`}>
                                     {
                                         RenderComponent[component]({
-                                            ...props
+                                            ...props,
+                                            validation: errors[props.name]
                                         })
-                                    }
-                                    {
-                                        step === 1 && itemIndex === 1 && warningMessage &&
-                                        <Text
-                                            variant="body"
-                                            size="m"
-                                            text={warningMessage}
-                                            color={theme.color.destructive}
-                                        />
                                     }
                                 </Fragment>
                             ))}
@@ -177,16 +177,8 @@ export default function SignupForm({
                 <Button
                     text={step === renderItems.length ? "Confirm" : "Next"}
                     variant="primary"
-                    type="button"
+                    type={'submit'}
                     disabled={signingup}
-                    onClick={() => {
-                        let nextStep = step;
-                        if (step < renderItems.length) {
-                            nextStep++
-                            itemsRef.current += FORM_WIDTH - FORM_MARGIN * 2
-                        }
-                        setStep(nextStep)
-                    }}
                 />
             </div>
         </form>
