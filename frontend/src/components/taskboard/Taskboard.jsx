@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useMemo } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
@@ -10,7 +10,7 @@ import Taskcolumn from "./Taskcolumn"
 import Text from "../Text"
 import Button from "../Button"
 // import Modal from "../modals"
-import { setColumnList, handleTaskDragDrop } from "../../Redux/features/columns/columnSlice"
+import { setColumnList } from "../../Redux/features/columns/columnSlice"
 
 export default function Taskboard({
     sidebar,

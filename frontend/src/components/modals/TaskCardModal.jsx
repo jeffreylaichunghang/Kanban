@@ -16,9 +16,9 @@ export default function TaskCardModal({
     modal,
     setModal,
     setWarningModal,
-    boardTasks,
 }) {
     const task = useSelector((state) => state.task.activeTask)
+    const columnList = useSelector((state) => state.column.columnList)
     const [actionModal, setActionModal] = useState(false)
     const { value: updatedSubtask, callApi: updateSubtask } = useApiCall(`updateSubTask/${task?.id}`, 'PUT')
     const { value: editedTask, callApi: editTask } = useApiCall(`editTask/${task?.id}`, 'PUT')
@@ -137,12 +137,12 @@ export default function TaskCardModal({
                 }
             </div>
             <Select
-                options={boardTasks[0]?.columns.map(col => col.column_name)}
-                initialValue={boardTasks[0]?.columns.filter(col => col.id === task?.columnId)[0]?.column_name}
+                options={columnList?.map(col => col.column_name)}
+                initialValue={columnList?.filter(col => col.id === task?.columnId)[0]?.column_name}
                 action={(option) => {
                     const newTask = {
                         ...task,
-                        columnId: boardTasks[0]?.columns.filter(col => col.column_name === option)[0].id
+                        columnId: columnList?.filter(col => col.column_name === option)[0].id
                     }
                     dispatch(setTaskdata(newTask))
                     dispatch(moveTaskAcrossColumns({ task: newTask, columnId: task?.columnId }))

@@ -20,16 +20,16 @@ export const columnSlice = createSlice({
                 }
             });
         },
-        handleTaskDragDrop: (state, action) => {
-            const newTasklist = state.columnList
-            const { source, destination } = action.payload
-            const draggedItem = newTasklist[Number(source.droppableId)].tasks.splice(source.index, 1)
-            draggedItem[0].columnId = newTasklist[Number(destination.droppableId)].id
-            newTasklist[Number(destination.droppableId)].tasks.splice(destination.index, 0, draggedItem[0])
+        addNewTask: (state, action) => {
+            const newTask = action.payload
+            console.log(newTask)
+            const targetColumn = state.columnList.filter(col => col.id === newTask.columnId)[0]
+            console.log(targetColumn)
+            targetColumn.tasks.push(newTask)
         }
     }
 })
 
-export const { setColumnList, moveTaskAcrossColumns, handleTaskDragDrop } = columnSlice.actions
+export const { setColumnList, moveTaskAcrossColumns, addNewTask } = columnSlice.actions
 
 export default columnSlice.reducer

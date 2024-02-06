@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from "react"
 import useApiCall from "../../hooks/useApiCall"
+import { useSelector, useDispatch } from "react-redux"
 
 import Modal from "."
 import Label from "../Label"
@@ -10,23 +11,27 @@ import Button from "../Button"
 import Select from "../Select"
 import Textarea from "../Textarea"
 import { constants } from "../../constants/constants"
+import { addNewTask, moveTaskAcrossColumns } from "../../Redux/features/columns/columnSlice"
+import { setTaskdata } from "../../Redux/features/task/taskSlice"
 
 export default function TaskModal({
     modal,
     setModal,
-    taskData,
-    boardTasks,
-    getAllBoardsData
+    // taskData,
+    // boardTasks,
 }) {
-    const [task, setTask] = useState(taskData)
+    const [task, setTask] = useState(null)
+    const activeTask = useSelector(state => state.task.activeTask)
+    const columnList = useSelector(state => state.column.columnList)
+    const dispatch = useDispatch()
     const { value: createdTask, callApi: createTask } = useApiCall('createTask', 'POST')
-    const { value: editedTask, callApi: editTask } = useApiCall(`editTask/${taskData?.id}`, 'PUT')
+    const { value: editedTask, callApi: editTask } = useApiCall(`editTask/${activeTask?.id}`, 'PUT')
 
     useEffect(() => {
         modal === 'taskmodal' ? setTask({
             task_name: '',
             description: '',
-            columnId: boardTasks[0]?.columns[0].id,
+            columnId: columnList[0]?.id,
             sub_tasks: constants.subtaskSuggestion.slice(0, 2).map(sug => {
                 return {
                     sub_task_name: '',
@@ -34,19 +39,26 @@ export default function TaskModal({
                     placeholder: sug
                 }
             })
-        }) : setTask(taskData)
-    }, [taskData, modal])
+        }) : setTask(activeTask)
+    }, [activeTask, modal, columnList])
 
     useEffect(() => {
-        if (createdTask || editedTask) {
-            getAllBoardsData()
-            setModal('')
+        if (createdTask) {
+            dispatch(addNewTask(createdTask))
         }
-    }, [createdTask, editedTask])
+        setModal('')
+    }, [createdTask, dispatch])
+    useEffect(() => {
+        if (editedTask) {
+            dispatch(setTaskdata(editedTask))
+            dispatch(moveTaskAcrossColumns({ task: editedTask, columnId: activeTask.columnId }))
+        }
+        setModal('')
+    }, [editedTask, dispatch])
 
     const validateTaskInfo = (info) => {
         let valid = true
-        let infoToValidate = { ...info }
+        let infoToValidate = JSON.parse(JSON.stringify(info))
 
         for (const key in info) {
             const value = info[key]
@@ -147,7 +159,7 @@ export default function TaskModal({
                                 <Fragment key={modal === 'edittask' ? subtask.id : index}>
                                     <InputItem
                                         // key={subtask.id}
-                                        name={`subtask_${subtask.id}`}
+                                        name={`subtask_${subtask.id || index}`}
                                         value={subtask.sub_task_name}
                                         placeholder={modal === 'taskmodal' ? subtask.placeholder : ''}
                                         onChange={(e) => setTask(prev => ({
@@ -178,11 +190,11 @@ export default function TaskModal({
                     }}
                     onClick={() => setTask(prev => ({
                         ...prev,
-                        sub_tasks: prev.sub_tasks.concat([{
+                        sub_tasks: [...prev.sub_tasks, {
                             sub_task_name: '',
                             status: false,
                             placeholder: constants.subtaskSuggestion.filter(sug => !prev.sub_tasks.map(subtask => subtask.placeholder).includes(sug))[0]
-                        }])
+                        }]
                     }))}
                 />
             </div>
@@ -196,11 +208,11 @@ export default function TaskModal({
                     text={'Status'}
                 />
                 <Select
-                    options={boardTasks[0]?.columns.map(col => col.column_name)}
-                    initialValue={boardTasks[0]?.columns.filter(col => col.id === task?.columnId)[0]?.column_name}
+                    options={columnList?.map(col => col.column_name)}
+                    initialValue={columnList?.filter(col => col.id === task?.columnId)[0]?.column_name}
                     action={(option) => setTask(prev => ({
                         ...prev,
-                        columnId: boardTasks[0]?.columns?.filter(col => col?.column_name === option)[0]?.id
+                        columnId: columnList?.filter(col => col?.column_name === option)[0]?.id
                     }))}
                 />
             </div>

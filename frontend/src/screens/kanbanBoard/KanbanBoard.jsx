@@ -63,15 +63,11 @@ export default function KanbanBoard() {
                 modal={modal}
                 setModal={setModal}
                 taskData={taskData}
-                boardTasks={boardTasks}
-                getAllBoardsData={getAllBoardsData}
             />
             <TaskCardModal
                 modal={modal}
                 setModal={setModal}
                 setWarningModal={setWarningModal}
-                /* TODO: delete the belows */
-                boardTasks={boardTasks}
             />
             <BoardModal
                 board={board}
