@@ -1,32 +1,36 @@
-import { useContext, useEffect, useState, useRef, useMemo } from "react"
+import { useContext, useEffect, useState, useMemo } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import useApiCall from "../../hooks/useApiCall"
+import { useSelector, useDispatch } from "react-redux"
 
 import Taskcolumn from "./Taskcolumn"
 import Text from "../Text"
 import Button from "../Button"
+// import Modal from "../modals"
+import { setColumnList, handleTaskDragDrop } from "../../Redux/features/columns/columnSlice"
 
 export default function Taskboard({
     sidebar,
     board,
     setModal,
-    setTaskData,
 }) {
-    const [tasklist, setTasklist] = useState(null)
+    // const [tasklist, setTasklist] = useState(null)
+    const tasklist = useSelector(state => state.column.columnList)
+    const dispatch = useDispatch()
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
-    const draggedCard = useRef(null)
     const { value: updatedTask, callApi: updatetask } = useApiCall(`updateTask`, 'PUT')
     const { value: boardTasks, callApi: getBoardTasks } = useApiCall(`tasks/${board.id}`)
 
     useEffect(() => getBoardTasks(), [board.id, getBoardTasks])
     useEffect(() => {
-        if (boardTasks) setTasklist(boardTasks.columns)
-    }, [boardTasks])
+        if (boardTasks) dispatch(setColumnList(boardTasks.columns))
+        // if (boardTasks) setTasklist(boardTasks.columns)
+    }, [boardTasks, dispatch])
 
     useEffect(() => {
         if (updatedTask) {
@@ -51,23 +55,24 @@ export default function Taskboard({
         ) return;
         if (type === 'task_group') {
             console.log(source, destination)
-            setTasklist(prev => {
-                const newTasklist = [...prev]
-                const draggedItem = newTasklist[source.droppableId].tasks.splice(source.index, 1)
-                draggedItem[0].columnId = boardTasks.columns[Number(destination.droppableId)].id
-                draggedCard.current = draggedItem[0]
-                newTasklist[destination.droppableId].tasks.splice(destination.index, 0, draggedItem[0])
-                return newTasklist
-            })
-            updatetask(draggedCard.current)
+            let tasklistClone = JSON.parse(JSON.stringify(tasklist));
+            console.log(tasklistClone)
+            const draggedItem = tasklistClone[Number(source.droppableId)].tasks.splice(source.index, 1)
+            console.log(tasklistClone)
+            const droppedItem = {
+                ...draggedItem[0],
+                columnId: board.columns[Number(destination.droppableId)].id
+            }
+            updatetask(droppedItem)
+            tasklistClone[Number(destination.droppableId)].tasks.splice(destination.index, 0, droppedItem)
+
+            dispatch(setColumnList(tasklistClone))
         } else if (type === 'column_group') {
             console.log(source, destination)
-            setTasklist(prev => {
-                const newTasklist = [...prev];
-                [newTasklist[source.index], newTasklist[destination.index]] =
-                    [newTasklist[destination.index], newTasklist[source.index]];
-                return newTasklist
-            })
+            const newTasklist = [...tasklist];
+            [newTasklist[source.index], newTasklist[destination.index]] =
+                [newTasklist[destination.index], newTasklist[source.index]];
+            dispatch(setColumnList(newTasklist))
         }
     }
 
@@ -77,7 +82,6 @@ export default function Taskboard({
             colIndex={index}
             columnInfo={column}
             setModal={setModal}
-            setTaskData={setTaskData}
         />
     )), [tasklist])
 
@@ -116,6 +120,7 @@ export default function Taskboard({
                         )}
                     </Droppable>
                 </DragDropContext>
+                {/* Task Card Modal? */}
             </motion.div> :
             <div
                 style={{

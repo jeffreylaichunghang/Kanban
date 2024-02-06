@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { ThemeContext } from "../../themes"
 import { Draggable, Droppable } from "react-beautiful-dnd"
 
@@ -11,7 +11,6 @@ export default function Taskcolumn({
     columnInfo,
     colIndex,
     setModal,
-    setTaskData,
 }) {
     const { theme } = useContext(ThemeContext)
     const styles = {
@@ -52,21 +51,6 @@ export default function Taskcolumn({
             marginTop: 5
         }
     }
-
-    // const memorizedTaskCards = useMemo(() => columnInfo?.tasks.map((task, index) => {
-    //     return (
-    //         <TaskCard
-    //             key={task.id}
-    //             taskInfo={task}
-    //             index={index}
-    //             onClick={(e) => {
-    //                 e.stopPropagation()
-    //                 setTaskData(task)
-    //                 setModal('taskcard')
-    //             }}
-    //         />
-    //     )
-    // }), [columnInfo])
 
     return (
         <Draggable
@@ -118,12 +102,11 @@ export default function Taskcolumn({
                                         columnInfo?.tasks.map((task, index) => {
                                             return (
                                                 <TaskCard
-                                                    key={task.id}
+                                                    key={task?.id}
                                                     taskInfo={task}
                                                     index={index}
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setTaskData(task)
                                                         setModal('taskcard')
                                                     }}
                                                 />

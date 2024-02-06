@@ -33,7 +33,9 @@ export default function Modal({
                 width: '100%',
                 height: '100%',
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                zIndex: 5
+                zIndex: 5,
+                top: 0,
+                left: 0
             }}>
             <OutsideAlerter
                 action={action}

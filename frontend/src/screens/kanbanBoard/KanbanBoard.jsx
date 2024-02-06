@@ -67,13 +67,11 @@ export default function KanbanBoard() {
                 getAllBoardsData={getAllBoardsData}
             />
             <TaskCardModal
-                taskData={taskData}
-                setTaskData={setTaskData}
                 modal={modal}
                 setModal={setModal}
                 setWarningModal={setWarningModal}
+                /* TODO: delete the belows */
                 boardTasks={boardTasks}
-                getAllBoardsData={getAllBoardsData}
             />
             <BoardModal
                 board={board}
@@ -100,7 +98,6 @@ export default function KanbanBoard() {
                 sidebar={sidebar}
                 board={board}
                 setModal={setModal}
-                setTaskData={setTaskData}
             />}
         </div>
     )

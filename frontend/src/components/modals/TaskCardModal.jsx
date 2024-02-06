@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../themes";
 import useApiCall from "../../hooks/useApiCall";
+import { useSelector, useDispatch } from "react-redux";
 
 import Modal from ".";
 import Text from "../Text";
@@ -8,29 +9,25 @@ import Ellipsis from "../../assets/Ellipsis";
 import Checkbox from "../Checkbox";
 import Select from "../Select";
 import ActionModal from "./ActionModal";
+import { setTaskdata } from "../../Redux/features/task/taskSlice";
+import { moveTaskAcrossColumns } from '../../Redux/features/columns/columnSlice'
 
 export default function TaskCardModal({
-    taskData,
-    setTaskData,
     modal,
     setModal,
     setWarningModal,
     boardTasks,
-    getAllBoardsData
 }) {
-    const [task, setTask] = useState(taskData)
+    const task = useSelector((state) => state.task.activeTask)
     const [actionModal, setActionModal] = useState(false)
-    const { value: updatedSubtask, callApi: updateSubtask } = useApiCall(`updateSubTask/${taskData?.id}`, 'PUT')
-    const { value: editedTask, callApi: editTask } = useApiCall(`editTask/${taskData?.id}`, 'PUT')
+    const { value: updatedSubtask, callApi: updateSubtask } = useApiCall(`updateSubTask/${task?.id}`, 'PUT')
+    const { value: editedTask, callApi: editTask } = useApiCall(`editTask/${task?.id}`, 'PUT')
     const { theme } = useContext(ThemeContext)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        setTask(taskData)
-    }, [taskData])
-    useEffect(() => {
         if (updatedSubtask || editedTask) {
-            setTaskData(task)
-            getAllBoardsData()
+            // console.log(task)
         }
     }, [updatedSubtask, editedTask])
 
@@ -126,10 +123,12 @@ export default function TaskCardModal({
                                         ...task.sub_tasks[index],
                                         status: !task.sub_tasks[index].status
                                     }
-                                    setTask(prev => ({
-                                        ...prev,
-                                        sub_tasks: prev.sub_tasks.toSpliced(index, 1, newSubTask)
-                                    }))
+                                    const newTask = {
+                                        ...task,
+                                        sub_tasks: task.sub_tasks.toSpliced(index, 1, newSubTask)
+                                    }
+                                    console.log(newTask)
+                                    dispatch(setTaskdata(newTask))
                                     updateSubtask([newSubTask])
                                 }}
                             />
@@ -139,12 +138,14 @@ export default function TaskCardModal({
             </div>
             <Select
                 options={boardTasks[0]?.columns.map(col => col.column_name)}
-                initialValue={boardTasks[0]?.columns.filter(col => col.id === taskData?.columnId)[0]?.column_name}
+                initialValue={boardTasks[0]?.columns.filter(col => col.id === task?.columnId)[0]?.column_name}
                 action={(option) => {
                     const newTask = {
                         ...task,
                         columnId: boardTasks[0]?.columns.filter(col => col.column_name === option)[0].id
                     }
+                    dispatch(setTaskdata(newTask))
+                    dispatch(moveTaskAcrossColumns({ task: newTask, columnId: task?.columnId }))
                     editTask(newTask)
                 }}
             />
