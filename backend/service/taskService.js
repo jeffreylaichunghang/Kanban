@@ -32,15 +32,17 @@ class TaskService {
 
     async getAllBoards(userId) {
         const boards = await this.prisma.board.findMany({
-            where: { userId: userId }
+            where: { userId: userId },
+            include: { columns: true }
         })
         return boards
     }
 
-    async getBoardTasks(board) {
+    async getBoardTasks(userId, boardId) {
         const allTasks = await this.prisma.board.findFirst({
             where: {
-                board_name: board,
+                id: boardId,
+                userId: userId
             },
             include: {
                 columns: {
@@ -78,14 +80,14 @@ class TaskService {
         return columns
     }
 
-    async createBoard(newBoard) {
+    async createBoard(newBoard, userId) {
         console.log(`create new board ${newBoard}`)
         const { board_name, board_columns } = newBoard
         try {
             const createdBoard = await this.prisma.$transaction(async tx => {
                 const newBoard = await tx.board.create({
                     data: {
-                        userId: 1,
+                        userId: userId,
                         board_name: board_name,
                     }
                 })

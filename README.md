@@ -18,6 +18,8 @@ Insert gif or link to demo -->
 
 **API:** Node, Express, Postgres, Prisma
 
+**API testing** Postmen
+
 **Authentication:** Passport, JWT, bcrypt
 
 ## Features

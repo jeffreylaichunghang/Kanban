@@ -91,19 +91,17 @@ export default function KanbanBoard() {
                 setSidebar={setSidebar}
             />
             <Sidebar
-                board={board}
                 setBoard={setBoard}
-                allTaskData={allTaskData}
                 setModal={setModal}
                 sidebar={sidebar}
                 setSidebar={setSidebar}
             />
-            <Taskboard
+            {board && <Taskboard
                 sidebar={sidebar}
-                boardTasks={boardTasks}
+                board={board}
                 setModal={setModal}
                 setTaskData={setTaskData}
-            />
+            />}
         </div>
     )
 }

@@ -11,19 +11,21 @@ import Button from "../Button"
 
 export default function Taskboard({
     sidebar,
-    boardTasks,
+    board,
     setModal,
     setTaskData,
 }) {
-    const [tasklist, setTasklist] = useState(boardTasks[0]?.columns)
+    const [tasklist, setTasklist] = useState(null)
     const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
     const draggedCard = useRef(null)
     const { value: updatedTask, callApi: updatetask } = useApiCall(`updateTask`, 'PUT')
+    const { value: boardTasks, callApi: getBoardTasks } = useApiCall(`tasks/${board.id}`)
 
+    useEffect(() => getBoardTasks(), [board.id, getBoardTasks])
     useEffect(() => {
-        setTasklist(boardTasks[0]?.columns)
+        if (boardTasks) setTasklist(boardTasks.columns)
     }, [boardTasks])
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export default function Taskboard({
             setTasklist(prev => {
                 const newTasklist = [...prev]
                 const draggedItem = newTasklist[source.droppableId].tasks.splice(source.index, 1)
-                draggedItem[0].columnId = boardTasks[0]?.columns[Number(destination.droppableId)].id
+                draggedItem[0].columnId = boardTasks.columns[Number(destination.droppableId)].id
                 draggedCard.current = draggedItem[0]
                 newTasklist[destination.droppableId].tasks.splice(destination.index, 0, draggedItem[0])
                 return newTasklist

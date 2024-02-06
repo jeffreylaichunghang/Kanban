@@ -9,7 +9,7 @@ class TaskRouter {
 
         router.get('/getAllBoardsData', this.getAllBoardsData.bind(this))
         router.get('/boards', this.getAllBoards.bind(this))
-        router.get('/tasks/boardId', this.getBoardTasks.bind(this))
+        router.get('/tasks/:boardId', this.getBoardTasks.bind(this))
 
         router.post('/createBoard', this.createBoard.bind(this))
         router.post('/createColumn', this.createColumn.bind(this))
@@ -38,14 +38,17 @@ class TaskRouter {
     }
 
     async getBoardTasks(req, res) {
+        const userId = Number(req.user.id)
         const boardId = Number(req.params.boardId)
-        const data = await this.service.getBoardTasks()
+        console.log(userId, boardId)
+        const data = await this.service.getBoardTasks(userId, boardId)
         res.json(data)
     }
 
     async createBoard(req, res) {
         console.log(req.body)
-        const data = await this.service.createBoard(req.body)
+        const userId = Number(req.user.id)
+        const data = await this.service.createBoard(req.body, userId)
         res.json(data)
     }
 

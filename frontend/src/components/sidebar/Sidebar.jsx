@@ -11,9 +11,7 @@ import ThemeLight from "../../assets/ThemeLight"
 import ThemeDark from "../../assets/ThemeDark"
 
 export default function Sidebar({
-    board,
     setBoard,
-    allTaskData,
     setModal,
     sidebar,
     setSidebar,
@@ -63,19 +61,18 @@ export default function Sidebar({
         }
     }
 
-    useEffect(() => {
-        setBoardList(allTaskData)
-        setActiveBoard(board)
-    }, [allTaskData, board])
-    // useEffect(() => getAllboards(), [])
     // useEffect(() => {
-    //     if (allboards) {
-    //         console.log(allboards)
-    //         setBoardList(allboards)
-    //         setActiveBoard(allboards[0])
-    //         setBoard(allboards[0])
-    //     }
-    // }, [allboards])
+    //     setBoardList(allTaskData)
+    //     setActiveBoard(board)
+    // }, [allTaskData, board])
+    useEffect(() => getAllboards(), [])
+    useEffect(() => {
+        if (allboards) {
+            setBoardList(allboards)
+            setActiveBoard(allboards[0])
+            setBoard(allboards[0])
+        }
+    }, [allboards])
 
     const boardButtonElements = boardList.map(board => {
         return (
