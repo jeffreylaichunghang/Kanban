@@ -37,7 +37,7 @@ export default function SignupForm({
     const itemsRef = useRef(0)
 
     const FORM_MARGIN = isMobile ? 15 : 90;
-    const FORM_WIDTH = isMobile ? layout.signupContainerWidth : layout.signupContainerWidth - layout.signupSidebarWidth
+    const FORM_WIDTH = isMobile ? 345 : layout.signupContainerWidth - layout.signupSidebarWidth
 
     useEffect(() => {
         if (signupSuccess) return navigate('/signin')
@@ -58,7 +58,7 @@ export default function SignupForm({
                 let nextStep = prev;
                 if (prev < renderItems.length) {
                     nextStep++
-                    itemsRef.current += FORM_WIDTH - FORM_MARGIN * 2
+                    itemsRef.current += isMobile ? FORM_WIDTH : FORM_WIDTH - FORM_MARGIN * 2
                 }
                 return nextStep
             })
@@ -100,9 +100,8 @@ export default function SignupForm({
                     <motion.li
                         key={`signup_step_${index}`}
                         style={{
-                            // border: '1px solid white',
                             height: '100%',
-                            minWidth: FORM_WIDTH - FORM_MARGIN * 2,
+                            minWidth: isMobile ? FORM_WIDTH : FORM_WIDTH - FORM_MARGIN * 2,
                             listStyle: 'none',
                             paddingTop: isMobile ? 20 : 40,
                             paddingLeft: 15,
@@ -168,7 +167,7 @@ export default function SignupForm({
                         let nextStep = step;
                         if (step > 1) {
                             nextStep--
-                            itemsRef.current -= FORM_WIDTH - FORM_MARGIN * 2
+                            itemsRef.current -= isMobile ? FORM_WIDTH : FORM_WIDTH - FORM_MARGIN * 2
                         }
                         setStep(nextStep)
                         if (step === 1) navigate('/signin')
