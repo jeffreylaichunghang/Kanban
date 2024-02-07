@@ -304,7 +304,8 @@ class TaskService {
                     },
                     select: {
                         id: true,
-                        task_name: true
+                        task_name: true,
+                        columnId: true,
                     }
                 })
             })

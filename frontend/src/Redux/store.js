@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import taskSlice from './features/task/taskSlice'
-import columnSlice from './features/columns/columnSlice'
+import rootReducer from './reducer'
+import logger from 'redux-logger'
 
 export default configureStore({
-    reducer: {
-        task: taskSlice,
-        column: columnSlice
-    },
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    devTools: import.meta.env.NODE_ENV !== 'production',
 })

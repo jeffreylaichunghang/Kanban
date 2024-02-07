@@ -1,21 +1,26 @@
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "../../themes";
 import useApiCall from "../../hooks/useApiCall";
+import { useSelector, useDispatch } from "react-redux";
 
 import Modal from ".";
 import Text from "../Text";
 import Button from "../Button";
+import { setTaskdata } from "../../Redux/features/task/taskSlice";
+import { removeTask } from "../../Redux/features/columns/columnSlice";
 
 export default function WarningModal({
     warningModal,
     setWarningModal,
     board,
     setBoard,
-    taskData,
-    getAllBoardsData
+    //     taskData,
+    // getAllBoardsData
 }) {
+    const activeTask = useSelector(state => state.task.activeTask)
+    const dispatch = useDispatch()
     const { loading, error, value: deletedboard, callApi: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
-    const { value: deletedTask, callApi: deleteTask } = useApiCall(`deleteTask/${taskData?.id}`, 'DELETE')
+    const { value: deletedTask, callApi: deleteTask } = useApiCall(`deleteTask/${activeTask?.id}`, 'DELETE')
     const { theme } = useContext(ThemeContext)
 
     useEffect(() => {
@@ -23,11 +28,11 @@ export default function WarningModal({
             console.log(deletedboard)
             setWarningModal({ show: false })
             setBoard(null)
-            getAllBoardsData()
         } else if (deletedTask) {
             console.log(deletedTask)
             setWarningModal({ show: false })
-            getAllBoardsData()
+            dispatch(setTaskdata(null))
+            dispatch(removeTask(deletedTask))
         }
     }, [deletedboard, deletedTask])
 
@@ -43,7 +48,7 @@ export default function WarningModal({
                 break;
             case 'task':
                 target.type = 'task',
-                    target.message = `Are you sure you want to delete the ‘${taskData.task_name}’ task? This action will remove all subtasks and cannot be reversed.`
+                    target.message = `Are you sure you want to delete the ‘${activeTask?.task_name}’ task? This action will remove all subtasks and cannot be reversed.`
                 break;
 
             default:

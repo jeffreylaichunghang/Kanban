@@ -24,12 +24,18 @@ export const columnSlice = createSlice({
             const newTask = action.payload
             console.log(newTask)
             const targetColumn = state.columnList.filter(col => col.id === newTask.columnId)[0]
-            console.log(targetColumn)
             targetColumn.tasks.push(newTask)
+        },
+        removeTask: (state, action) => {
+            const deletedTask = action.payload
+            const targetColumn = state.columnList.filter(col => col.id === deletedTask.columnId)[0]
+            const taskIndex = targetColumn.tasks.map(task => task.id).indexOf(deletedTask.id)
+            console.log(taskIndex)
+            targetColumn.tasks.splice(taskIndex, 1)
         }
     }
 })
 
-export const { setColumnList, moveTaskAcrossColumns, addNewTask } = columnSlice.actions
+export const { setColumnList, moveTaskAcrossColumns, addNewTask, removeTask } = columnSlice.actions
 
 export default columnSlice.reducer
