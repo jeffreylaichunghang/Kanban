@@ -11,6 +11,10 @@ export default defineConfig({
         target: 'http://localhost:5001',
         changeOrigin: true
       }
+    },
+    https: {
+      key: './private.key',
+      cert: './certificate.crt',
     }
   }
 })

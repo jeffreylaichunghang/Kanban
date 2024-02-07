@@ -1,5 +1,7 @@
 // modules
 require('dotenv').config()
+const https = require('https')
+const fs = require('fs')
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 const cors = require('cors')
@@ -36,9 +38,15 @@ async function main() {
     }
 }
 
-app.listen(process.env.PORT, () => {
-    console.log(`app listening on ${process.env.PORT}`)
-})
+const options = {
+    cert: fs.readFileSync('./localhost.crt'),
+    key: fs.readFileSync('./localhost.key')
+}
+
+// app.listen(process.env.PORT, () => {
+//     console.log(`app listening on ${process.env.PORT}`)
+// })
+https.createServer(options, app).listen(process.env.PORT)
 
 main()
     .then(async () => {
