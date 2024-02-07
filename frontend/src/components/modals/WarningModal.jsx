@@ -8,16 +8,16 @@ import Text from "../Text";
 import Button from "../Button";
 import { setTaskdata } from "../../Redux/features/task/taskSlice";
 import { removeTask } from "../../Redux/features/columns/columnSlice";
+import { deleteBoard } from "../../Redux/features/board/boardSlice";
 
 export default function WarningModal({
     warningModal,
     setWarningModal,
     board,
     setBoard,
-    //     taskData,
-    // getAllBoardsData
 }) {
     const activeTask = useSelector(state => state.task.activeTask)
+    const boardList = useSelector(state => state.board.boardList)
     const dispatch = useDispatch()
     const { loading, error, value: deletedboard, callApi: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
     const { value: deletedTask, callApi: deleteTask } = useApiCall(`deleteTask/${activeTask?.id}`, 'DELETE')
@@ -26,8 +26,9 @@ export default function WarningModal({
     useEffect(() => {
         if (deletedboard) {
             console.log(deletedboard)
+            dispatch(deleteBoard(deletedboard))
             setWarningModal({ show: false })
-            setBoard(null)
+            setBoard(boardList[0])
         } else if (deletedTask) {
             console.log(deletedTask)
             setWarningModal({ show: false })

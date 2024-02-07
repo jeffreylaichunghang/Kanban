@@ -62,7 +62,13 @@ class TaskService {
     async getBoard(boardId) {
         return await this.prisma.board.findFirst({
             where: { id: boardId },
-            include: { columns: true }
+            include: {
+                columns: {
+                    include: {
+                        tasks: true
+                    }
+                }
+            }
         })
     }
 

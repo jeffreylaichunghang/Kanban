@@ -72,7 +72,7 @@ export default function Taskcolumn({
                                     variant="heading"
                                     size="s"
                                     color={theme.color.secondaryText}
-                                    text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks.length})`}
+                                    text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks?.length})`}
                                     style={{ letterSpacing: '2.4px' }}
                                 />
                             </div>

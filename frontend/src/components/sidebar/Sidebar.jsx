@@ -3,21 +3,25 @@ import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
 import useApiCall from "../../hooks/useApiCall"
+import { useDispatch, useSelector } from "react-redux"
 
 import SidebarButton from "./SidebarButton"
 import ToggleSwitch from "../ToggleSwitch"
 import Text from "../Text"
 import ThemeLight from "../../assets/ThemeLight"
 import ThemeDark from "../../assets/ThemeDark"
+import { setBoardList } from "../../Redux/features/board/boardSlice"
 
 export default function Sidebar({
+    board,
     setBoard,
     setModal,
     sidebar,
     setSidebar,
 }) {
     const [activeBoard, setActiveBoard] = useState(null)
-    const [boardList, setBoardList] = useState([])
+    const boardList = useSelector(state => state.board.boardList)
+    const dispatch = useDispatch()
     const { theme, toggleTheme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { height } = useWindowDimension()
@@ -61,18 +65,15 @@ export default function Sidebar({
         }
     }
 
-    // useEffect(() => {
-    //     setBoardList(allTaskData)
-    //     setActiveBoard(board)
-    // }, [allTaskData, board])
     useEffect(() => getAllboards(), [])
     useEffect(() => {
         if (allboards) {
-            setBoardList(allboards)
+            dispatch(setBoardList(allboards))
             setActiveBoard(allboards[0])
             setBoard(allboards[0])
         }
-    }, [allboards])
+    }, [allboards, dispatch])
+    useEffect(() => setActiveBoard(board), [board])
 
     const boardButtonElements = boardList.map(board => {
         return (

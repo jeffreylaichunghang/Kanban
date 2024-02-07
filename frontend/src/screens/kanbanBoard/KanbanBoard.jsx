@@ -46,9 +46,6 @@ export default function KanbanBoard() {
         }
     }, [value, board])
 
-    // const boardTasks = allTaskData?.filter(data => data.id === board?.id)
-    const boardTasks = useMemo(() => allTaskData?.filter(data => data.id === board?.id), [board, allTaskData])
-
     return (
         <div style={styles.container}>
             <WarningModal
@@ -56,8 +53,6 @@ export default function KanbanBoard() {
                 setWarningModal={setWarningModal}
                 board={board}
                 setBoard={setBoard}
-                taskData={taskData}
-                getAllBoardsData={getAllBoardsData}
             />
             <TaskModal
                 modal={modal}
@@ -85,6 +80,7 @@ export default function KanbanBoard() {
                 setSidebar={setSidebar}
             />
             <Sidebar
+                board={board}
                 setBoard={setBoard}
                 setModal={setModal}
                 sidebar={sidebar}

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { ThemeContext } from "../../themes";
 import useApiCall from "../../hooks/useApiCall";
+import { useDispatch, useSelector } from "react-redux";
 
 import Modal from ".";
 import Text from "../Text";
@@ -9,15 +10,18 @@ import InputItem from "../InputItem";
 import Label from "../Label";
 import Button from "../Button";
 import { constants } from "../../constants/constants";
+import { addBoard, editBoard } from "../../Redux/features/board/boardSlice";
+import { setColumnList } from "../../Redux/features/columns/columnSlice";
 
 export default function BoardModal({
     board,
     setBoard,
     modal,
     setModal,
-    allTaskData,
-    getAllBoardsData
+    // allTaskData,
 }) {
+    const boardList = useSelector(state => state.board.boardList)
+    const dispatch = useDispatch()
     const { value: createdBoard, callApi: createboard } = useApiCall('createBoard', 'POST')
     const { value: editedBoard, callApi: editboard } = useApiCall(`editBoard/${board?.id}`, 'PUT')
     const [boardInfo, setBoardInfo] = useState(null)
@@ -49,15 +53,22 @@ export default function BoardModal({
                 ...createdBoard.createdBoard,
                 columns: createdBoard.createdColumns
             })
+            dispatch(addBoard({
+                ...createdBoard.createdBoard,
+                columns: createdBoard.createdColumns
+            }))
             setModal('')
-            getAllBoardsData()
-        } else if (editedBoard) {
+        }
+    }, [createdBoard])
+    useEffect(() => {
+        if (editedBoard) {
             console.log(editedBoard)
             setBoard(editedBoard)
+            dispatch(editBoard(editedBoard))
+            dispatch(setColumnList(editedBoard.columns))
             setModal('')
-            getAllBoardsData()
         }
-    }, [createdBoard, editedBoard])
+    }, [editedBoard])
 
     const boardColumnList = useMemo(() => {
         return boardInfo?.columns.map((info, index) => {
@@ -85,7 +96,7 @@ export default function BoardModal({
 
     function validateBoardInfo(info) {
         let valid = true
-        let infoToValidate = { ...info }
+        let infoToValidate = JSON.parse(JSON.stringify(info))
 
         for (const key in info) {
             const value = info[key]
@@ -96,13 +107,13 @@ export default function BoardModal({
                     valid = false
                     validation.valid = false
                     validation.message = 'Can \'t be empty'
-                } else if (modal === 'newboard' && allTaskData?.map(board => board.board_name).includes(value)) {
+                } else if (modal === 'newboard' && boardList?.map(board => board.board_name).includes(value)) {
                     valid = false
                     validation.valid = false
                     validation.message = `${value} already exist`
                 } else if (
                     modal === 'editboard' &&
-                    allTaskData.map(data => data.board_name).filter(name => name !== board.board_name).includes(value)
+                    boardList.map(data => data.board_name).filter(name => name !== board.board_name).includes(value)
                 ) {
                     valid = false
                     validation.valid = false
