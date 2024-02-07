@@ -18,7 +18,6 @@ export default function BoardModal({
     setBoard,
     modal,
     setModal,
-    // allTaskData,
 }) {
     const boardList = useSelector(state => state.board.boardList)
     const dispatch = useDispatch()

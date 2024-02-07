@@ -1,6 +1,5 @@
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useState } from "react"
 import { ThemeContext } from "../../themes"
-import useApiCall from "../../hooks/useApiCall"
 import useWindowDimension from "../../hooks/useWindowDimension"
 
 import Taskboard from "../../components/taskboard/Taskboard"
@@ -12,14 +11,11 @@ import TaskCardModal from "../../components/modals/TaskCardModal"
 import TaskModal from "../../components/modals/TaskModal"
 
 export default function KanbanBoard() {
-    const [allTaskData, setAllTaskData] = useState([])
-    const [taskData, setTaskData] = useState(null)
     const [board, setBoard] = useState(null)
     const [modal, setModal] = useState('')
     const [warningModal, setWarningModal] = useState({ show: false })
     const [sidebar, setSidebar] = useState(true)
     const { theme } = useContext(ThemeContext)
-    const { value, error, loading, callApi: getAllBoardsData } = useApiCall('getAllBoardsData', 'GET')
     const { width, height } = useWindowDimension()
     const styles = {
         container: {
@@ -33,19 +29,6 @@ export default function KanbanBoard() {
         }
     }
 
-    useEffect(() => { getAllBoardsData() }, [])
-    useEffect(() => {
-        if (value) {
-            // console.log(value)
-            setAllTaskData(value)
-            if (!board) {
-                setBoard(value[0])
-            } else {
-                setBoard(board)
-            }
-        }
-    }, [value, board])
-
     return (
         <div style={styles.container}>
             <WarningModal
@@ -57,7 +40,6 @@ export default function KanbanBoard() {
             <TaskModal
                 modal={modal}
                 setModal={setModal}
-                taskData={taskData}
             />
             <TaskCardModal
                 modal={modal}
@@ -69,8 +51,6 @@ export default function KanbanBoard() {
                 setBoard={setBoard}
                 modal={modal}
                 setModal={setModal}
-                allTaskData={allTaskData}
-                getAllBoardsData={getAllBoardsData}
             />
             <NavBar
                 board={board}

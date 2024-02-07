@@ -17,8 +17,6 @@ import { setTaskdata } from "../../Redux/features/task/taskSlice"
 export default function TaskModal({
     modal,
     setModal,
-    // taskData,
-    // boardTasks,
 }) {
     const [task, setTask] = useState(null)
     const activeTask = useSelector(state => state.task.activeTask)
