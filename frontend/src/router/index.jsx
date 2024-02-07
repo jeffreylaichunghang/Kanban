@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "../Auth/ProtectedRoute";
 import KanbanBoard from "../screens/kanbanBoard/KanbanBoard";
@@ -20,6 +20,10 @@ export const router = createBrowserRouter([
             <KanbanBoard />
         </ProtectedRoute>)
     },
+    {
+        path: '*',
+        element: <Navigate to='/kanbanBoard' />
+    }
     // {
     //     path: '/test',
     //     element: (<ProtectedRoute>

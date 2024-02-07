@@ -1,11 +1,12 @@
 import { useContext, useState } from "react"
 import { ThemeContext, MediaQueryContext } from '../../themes/index'
 import useWindowDimension from '../../hooks/useWindowDimension'
+import { useForm, FormProvider } from "react-hook-form"
 
 import Sidebar from "./Sidebar"
 import SignupForm from "./SignupForm"
 import Text from "../../components/Text"
-import { useForm, FormProvider } from "react-hook-form"
+import desktopBgImage from '../../assets/bg-intro-desktop.png'
 
 export default function SignupPage() {
     const methods = useForm()
@@ -183,6 +184,7 @@ export default function SignupPage() {
         <div
             style={{
                 backgroundColor: theme.color.backgroundPrimary,
+                backgroundImage: `url(${desktopBgImage})`,
                 width: width,
                 height: height,
                 overflow: 'none',
