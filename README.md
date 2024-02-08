@@ -3,6 +3,8 @@
 
 The Kanban Task Management App is a web-based application designed to help individuals or teams efficiently manage their tasks using the popular Kanban method. With an intuitive user interface and powerful features, the app allows users to visualize their workflow, track progress, and collaborate effectively.
 
+<https://kanban.codes/>
+
 ## Screenshots
 
 <!-- ![App Screenshot]() -->
@@ -21,6 +23,8 @@ Insert gif or link to demo -->
 **API testing** Postmen
 
 **Authentication:** Passport, JWT, bcrypt
+
+**Deployment** AWS, EC2, Route53
 
 ## Features
 
