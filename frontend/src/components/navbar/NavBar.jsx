@@ -12,6 +12,7 @@ import Ellipsis from '../../assets/Ellipsis'
 import Button from "../Button"
 import Text from "../Text"
 import ActionModal from "../modals/ActionModal"
+import { useSelector } from "react-redux"
 
 export default function NavBar({
     board,
@@ -20,6 +21,7 @@ export default function NavBar({
     sidebar,
     setSidebar,
 }) {
+    const boardList = useSelector(state => state.board.boardList)
     const [actionModal, setActionModal] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
@@ -67,10 +69,12 @@ export default function NavBar({
 
     return (
         <div style={styles.container}>
+            {/* TODO: extract <Logo /> */}
             {!isMobile && <div style={styles.logo}>
                 {themeState === 'dark' ? <LogoLight /> : <LogoDark />}
             </div>}
             <div style={styles.content}>
+                {/* TODO: extract <Board /> */}
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -110,7 +114,7 @@ export default function NavBar({
                     setActionModal={setActionModal}
                     style={{
                         right: 24,
-                        bottom: -140,
+                        top: 110,
                     }}
                 >
                     <Text
@@ -124,31 +128,32 @@ export default function NavBar({
                             navigate('/signin', { replace: true })
                         }}
                     />
-                    <Text
-                        variant="body"
-                        size="l"
-                        color={theme.color.secondaryText}
-                        text="Edit Board"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            setActionModal(false)
-                            setModal('editboard')
-                        }}
-                    />
-                    <Text
-                        variant="body"
-                        size="l"
-                        color={theme.color.destructive}
-                        text="Delete Board"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            setWarningModal({
-                                show: true,
-                                target: 'board'
-                            })
-                            setActionModal(false)
-                        }}
-                    />
+                    {boardList.length > 0 && <>
+                        <Text
+                            variant="body"
+                            size="l"
+                            color={theme.color.secondaryText}
+                            text="Edit Board"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                setActionModal(false)
+                                setModal('editboard')
+                            }}
+                        />
+                        <Text
+                            variant="body"
+                            size="l"
+                            color={theme.color.destructive}
+                            text="Delete Board"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                setWarningModal({
+                                    show: true,
+                                    target: 'board'
+                                })
+                                setActionModal(false)
+                            }}
+                        /></>}
                 </ActionModal>
             </div>
         </div>

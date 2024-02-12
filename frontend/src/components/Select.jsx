@@ -39,9 +39,7 @@ export default function Select({
                     borderRadius: 4,
                     backgroundColor: 'transparent'
                 }}
-                onClick={() => {
-                    setOpen(!open)
-                }}
+                onClick={() => setOpen(!open)}
                 whileTap={{ scale: 0.97 }}
                 animate={open ? 'open' : 'closed'}
             >
@@ -111,7 +109,7 @@ export default function Select({
                         options?.map((option, index) => {
                             return (
                                 <motion.li
-                                    key={index}
+                                    key={`option_${index}`}
                                     style={{
                                         listStyle: 'none'
                                     }}

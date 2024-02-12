@@ -17,36 +17,22 @@ const Input = forwardRef(function Input({
     type = 'text',
     ...props
 }, ref) {
-    const inputRef = useRef()
-    const hovered = useHover(inputRef)
     const [inputValue, setInputValue] = useState('')
     const [warningText, setWarningText] = useState(false)
     const { theme, themeState } = useContext(ThemeContext)
+    const inputRef = useRef()
+    const hovered = useHover(inputRef)
 
-    useEffect(() => {
-        if (validation) {
-            setWarningText(validation.message)
-        } else {
-            setWarningText(false)
-        }
-    }, [validation])
-    useEffect(() => {
-        setInputValue(value)
-    }, [value])
+    useEffect(() => setInputValue(value), [value])
+    useEffect(() => validation ?
+        setWarningText(validation.message) :
+        setWarningText(false), [validation])
 
     let borderColor;
-    if (hovered) {
-        if (validation && !validation.valid) {
-            borderColor = theme.color.destructive
-        } else {
-            borderColor = theme.color.mainPurple
-        }
+    if (validation && !validation.valid) {
+        borderColor = theme.color.destructive
     } else {
-        if (validation && !validation.valid) {
-            borderColor = theme.color.destructive
-        } else {
-            borderColor = theme.color.line
-        }
+        borderColor = hovered ? theme.color.mainPurple : theme.color.line
     }
 
     return (
@@ -88,7 +74,6 @@ const Input = forwardRef(function Input({
                     ...theme.font.body.l,
                     ...style,
                 }}
-                autoComplete="color transparent"
                 {...props}
             />
             <Text

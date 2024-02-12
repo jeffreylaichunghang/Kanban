@@ -14,10 +14,17 @@ export const boardSlice = createSlice({
         },
         editBoard: (state, action) => {
             const editedBoard = action.payload
-            let targetBoard = state.boardList.filter(board => board.id === editedBoard.id)[0]
+            let targetIndex;
+            let targetBoard = state.boardList.filter((board, index) => {
+                targetIndex = index
+                return board.id === editedBoard.id
+            })[0]
+            console.log(targetIndex)
             targetBoard = editedBoard
+            state.boardList.splice(targetIndex, 1, targetBoard)
         },
         deleteBoard: (state, action) => {
+            if (state.boardList.length <= 0) return
             const deletedBoard = action.payload
             const boardIndex = state.boardList.map(board => board.id).indexOf(deletedBoard.id)
             state.boardList.splice(boardIndex, 1)

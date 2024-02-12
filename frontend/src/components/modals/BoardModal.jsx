@@ -1,7 +1,6 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { ThemeContext } from "../../themes";
-import useApiCall from "../../hooks/useApiCall";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useApiCall from "../../hooks/useApiCall";
 
 import Modal from ".";
 import Text from "../Text";
@@ -24,7 +23,6 @@ export default function BoardModal({
     const { value: createdBoard, callApi: createboard } = useApiCall('createBoard', 'POST')
     const { value: editedBoard, callApi: editboard } = useApiCall(`editBoard/${board?.id}`, 'PUT')
     const [boardInfo, setBoardInfo] = useState(null)
-    const { theme } = useContext(ThemeContext)
     const styles = {
         boardColumnList: {
             maxHeight: 170,
@@ -56,6 +54,7 @@ export default function BoardModal({
                 ...createdBoard.createdBoard,
                 columns: createdBoard.createdColumns
             }))
+            // dispatch(setColumnList(createdBoard.createdColumns))
             setModal('')
         }
     }, [createdBoard])
@@ -93,6 +92,7 @@ export default function BoardModal({
         })
     }, [boardInfo])
 
+    /* TODO: replace with react hook form */
     function validateBoardInfo(info) {
         let valid = true
         let infoToValidate = JSON.parse(JSON.stringify(info))

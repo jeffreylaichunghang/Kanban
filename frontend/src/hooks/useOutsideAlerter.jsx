@@ -1,5 +1,8 @@
-import { useRef } from "react";
+import { useRef, forwardRef } from "react";
+import { motion } from "framer-motion";
+
 import useEventListener from "./useEventListener";
+import { mergeRefs } from '../utils/mergeRefs'
 
 export function useOutsideAlerter(ref, cb) {
     useEventListener("mousedown", e => {
@@ -8,21 +11,26 @@ export function useOutsideAlerter(ref, cb) {
     }, document)
 }
 
-export default function OutsideAlerter({
+const StaticOutsideAlerter = forwardRef(function OutsideAlerter({
     children,
     style,
-    action
-}) {
+    action,
+    ...props
+}, ref) {
     const modalRef = useRef()
 
     useOutsideAlerter(modalRef, action)
 
     return (
-        <div
-            ref={modalRef}
+        <motion.div
+            ref={mergeRefs(modalRef, ref)}
             style={style}
+            {...props}
         >
             {children}
-        </div>
+        </motion.div>
     )
-}
+})
+
+const OutsideAlerter = motion(StaticOutsideAlerter, { forwardMotionProps: true })
+export default OutsideAlerter

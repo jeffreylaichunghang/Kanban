@@ -67,15 +67,20 @@ export default function Taskcolumn({
                     <div style={styles.container}>
                         <div style={styles.columnHeader} {...provided.dragHandleProps}>
                             <div style={styles.columnName}>
+                                {/*
+                                    - how colors follow the column instead of index
+                                    - write a function that the colors array is sorted           corresponding to the order of columns array
+                                */}
                                 <span style={styles.colorDot}></span>
                                 <Text
                                     variant="heading"
                                     size="s"
                                     color={theme.color.secondaryText}
-                                    text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks?.length})`}
+                                    text={`${columnInfo.column_name.toUpperCase()} (${columnInfo.tasks?.length || 0})`}
                                     style={{ letterSpacing: '2.4px' }}
                                 />
                             </div>
+                            {/* extract <DoubleEllipsis /> */}
                             <span style={styles.ellipsis}>
                                 <Ellipsis />
                                 <Ellipsis />
@@ -99,7 +104,7 @@ export default function Taskcolumn({
                                         height: '100%'
                                     }}>
                                     {
-                                        columnInfo?.tasks.map((task, index) => {
+                                        columnInfo.tasks && columnInfo.tasks.map((task, index) => {
                                             return (
                                                 <TaskCard
                                                     key={task?.id}

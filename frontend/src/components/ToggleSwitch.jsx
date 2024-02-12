@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { ThemeContext, MediaQueryContext } from "../themes"
+import { ThemeContext } from "../themes"
 import useHover from "../hooks/useHover"
 import { motion } from 'framer-motion'
 
@@ -10,14 +10,11 @@ export default function ToggleSwitch({
     defaultValue,
 }) {
     const { theme } = useContext(ThemeContext)
-    // const { layout } = useContext(MediaQueryContext)
     const [buttonPosition, setButtonPosition] = useState(defaultValue)
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
 
-    useEffect(() => {
-        setButtonPosition(defaultValue)
-    }, [defaultValue])
+    useEffect(() => setButtonPosition(defaultValue), [defaultValue])
 
     return (
         <div

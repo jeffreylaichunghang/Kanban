@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../themes";
 
 export default function Label({

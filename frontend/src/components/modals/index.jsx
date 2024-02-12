@@ -3,9 +3,45 @@ import { ThemeContext, MediaQueryContext } from "../../themes";
 import OutsideAlerter from "../../hooks/useOutsideAlerter";
 import { motion } from "framer-motion";
 
+const modaltransition = {
+    type: "spring",
+    bounce: 0,
+    duration: 0.4,
+}
+
 const modalVariants = {
-    open: { scale: 1 },
-    closed: { scale: 0 }
+    open: {
+        scale: 1,
+        transition: modaltransition
+    },
+    closed: {
+        scale: 0,
+        transition: {
+            ...modaltransition,
+        }
+    }
+}
+
+const modalBackgroundTransition = {
+    type: 'just',
+    duration: 0.5,
+    ease: [0, 0.71, 0.2, 1.01]
+}
+
+const modalBackgroundVariants = {
+    open: {
+        opacity: 1,
+        display: 'block',
+        transition: modalBackgroundTransition
+    },
+    closed: {
+        opacity: 0,
+        display: 'none',
+        transition: {
+            ...modalBackgroundTransition,
+            delay: 0.2
+        }
+    }
 }
 
 export default function Modal({
@@ -25,8 +61,7 @@ export default function Modal({
     return (
         <motion.div
             animate={open ? 'open' : 'closed'}
-            variants={modalVariants}
-            transition={{ type: 'just', duration: 0.5, ease: [0, 0.71, 0.2, 1.01] }}
+            variants={modalBackgroundVariants}
             initial={false}
             style={{
                 position: 'absolute',
@@ -41,24 +76,25 @@ export default function Modal({
                 action={action}
                 style={{
                     backgroundColor: theme.color.backgroundSecondary,
-                    borderRadius: 6,
                     color: theme.color.secondary,
+                    boxShadow: '1px 2px 9px black',
+                    borderRadius: 6,
                     width: layout.modalWidth,
                     height: 'min-content',
+                    margin: 'auto',
+                    padding: 32,
+                    zIndex: 10,
                     position: "absolute",
                     top: 0,
                     left: 0,
                     bottom: 0,
                     right: 0,
-                    margin: 'auto',
-                    zIndex: 10,
-                    padding: 32,
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                    boxShadow: '1px 2px 9px black',
                     ...style
                 }}
+                variants={modalVariants}
             >
                 {children}
             </OutsideAlerter>

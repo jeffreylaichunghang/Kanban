@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "../../themes";
-import useApiCall from "../../hooks/useApiCall";
 import { useSelector, useDispatch } from "react-redux";
+import useApiCall from "../../hooks/useApiCall";
 
 import Modal from ".";
 import Text from "../Text";
@@ -9,6 +9,7 @@ import Button from "../Button";
 import { setTaskdata } from "../../Redux/features/task/taskSlice";
 import { removeTask } from "../../Redux/features/columns/columnSlice";
 import { deleteBoard } from "../../Redux/features/board/boardSlice";
+import { setColumnList } from "../../Redux/features/columns/columnSlice";
 
 export default function WarningModal({
     warningModal,
@@ -25,17 +26,27 @@ export default function WarningModal({
 
     useEffect(() => {
         if (deletedboard) {
-            console.log(deletedboard)
             dispatch(deleteBoard(deletedboard))
-            setWarningModal({ show: false })
-            setBoard(boardList[0])
-        } else if (deletedTask) {
+            const remainingBoard = boardList.filter(board => board.id !== deletedboard.id)
+            if (remainingBoard.length > 0) {
+                setBoard(remainingBoard[0])
+                dispatch(setColumnList(remainingBoard[0].columns))
+            } else {
+                setBoard(null)
+                dispatch(setColumnList([]))
+            }
+        }
+        setWarningModal({ show: false })
+    }, [deletedboard])
+
+    useEffect(() => {
+        if (deletedTask) {
             console.log(deletedTask)
-            setWarningModal({ show: false })
             dispatch(setTaskdata(null))
             dispatch(removeTask(deletedTask))
         }
-    }, [deletedboard, deletedTask])
+        setWarningModal({ show: false })
+    }, [deletedTask])
 
     let target = {
         type: '',

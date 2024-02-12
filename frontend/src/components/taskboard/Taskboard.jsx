@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from "react-redux"
 import Taskcolumn from "./Taskcolumn"
 import Text from "../Text"
 import Button from "../Button"
-// import Modal from "../modals"
 import { setColumnList } from "../../Redux/features/columns/columnSlice"
 
 export default function Taskboard({
@@ -17,7 +16,6 @@ export default function Taskboard({
     board,
     setModal,
 }) {
-    // const [tasklist, setTasklist] = useState(null)
     const tasklist = useSelector(state => state.column.columnList)
     const dispatch = useDispatch()
     const { theme } = useContext(ThemeContext)
@@ -29,11 +27,11 @@ export default function Taskboard({
     useEffect(() => getBoardTasks(), [board.id, getBoardTasks])
     useEffect(() => {
         if (boardTasks) dispatch(setColumnList(boardTasks.columns))
-        // if (boardTasks) setTasklist(boardTasks.columns)
     }, [boardTasks, dispatch])
 
     useEffect(() => {
         if (updatedTask) {
+            // for toast message
             console.log(updatedTask)
         }
     }, [updatedTask])
@@ -56,9 +54,7 @@ export default function Taskboard({
         if (type === 'task_group') {
             console.log(source, destination)
             let tasklistClone = JSON.parse(JSON.stringify(tasklist));
-            console.log(tasklistClone)
             const draggedItem = tasklistClone[Number(source.droppableId)].tasks.splice(source.index, 1)
-            console.log(tasklistClone)
             const droppedItem = {
                 ...draggedItem[0],
                 columnId: board.columns[Number(destination.droppableId)].id
@@ -122,6 +118,7 @@ export default function Taskboard({
                 </DragDropContext>
                 {/* Task Card Modal? */}
             </motion.div> :
+            /* TODO: extract <EmptyBoard /> */
             <div
                 style={{
                     width: '100%',

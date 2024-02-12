@@ -5,6 +5,10 @@ The Kanban Task Management App is a web-based application designed to help indiv
 
 <https://kanban.codes/>
 
+sample
+email: <jdoe@gmail.com>
+password: 1234
+
 ## Screenshots
 
 <!-- ![App Screenshot]() -->
@@ -25,6 +29,8 @@ Insert gif or link to demo -->
 **Authentication:** Passport, JWT, bcrypt
 
 **Deployment** AWS, EC2, Route53
+
+**CI/CD** Github Action
 
 ## Features
 

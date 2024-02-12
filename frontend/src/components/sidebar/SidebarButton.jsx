@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useRef } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import useHover from "../../hooks/useHover"
 
@@ -22,9 +22,9 @@ export default function SidebarButton({
     const { theme } = useContext(ThemeContext)
     const { layout } = useContext(MediaQueryContext)
     const renderedIcon = {
-        'hideIcon': <HideIcon fill={hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText} />,
-        'showIcon': <ShowIcon fill={hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText} />,
-        'boardIcon': <BoardIcon fill={hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText} />
+        'hideIcon': HideIcon,
+        'showIcon': ShowIcon,
+        'boardIcon': BoardIcon
     }
 
     return (
@@ -48,7 +48,9 @@ export default function SidebarButton({
                 ...style
             }}
         >
-            {renderedIcon[icon]}
+            {renderedIcon[icon]({
+                fill: hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText
+            })}
             <Text
                 variant="heading"
                 size="m"

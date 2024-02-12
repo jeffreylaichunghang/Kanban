@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
