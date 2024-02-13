@@ -29,11 +29,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
           node-version: 18
-    # - name: database migration
-    #   run: |
-    #     cd backend/prisma
-    #     npx prisma migrate dev
-    #     cd ..
+    - name: database migration
+      run: |
+        cd backend/prisma
+        npx prisma migrate dev
+        cd ..
     - run: |
         npm i
         cd frontend
