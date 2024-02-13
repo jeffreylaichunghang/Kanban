@@ -1,4 +1,4 @@
-name: deployment CI
+name: deployment CD
 
 on:
   push:
@@ -11,34 +11,49 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v2
-    - name: create .env file
+    - uses: actions/checkout@v4
+    - name: create backend .env file
       run: |
         touch .env
         echo NODE_ENV=production >> .env
         echo PORT=5000 >> .env
         echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
         echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-        cd frontend
+      working-directory: ./
+    - name: create frontend .env file
+      run: |
         touch .env
         echo HTTPS=true >> .env
         echo VITE_API_URL=${{ secrets.VITE_API_URL }} >> .env
         echo VITE_AUTH_URL=${{ secrets.VITE_AUTH_URL }} >> .env
-        cd ..
+      working-directory: ./frontend
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-          node-version: 18
+          node-version: 18.x
+          cache: 'npm'
+    - name: install backend dependencies
+      run: |
+        npm ci
+    # - run: rm -rf node_modules/.prisma
+    - name: Generate Prisma Client
+      run: |
+        npx prisma generate
+      working-directory: ./backend/prisma
     - name: database migration
       run: |
-        cd backend/prisma
-        npx prisma migrate dev
-        cd ..
-    - run: |
-        npm i
-        cd frontend
-        npm i
+        npx prisma migrate deploy
+      working-directory: ./backend/prisma
+    - name: install frontend dependencies
+      run: |
+        npm ci
+      working-directory: ./frontend
+    - name: build frontend
+      run: |
         npm run build
-        cd ..
+      working-directory: ./frontend
+    - name: restart forever and nginx
+      run: |
         forever restart backend/app.js
         sudo service nginx restart
+      working-directory: ./
