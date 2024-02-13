@@ -33,7 +33,7 @@ export default function Sidebar({
     return (
         <div
             style={{
-                backgroundImage: `url(${isMobile ? signup_sidebar_mobile : signup_sidebar_desktop})`,
+                backgroundImage: `url("${isMobile ? signup_sidebar_mobile : signup_sidebar_desktop}")`,
                 width: layout.signupSidebarWidth,
                 height: isMobile ? layout.signupSidebarHeight : '100%',
                 borderTopRightRadius: 15,

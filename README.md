@@ -148,7 +148,6 @@ Takes two numbers and returns the sum. -->
 ```bash
   cd backend
   npm install
-  npx prisma generate
   npx prisma migrate dev
   (if you wish to have seed data, run:)
   npx prisma db seed -- --environment development

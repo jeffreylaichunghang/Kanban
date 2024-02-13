@@ -29,11 +29,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
           node-version: 18
+    # - name: database migration
+    #   run: |
+    #     cd backend/prisma
+    #     npx prisma migrate dev
+    #     cd ..
     - run: |
-       npm i
-       cd frontend
-       npm i
-       npm run build
-       cd ..
-       forever start backend/app.js
-       sudo service nginx restart
+        npm i
+        cd frontend
+        npm i
+        npm run build
+        cd ..
+        forever restart backend/app.js
+        sudo service nginx restart

@@ -78,7 +78,7 @@ export default function SignupForm({
                 marginLeft: FORM_MARGIN,
                 marginRight: FORM_MARGIN,
                 overflow: 'hidden',
-                // border: '1px solid red',
+                translate: `0 ${isMobile ? '-10%' : 0}`,
             }}
             onSubmit={handleSubmit(submitForm)}
         >
@@ -91,8 +91,6 @@ export default function SignupForm({
                         overflowY: 'none',
                         height: isMobile ? layout.signupContainerHeight - layout.signupSidebarHeight - 100 : layout.signupContainerHeight - 100,
                         minWidth: '100%',
-                        margin: 'auto',
-                        translate: `0 ${isMobile ? '-15%' : 0}`,
                         borderRadius: 15,
                         backgroundColor: isMobile ? theme.color.white : theme.color.backgroundSecondary,
                     }}
@@ -158,6 +156,7 @@ export default function SignupForm({
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    marginTop: isMobile ? 20 : 0
                 }}
             >
                 <Button
