@@ -19,6 +19,8 @@ jobs:
         echo PORT=5000 >> .env
         echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
         echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+        echo SERVER_CERT_PATH=${{  secrets.SERVER_CERT_PATH }} >> .env
+        echo SERVER_KEY_PATH=${{  secrets.SERVER_KEY_PATH }} >> .env
       working-directory: ./
     - name: create frontend .env file
       run: |

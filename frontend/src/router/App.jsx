@@ -5,9 +5,9 @@ import { router } from ".";
 import { ThemeContext } from "../themes";
 import useToggleTheme from "../hooks/useToggleTheme";
 import { MediaQueryContext } from "../themes";
-import useLayout from "../hooks/useMediaQuery";
+import useLayout from "../hooks/useLayout";
 import AuthProvider from "../Auth/AuthProvider";
-import { Provider } from 'react-redux'
+import { Provider as ReduxProvider } from 'react-redux'
 import store from '../Redux/store'
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
   const { layout, isMobile, isTablet } = useLayout()
 
   return (
-    <Provider store={store}>
+    <ReduxProvider store={store}>
       <AuthProvider>
         <MediaQueryContext.Provider value={{ layout, isMobile, isTablet }}>
           <ThemeContext.Provider value={{ theme: themes, toggleTheme, themeState: themeState }}>
@@ -23,6 +23,6 @@ export default function App() {
           </ThemeContext.Provider>
         </MediaQueryContext.Provider>
       </AuthProvider>
-    </Provider>
+    </ReduxProvider>
   )
 }

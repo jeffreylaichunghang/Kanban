@@ -158,6 +158,7 @@ export default function SignupForm({
                     alignItems: 'center',
                     marginTop: isMobile ? 20 : 0
                 }}
+                data-test-id='signup-buttons'
             >
                 <Button
                     text={step > 1 ? "Back" : "Cancel"}

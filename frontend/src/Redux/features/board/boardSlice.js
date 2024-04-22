@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const boardSlice = createSlice({
     name: 'board',
     initialState: {
-        boardList: []
+        boardList: [],
+        currentBoard: null
     },
     reducers: {
         setBoardList: (state, action) => {
@@ -19,7 +20,6 @@ export const boardSlice = createSlice({
                 targetIndex = index
                 return board.id === editedBoard.id
             })[0]
-            console.log(targetIndex)
             targetBoard = editedBoard
             state.boardList.splice(targetIndex, 1, targetBoard)
         },
@@ -28,10 +28,19 @@ export const boardSlice = createSlice({
             const deletedBoard = action.payload
             const boardIndex = state.boardList.map(board => board.id).indexOf(deletedBoard.id)
             state.boardList.splice(boardIndex, 1)
+        },
+        setCurrentBoard: (state, action) => {
+            state.currentBoard = action.payload
         }
     }
 })
 
-export const { setBoardList, addBoard, editBoard, deleteBoard } = boardSlice.actions
+export const {
+    setBoardList,
+    addBoard,
+    editBoard,
+    deleteBoard,
+    setCurrentBoard
+} = boardSlice.actions
 
 export default boardSlice.reducer

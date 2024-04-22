@@ -26,6 +26,8 @@ Insert gif or link to demo -->
 
 **API testing** Postmen
 
+**E2E testing** Cypress
+
 **Authentication:** Passport, JWT, bcrypt
 
 **Deployment** AWS, EC2, Route53

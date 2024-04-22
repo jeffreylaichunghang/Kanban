@@ -2,31 +2,26 @@ import { useContext, useState } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
 import useWindowDimension from "../../hooks/useWindowDimension"
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux"
+import { setModal } from "../../Redux/features/modal/modalSlice"
 
-import LogoDark from "../../assets/LogoDark"
-import LogoLight from '../../assets/LogoLight'
-import LogoMobile from '../../assets/LogoMobile'
-import ChevronDown from '../../assets/ChevronDown'
-import ChevronUp from '../../assets/ChevronUp'
+import Logo from "./Logo"
+import NavbarTitle from "./Title"
 import Ellipsis from '../../assets/Ellipsis'
 import Button from "../Button"
-import Text from "../Text"
 import ActionModal from "../modals/ActionModal"
-import { useSelector } from "react-redux"
 
 export default function NavBar({
-    board,
-    setWarningModal,
-    setModal,
     sidebar,
     setSidebar,
 }) {
-    const boardList = useSelector(state => state.board.boardList)
+    const { boardList, currentBoard } = useSelector(state => state.board)
     const [actionModal, setActionModal] = useState(false)
-    const { theme, themeState } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width } = useWindowDimension()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const styles = {
         container: {
             height: layout.navbarHeight,
@@ -35,13 +30,6 @@ export default function NavBar({
             borderBottom: `1px solid ${theme.color.line}`,
             display: 'flex',
             flexDirection: 'row',
-        },
-        logo: {
-            width: layout.sidebarWidth,
-            height: '100%',
-            paddingTop: layout.logoPaddingTop,
-            paddingLeft: '24px',
-            borderRight: `1px solid ${theme.color.line}`,
         },
         content: {
             display: 'flex',
@@ -65,41 +53,52 @@ export default function NavBar({
             cursor: 'pointer'
         }
     }
-    // console.log(board)
+
+    const actionButtons = [
+        {
+            text: 'Logout',
+            color: theme.color.secondaryText,
+            onClick: () => {
+                localStorage.removeItem('secret_token')
+                navigate('/signin', { replace: true })
+            },
+            props: {}
+        },
+        {
+            text: 'Edit Board',
+            color: theme.color.secondaryText,
+            onClick: () => {
+                setActionModal(false)
+                dispatch(setModal('editboard'))
+            },
+            props: {}
+        },
+        {
+            text: 'Delete Board',
+            color: theme.color.destructive,
+            onClick: () => {
+                dispatch(setModal('deleteboard'))
+                setActionModal(false)
+            },
+            props: {}
+        },
+    ]
 
     return (
         <div style={styles.container}>
-            {/* TODO: extract <Logo /> */}
-            {!isMobile && <div style={styles.logo}>
-                {themeState === 'dark' ? <LogoLight /> : <LogoDark />}
-            </div>}
+            {!isMobile && <Logo />}
             <div style={styles.content}>
-                {/* TODO: extract <Board /> */}
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    columnGap: 24
-                }}>
-                    {isMobile && <LogoMobile />}
-                    <Text
-                        text={board?.board_name}
-                        variant="heading"
-                        size={layout.boardnameSize}
-                        hoverColor={theme.color.primaryText}
-                    />
-                    {
-                        isMobile &&
-                        <ChevronUp onClick={() => setSidebar(!sidebar)} />
-                    }
-                </div>
+                <NavbarTitle
+                    board={currentBoard}
+                    sidebar={sidebar}
+                    setSidebar={setSidebar}
+                />
                 <span style={styles.buttonGroup}>
                     <Button
                         variant="primary"
                         text={isMobile ? "+" : "+ Add New Task"}
-                        onClick={() => setModal('taskmodal')}
-                        disabled={!board?.columns.length > 0}
+                        onClick={() => dispatch(setModal('taskmodal'))}
+                        disabled={!currentBoard?.columns.length > 0}
                         style={{
                             paddingTop: isMobile ? 5 : 15,
                             paddingBottom: isMobile ? 8 : 15,
@@ -107,54 +106,23 @@ export default function NavBar({
                             paddingRight: isMobile ? 18 : 24,
                         }}
                     />
-                    <span style={styles.ellipsis} onClick={() => setActionModal(true)}><Ellipsis /></span>
+                    <span
+                        style={styles.ellipsis}
+                        onClick={() => setActionModal(true)}
+                        data-test-id='navbar-ellipsis'
+                    >
+                        <Ellipsis />
+                    </span>
                 </span>
                 <ActionModal
                     actionModal={actionModal}
                     setActionModal={setActionModal}
                     style={{
                         right: 24,
-                        top: 110,
+                        top: isMobile ? 70 : 110,
                     }}
-                >
-                    <Text
-                        variant="body"
-                        size="l"
-                        color={theme.color.secondaryText}
-                        text="Logout"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            localStorage.removeItem('secret_token')
-                            navigate('/signin', { replace: true })
-                        }}
-                    />
-                    {boardList.length > 0 && <>
-                        <Text
-                            variant="body"
-                            size="l"
-                            color={theme.color.secondaryText}
-                            text="Edit Board"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                setActionModal(false)
-                                setModal('editboard')
-                            }}
-                        />
-                        <Text
-                            variant="body"
-                            size="l"
-                            color={theme.color.destructive}
-                            text="Delete Board"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                setWarningModal({
-                                    show: true,
-                                    target: 'board'
-                                })
-                                setActionModal(false)
-                            }}
-                        /></>}
-                </ActionModal>
+                    actions={boardList.length > 0 ? actionButtons : actionButtons.slice(0, 1)}
+                />
             </div>
         </div>
     )

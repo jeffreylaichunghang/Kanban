@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { forwardRef, useContext } from "react";
 import { ThemeContext } from "../themes";
 
 import Input from "./Input";
 import CrossIcon from '../assets/CrossIcon'
 
-export default function InputItem({
+const InputItem = forwardRef(function InputItem({
     name = '',
     placeholder = '',
     value,
@@ -14,7 +14,7 @@ export default function InputItem({
     onClick,
     style,
     validation
-}) {
+}, ref) {
     const { theme } = useContext(ThemeContext)
     return (
         <div style={{
@@ -34,6 +34,7 @@ export default function InputItem({
                 onBlur={onBlur}
                 style={style}
                 validation={validation}
+                ref={ref}
             />
             <span
                 onClick={onClick}
@@ -47,4 +48,6 @@ export default function InputItem({
             </span>
         </div>
     )
-}
+})
+
+export default InputItem

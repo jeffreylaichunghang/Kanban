@@ -1,19 +1,42 @@
 class AuthRouter {
-    constructor(express, passport, jwt) {
+    constructor(express, passport, jwt, service) {
         this.express = express
         this.passport = passport
         this.jwt = jwt
+        this.service = service
     }
 
     route() {
         const router = this.express.Router()
 
-        // router.get('/user')
+        router.get('/user/:email', this.getUserByEmail.bind(this))
         router.post('/signup', this.signup.bind(this))
         router.post('/login', this.login.bind(this))
         // router.put('/user/:id')
+        router.delete('/user/:email', this.deleteUser.bind(this))
 
         return router
+    }
+
+    async getUserByEmail(req, res) {
+        const email = req.params.email
+        console.log(`getting user with email: `.email)
+        const user = await this.service.findUserByEmail(email)
+        res.json(user)
+    }
+
+    async deleteUser(req, res) {
+        const email = req.params.email
+
+        const userFound = await this.service.findUserByEmail(email)
+
+        if (userFound) {
+            console.log(`deleting user with email: `.email)
+            await this.service.deleteUser(email)
+            res.json('user deleted')
+        } else {
+            res.status(404).send('user doesn\'t exist')
+        }
     }
 
     async signup(req, res, next) {

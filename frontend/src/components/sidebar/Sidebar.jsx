@@ -1,26 +1,23 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { ThemeContext, MediaQueryContext } from "../../themes"
-import useWindowDimension from "../../hooks/useWindowDimension"
 import { motion } from "framer-motion"
-import useApiCall from "../../hooks/useApiCall"
 import { useDispatch, useSelector } from "react-redux"
+import useWindowDimension from "../../hooks/useWindowDimension"
+import useApiCall from "../../hooks/useApiCall"
 
 import SidebarButton from "./SidebarButton"
 import ToggleSwitch from "../ToggleSwitch"
 import Text from "../Text"
 import ThemeLight from "../../assets/ThemeLight"
 import ThemeDark from "../../assets/ThemeDark"
-import { setBoardList } from "../../Redux/features/board/boardSlice"
+import { setBoardList, setCurrentBoard } from "../../Redux/features/board/boardSlice"
+import { setModal } from "../../Redux/features/modal/modalSlice"
 
 export default function Sidebar({
-    board,
-    setBoard,
-    setModal,
     sidebar,
     setSidebar,
 }) {
-    const [activeBoard, setActiveBoard] = useState(null)
-    const boardList = useSelector(state => state.board.boardList)
+    const { boardList, currentBoard } = useSelector(state => state.board)
     const dispatch = useDispatch()
     const { theme, toggleTheme, themeState } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
@@ -69,11 +66,9 @@ export default function Sidebar({
     useEffect(() => {
         if (allboards) {
             dispatch(setBoardList(allboards))
-            setActiveBoard(allboards[0])
-            setBoard(allboards[0])
+            dispatch(setCurrentBoard(allboards[0]))
         }
-    }, [allboards, dispatch])
-    useEffect(() => setActiveBoard(board), [board])
+    }, [allboards])
 
     const boardButtonElements = boardList.map(board => {
         return (
@@ -81,14 +76,12 @@ export default function Sidebar({
                 key={board?.id}
                 icon={'boardIcon'}
                 text={board?.board_name}
-                onClick={() => {
-                    setActiveBoard(board)
-                    setBoard(board)
-                }}
-                buttonColor={activeBoard?.board_name === board?.board_name ? theme.color.primary : 'transparent'}
-                buttonHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.primaryHover : theme.color.secondary}
-                iconColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.secondaryText}
-                iconHoverColor={activeBoard?.board_name === board?.board_name ? theme.color.white : theme.color.primary}
+                onClick={() => dispatch(setCurrentBoard(board))}
+                buttonColor={currentBoard?.board_name === board?.board_name ? theme.color.primary : 'transparent'}
+                buttonHoverColor={currentBoard?.board_name === board?.board_name ? theme.color.primaryHover : theme.color.secondary}
+                iconColor={currentBoard?.board_name === board?.board_name ? theme.color.white : theme.color.secondaryText}
+                iconHoverColor={currentBoard?.board_name === board?.board_name ? theme.color.white : theme.color.primary}
+                testId="board-button"
             />
         )
     })
@@ -110,6 +103,7 @@ export default function Sidebar({
                 variants={sidebarVariant}
                 transition={{ type: 'just' }}
                 style={styles.container}
+                data-test-id='sidebar'
             >
                 <Text
                     variant="body"
@@ -131,16 +125,15 @@ export default function Sidebar({
                         buttonHoverColor={'transparent'}
                         iconColor={theme.color.primary}
                         iconHoverColor={theme.color.primaryHover}
-                        onClick={() => setModal('newboard')}
+                        onClick={() => dispatch(setModal('newboard'))}
+                        testId="new-board-button"
                     />
                 </div>
                 <div style={{ width: layout.sidebarWidth * 0.85, margin: 'auto' }}>
                     <ToggleSwitch
                         leftLabel={<ThemeLight />}
                         rightLabel={<ThemeDark />}
-                        onClick={() => {
-                            toggleTheme()
-                        }}
+                        onClick={toggleTheme}
                         defaultValue={themeState === 'light'}
                     />
                 </div>
@@ -154,6 +147,7 @@ export default function Sidebar({
                 iconColor={sidebar ? theme.color.secondaryText : theme.color.white}
                 iconHoverColor={sidebar ? theme.color.mainPurple : theme.color.white}
                 style={styles.sidebarBtn}
+                testId="sidebar-toggle-button"
             />}
         </>
     )

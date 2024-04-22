@@ -29,6 +29,7 @@ export default function Select({
         <OutsideAlerter action={() => setOpen(false)}>
             <motion.button
                 ref={selectRef}
+                type='button'
                 style={{
                     width: '100%',
                     paddingTop: 8,

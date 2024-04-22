@@ -2,12 +2,14 @@ import { useContext } from "react"
 import { ThemeContext } from "../../themes"
 
 import OutsideAlerter from "../../hooks/useOutsideAlerter"
+import Text from "../Text"
 
 export default function ActionModal({
     actionModal,
     setActionModal,
-    children,
-    style = {}
+    // children,
+    style = {},
+    actions = [],
 }) {
     const { theme } = useContext(ThemeContext)
 
@@ -32,7 +34,21 @@ export default function ActionModal({
                 flex: 1,
                 rowGap: 16
             }}>
-                {children}
+                {/* {children} */}
+                {
+                    actions.map((action, index) => (
+                        <Text
+                            key={`action_btn_${index}`}
+                            variant="body"
+                            size="l"
+                            style={{ cursor: 'pointer' }}
+                            text={action.text}
+                            color={action.color}
+                            onClick={action.onClick}
+                            {...action.props}
+                        />
+                    ))
+                }
             </div>
         </OutsideAlerter>
     )

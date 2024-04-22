@@ -11,11 +11,11 @@ import Select from "../Select";
 import ActionModal from "./ActionModal";
 import { setTaskdata } from "../../Redux/features/task/taskSlice";
 import { moveTaskAcrossColumns } from '../../Redux/features/columns/columnSlice'
+import { setModal } from "../../Redux/features/modal/modalSlice";
 
 export default function TaskCardModal({
-    modal,
-    setModal,
-    setWarningModal,
+    cardModal,
+    setCardModal,
 }) {
     const task = useSelector((state) => state.task.activeTask)
     const columnList = useSelector((state) => state.column.columnList)
@@ -31,12 +31,31 @@ export default function TaskCardModal({
         }
     }, [updatedSubtask, editedTask])
 
+    const actionButtons = [
+        {
+            text: 'Edit Task',
+            color: theme.color.secondaryText,
+            onClick: () => {
+                dispatch(setModal('edittask'))
+                setCardModal()
+            },
+            props: {}
+        },
+        {
+            text: 'Delete Task',
+            color: theme.color.destructive,
+            onClick: () => {
+                dispatch(setModal('deletetask'))
+                setCardModal()
+            },
+            props: {}
+        },
+    ]
+
     return (
         <Modal
-            modal={modal === 'taskcard'}
-            action={() => {
-                if (modal === 'taskcard') setModal(false)
-            }}
+            modal={cardModal}
+            action={setCardModal}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -67,30 +86,8 @@ export default function TaskCardModal({
                         right: -80,
                         top: 40
                     }}
-                >
-                    <Text
-                        variant="body"
-                        size="l"
-                        text="Edit Task"
-                        color={theme.color.secondaryText}
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => setModal('edittask')}
-                    />
-                    <Text
-                        variant="body"
-                        size="l"
-                        text="Delete Task"
-                        color={theme.color.destructive}
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            setWarningModal({
-                                show: true,
-                                target: 'task'
-                            })
-                            setModal('')
-                        }}
-                    />
-                </ActionModal>
+                    actions={actionButtons}
+                />
             </div>
             <Text
                 text={task?.description}
@@ -127,7 +124,7 @@ export default function TaskCardModal({
                                         ...task,
                                         sub_tasks: task.sub_tasks.toSpliced(index, 1, newSubTask)
                                     }
-                                    console.log(newTask)
+                                    // console.log(newTask)
                                     dispatch(setTaskdata(newTask))
                                     updateSubtask([newSubTask])
                                 }}

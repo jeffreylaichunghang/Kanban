@@ -7,12 +7,12 @@ export default defineConfig({
   plugins: [react(), svgr()],
   server: {
     port: 3001,
-    // proxy: {
-    //   '/api': {
-    //     target: 'http://localhost:5001',
-    //     changeOrigin: true
-    //   }
-    // },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5001',
+        changeOrigin: true
+      }
+    },
     https: {
       key: './private.key',
       cert: './certificate.crt',

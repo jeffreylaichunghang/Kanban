@@ -1,64 +1,32 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../../themes";
 import { useSelector, useDispatch } from "react-redux";
-import useApiCall from "../../hooks/useApiCall";
+import useWarningmodalAction from "../../hooks/modal/useWarningmodalAction";
 
 import Modal from ".";
 import Text from "../Text";
 import Button from "../Button";
-import { setTaskdata } from "../../Redux/features/task/taskSlice";
-import { removeTask } from "../../Redux/features/columns/columnSlice";
-import { deleteBoard } from "../../Redux/features/board/boardSlice";
-import { setColumnList } from "../../Redux/features/columns/columnSlice";
+import { setModal } from "../../Redux/features/modal/modalSlice";
 
-export default function WarningModal({
-    warningModal,
-    setWarningModal,
-    board,
-    setBoard,
-}) {
+export default function WarningModal() {
+    const { deleteboard, deleteTask } = useWarningmodalAction()
     const activeTask = useSelector(state => state.task.activeTask)
-    const boardList = useSelector(state => state.board.boardList)
+    const { currentBoard } = useSelector(state => state.board)
+    const modal = useSelector(state => state.modal.value)
     const dispatch = useDispatch()
-    const { loading, error, value: deletedboard, callApi: deleteboard } = useApiCall(`deleteBoard/${board?.id}`, 'DELETE')
-    const { value: deletedTask, callApi: deleteTask } = useApiCall(`deleteTask/${activeTask?.id}`, 'DELETE')
     const { theme } = useContext(ThemeContext)
-
-    useEffect(() => {
-        if (deletedboard) {
-            dispatch(deleteBoard(deletedboard))
-            const remainingBoard = boardList.filter(board => board.id !== deletedboard.id)
-            if (remainingBoard.length > 0) {
-                setBoard(remainingBoard[0])
-                dispatch(setColumnList(remainingBoard[0].columns))
-            } else {
-                setBoard(null)
-                dispatch(setColumnList([]))
-            }
-        }
-        setWarningModal({ show: false })
-    }, [deletedboard])
-
-    useEffect(() => {
-        if (deletedTask) {
-            console.log(deletedTask)
-            dispatch(setTaskdata(null))
-            dispatch(removeTask(deletedTask))
-        }
-        setWarningModal({ show: false })
-    }, [deletedTask])
 
     let target = {
         type: '',
         message: ''
     };
-    if (warningModal.show) {
-        switch (warningModal.target) {
-            case 'board':
+    if (modal) {
+        switch (modal) {
+            case 'deleteboard':
                 target.type = 'board',
-                    target.message = `Are you sure you want to delete the ‘${board.board_name}’ board? This action will remove all columns and tasks and cannot be reversed.`
+                    target.message = `Are you sure you want to delete the ‘${currentBoard?.board_name}’ board? This action will remove all columns and tasks and cannot be reversed.`
                 break;
-            case 'task':
+            case 'deletetask':
                 target.type = 'task',
                     target.message = `Are you sure you want to delete the ‘${activeTask?.task_name}’ task? This action will remove all subtasks and cannot be reversed.`
                 break;
@@ -70,8 +38,12 @@ export default function WarningModal({
 
     return (
         <Modal
-            modal={warningModal.show}
-            action={() => setWarningModal({ show: false })}
+            modal={modal === 'deleteboard' || modal === 'deletetask'}
+            action={() => {
+                if (modal === 'deleteboard' || modal === 'deletetask') {
+                    dispatch(setModal(''))
+                }
+            }}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -121,7 +93,7 @@ export default function WarningModal({
                     style={{
                         width: '100%'
                     }}
-                    onClick={() => setWarningModal({ show: false })}
+                    onClick={() => dispatch(setModal(''))}
                 />
             </div>
         </Modal>

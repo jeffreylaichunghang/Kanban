@@ -15,7 +15,8 @@ export default function SidebarButton({
     buttonHoverColor,
     iconColor,
     iconHoverColor,
-    style = {}
+    style = {},
+    testId = ''
 }) {
     const buttonRef = useRef()
     const hovered = useHover(buttonRef)
@@ -47,6 +48,7 @@ export default function SidebarButton({
                 backgroundColor: hovered ? buttonHoverColor || theme.color.secondary : buttonColor || 'transparent',
                 ...style
             }}
+            data-test-id={testId}
         >
             {renderedIcon[icon]({
                 fill: hovered ? iconHoverColor || theme.color.mainPurple : iconColor || theme.color.secondaryText

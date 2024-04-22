@@ -13,11 +13,13 @@ const jwt = require('jsonwebtoken')
 const TaskRouter = require('./router/taskRouter')
 const TaskService = require('./service/taskService')
 const AuthRouter = require('./router/authRouter')
+const AuthService = require('./service/authService')
 const secureRoute = require('./router/secureRoute')
 
 const app = express()
 const prisma = new PrismaClient()
 const taskService = new TaskService(prisma)
+const authService = new AuthService(prisma)
 require('./auth/auth')(passport, prisma)
 
 // middlewares
@@ -28,7 +30,7 @@ app.use(passport.initialize())
 
 async function main() {
     app.use('/api', passport.authenticate('jwt', { session: false }), new TaskRouter(express, taskService).route())
-    app.use('/auth', new AuthRouter(express, passport, jwt).route())
+    app.use('/auth', new AuthRouter(express, passport, jwt, authService).route())
     app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute) // for testing purpose
     if (process.env.NODE_ENV === 'production') {
         const __dirname = path.resolve();
@@ -39,8 +41,8 @@ async function main() {
 }
 
 const options = {
-    cert: fs.readFileSync('./localhost.crt'),
-    key: fs.readFileSync('./localhost.key')
+    cert: fs.readFileSync(process.env.SERVER_CERT_PATH),
+    key: fs.readFileSync(process.env.SERVER_KEY_PATH)
 }
 
 // app.listen(process.env.PORT, () => {

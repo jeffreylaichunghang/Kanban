@@ -12,11 +12,12 @@ export default function useEventListener(
     }, [callback])
 
     useEffect(() => {
-        if (element === null || element === undefined) return
+        const targetElement = element?.current ?? element;
+        if (targetElement === null || targetElement === undefined) return
 
         const handler = e => callbackRef.current(e)
-        element.addEventListener(eventType, handler)
+        targetElement.addEventListener(eventType, handler)
 
-        return () => element.removeEventListener(eventType, handler)
+        return () => targetElement.removeEventListener(eventType, handler)
     }, [eventType, element])
 }

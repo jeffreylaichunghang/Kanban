@@ -1,37 +1,36 @@
-import { useContext, useEffect, useMemo } from "react"
-import { ThemeContext, MediaQueryContext } from "../../themes"
+import { useCallback, useContext, useEffect, useMemo } from "react"
+import { MediaQueryContext } from "../../themes"
 import { motion } from "framer-motion"
-import useWindowDimension from "../../hooks/useWindowDimension"
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import useApiCall from "../../hooks/useApiCall"
 import { useSelector, useDispatch } from "react-redux"
+import useWindowDimension from "../../hooks/useWindowDimension"
+import useApiCall from "../../hooks/useApiCall"
+import { setColumnList } from "../../Redux/features/columns/columnSlice"
+import { getArrayorder } from "../../utils/getArrayorder"
 
 import Taskcolumn from "./Taskcolumn"
-import Text from "../Text"
-import Button from "../Button"
-import { setColumnList } from "../../Redux/features/columns/columnSlice"
+import Emptyboard from "./Emptyboard"
 
 export default function Taskboard({
     sidebar,
-    board,
-    setModal,
 }) {
+    const currentBoard = useSelector(state => state.board.currentBoard)
     const tasklist = useSelector(state => state.column.columnList)
     const dispatch = useDispatch()
-    const { theme } = useContext(ThemeContext)
     const { layout, isMobile } = useContext(MediaQueryContext)
     const { width, height } = useWindowDimension()
     const { value: updatedTask, callApi: updatetask } = useApiCall(`updateTask`, 'PUT')
-    const { value: boardTasks, callApi: getBoardTasks } = useApiCall(`tasks/${board.id}`)
+    const { value: boardTasks, callApi: getBoardTasks } = useApiCall(`tasks/${currentBoard?.id}`)
 
-    useEffect(() => getBoardTasks(), [board.id, getBoardTasks])
+    useEffect(() => {
+        if (currentBoard && currentBoard.id) getBoardTasks()
+    }, [currentBoard, getBoardTasks])
     useEffect(() => {
         if (boardTasks) dispatch(setColumnList(boardTasks.columns))
     }, [boardTasks, dispatch])
-
     useEffect(() => {
         if (updatedTask) {
-            // for toast message
+            // TODO: toast message
             console.log(updatedTask)
         }
     }, [updatedTask])
@@ -57,7 +56,7 @@ export default function Taskboard({
             const draggedItem = tasklistClone[Number(source.droppableId)].tasks.splice(source.index, 1)
             const droppedItem = {
                 ...draggedItem[0],
-                columnId: board.columns[Number(destination.droppableId)].id
+                columnId: currentBoard?.columns[Number(destination.droppableId)].id
             }
             updatetask(droppedItem)
             tasklistClone[Number(destination.droppableId)].tasks.splice(destination.index, 0, droppedItem)
@@ -72,14 +71,15 @@ export default function Taskboard({
         }
     }
 
+    const orderedIdArray = useCallback(() => getArrayorder(tasklist?.map(item => item.id)), [tasklist])
     const memorizedTaskColumns = useMemo(() => tasklist?.map((column, index) => (
         <Taskcolumn
             key={column.id}
             colIndex={index}
+            colOrder={orderedIdArray()[index]}
             columnInfo={column}
-            setModal={setModal}
         />
-    )), [tasklist])
+    )), [tasklist, orderedIdArray])
 
     return (
         tasklist?.length !== 0 ?
@@ -116,32 +116,7 @@ export default function Taskboard({
                         )}
                     </Droppable>
                 </DragDropContext>
-                {/* Task Card Modal? */}
             </motion.div> :
-            /* TODO: extract <EmptyBoard /> */
-            <div
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'grid',
-                    placeItems: 'center'
-                }}
-            >
-                <div style={{ textAlign: 'center' }}>
-                    <Text
-                        variant="heading"
-                        size="l"
-                        text="This board is empty. Create a new column to get started."
-                        color={theme.color.secondaryText}
-                        style={{ width: layout.emptyBoardtext }}
-                    />
-                    <Button
-                        variant="primary"
-                        text="+ Add New Column"
-                        style={{ marginTop: 32 }}
-                        onClick={() => setModal('editboard')}
-                    />
-                </div>
-            </div>
+            <Emptyboard />
     )
 }
